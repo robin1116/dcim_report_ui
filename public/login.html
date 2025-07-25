@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>simpleEye | Log in</title>
-    
+
     <!-- Bootstrap 5.3 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
+
     <!-- Custom CSS -->
     <link href="css/themes.css" rel="stylesheet">
     <link href="css/login.css" rel="stylesheet">
@@ -39,7 +39,7 @@
                 <!-- Left Side - Title Section -->
                 <div class="col-12 col-lg-6 d-flex align-items-center justify-content-center">
                     <div class="title-section">
-                        <h1 class="main-title">simpleEye</h1>
+                        <h1 class="main-title">죽전 퍼시픽써니 DC</h1>
                         <div class="title-description">
                             <h3>데이터센터 통합 관리</h3>
                             <p>효율적이고 안전한 DCIM 솔루션</p>
@@ -121,12 +121,12 @@
         $(document).ready(function() {
             // Initialize theme
             ThemeManager.init();
-            
+
             // Password toggle functionality
             $('#passwordToggle').click(function() {
                 const passwordInput = $('#password');
                 const icon = $(this).find('i');
-                
+
                 if (passwordInput.attr('type') === 'password') {
                     passwordInput.attr('type', 'text');
                     icon.removeClass('fa-eye').addClass('fa-eye-slash');
@@ -139,11 +139,11 @@
             // Login form submission
             $('#loginForm').submit(function(e) {
                 e.preventDefault();
-                
+
                 const username = $('#username').val();
                 const password = $('#password').val();
                 const loginBtn = $('.login-btn');
-                
+
                 if (!username || !password) {
                     ToastNotifications.show('아이디와 비밀번호를 입력해주세요.', 'warning');
                     return;
@@ -151,11 +151,11 @@
 
                 // Show loading state
                 loginBtn.addClass('loading');
-                
+
                 // Simulate login process
                 setTimeout(() => {
                     loginBtn.removeClass('loading');
-                    
+
                     // Simple validation (in production, this would be server-side)
                     if (username === 'admin' && password === 'admin') {
                         ToastNotifications.show('로그인 성공! 메인 페이지로 이동합니다.', 'success');
