@@ -595,22 +595,75 @@
                                 color: '#fff'
                             }
                         },
-                        yAxis: {
-                            type: 'value',
-                            axisLine: {
-                                lineStyle: {
-                                    color: 'rgba(255, 255, 255, 0.3)'
+                        yAxis: [
+                            {
+                                type: 'value',
+                                name: '전압 (V)',
+                                position: 'left',
+                                axisLine: {
+                                    show: true,
+                                    lineStyle: {
+                                        color: 'rgb(139, 92, 246)'
+                                    }
+                                },
+                                axisLabel: {
+                                    color: 'rgb(139, 92, 246)',
+                                    formatter: '{value} V'
+                                },
+                                splitLine: {
+                                    show: false
+                                },
+                                nameTextStyle: {
+                                    color: 'rgb(139, 92, 246)'
                                 }
                             },
-                            axisLabel: {
-                                color: '#fff'
+                            {
+                                type: 'value',
+                                name: '전류 (A)',
+                                position: 'right',
+                                axisLine: {
+                                    show: true,
+                                    lineStyle: {
+                                        color: 'rgb(59, 130, 246)'
+                                    }
+                                },
+                                axisLabel: {
+                                    color: 'rgb(59, 130, 246)',
+                                    formatter: '{value} A'
+                                },
+                                splitLine: {
+                                    show: false
+                                },
+                                nameTextStyle: {
+                                    color: 'rgb(59, 130, 246)'
+                                }
                             },
-                            splitLine: {
-                                lineStyle: {
-                                    color: 'rgba(255, 255, 255, 0.1)'
+                            {
+                                type: 'value',
+                                name: '전력량 (kWh)',
+                                position: 'right',
+                                offset: 80,
+                                axisLine: {
+                                    show: true,
+                                    lineStyle: {
+                                        color: 'rgb(16, 185, 129)'
+                                    }
+                                },
+                                axisLabel: {
+                                    color: 'rgb(16, 185, 129)',
+                                    formatter: '{value} kWh'
+                                },
+                                splitLine: {
+                                    show: true,
+                                    lineStyle: {
+                                        color: 'rgba(255, 255, 255, 0.1)'
+                                    }
+                                },
+                                nameTextStyle: {
+                                    color: 'rgb(16, 185, 129)'
                                 }
                             }
-                        },
+                        ],
                         series: [{
                             name: '전압 (V)',
                             type: 'line',
@@ -698,17 +751,20 @@
                         'voltage': {
                             name: '전압 (V)',
                             color: 'rgb(139, 92, 246)',
-                            data: data.map(item => parseFloat(item.voltage).toFixed(1))
+                            data: data.map(item => parseFloat(item.voltage).toFixed(1)),
+                            yAxisIndex: 0
                         },
                         'current': {
                             name: '전류 (A)',
                             color: 'rgb(59, 130, 246)',
-                            data: data.map(item => parseFloat(item.current).toFixed(2))
+                            data: data.map(item => parseFloat(item.current).toFixed(2)),
+                            yAxisIndex: 1
                         },
                         'power': {
                             name: '전력량 (kWh)',
                             color: 'rgb(16, 185, 129)',
-                            data: data.map(item => parseFloat(item.power).toFixed(3))
+                            data: data.map(item => parseFloat(item.power).toFixed(3)),
+                            yAxisIndex: 2
                         }
                     };
                     
@@ -717,6 +773,7 @@
                         name: powerTypeConfig[type].name,
                         type: 'line',
                         smooth: true,
+                        yAxisIndex: powerTypeConfig[type].yAxisIndex,
                         lineStyle: {
                             color: powerTypeConfig[type].color,
                             width: 3
@@ -732,9 +789,9 @@
                                 x2: 0,
                                 y2: 1,
                                 colorStops: [{
-                                    offset: 0, color: powerTypeConfig[type].color.replace('rgb', 'rgba').replace(')', ', 0.3)')
+                                    offset: 0, color: powerTypeConfig[type].color.replace('rgb', 'rgba').replace(')', ', 0.2)')
                                 }, {
-                                    offset: 1, color: powerTypeConfig[type].color.replace('rgb', 'rgba').replace(')', ', 0.1)')
+                                    offset: 1, color: powerTypeConfig[type].color.replace('rgb', 'rgba').replace(')', ', 0.05)')
                                 }]
                             }
                         },
@@ -743,6 +800,83 @@
                     
                     console.log('Chart series:', series.length);
                     
+                    // Show/hide Y axes based on selected types
+                    const yAxisOptions = [
+                        { // 전압
+                            show: selectedPowerTypes.includes('voltage'),
+                            type: 'value',
+                            name: selectedPowerTypes.includes('voltage') ? '전압 (V)' : '',
+                            position: 'left',
+                            axisLine: {
+                                show: selectedPowerTypes.includes('voltage'),
+                                lineStyle: {
+                                    color: 'rgb(139, 92, 246)'
+                                }
+                            },
+                            axisLabel: {
+                                show: selectedPowerTypes.includes('voltage'),
+                                color: 'rgb(139, 92, 246)',
+                                formatter: '{value} V'
+                            },
+                            splitLine: {
+                                show: false
+                            },
+                            nameTextStyle: {
+                                color: 'rgb(139, 92, 246)'
+                            }
+                        },
+                        { // 전류
+                            show: selectedPowerTypes.includes('current'),
+                            type: 'value',
+                            name: selectedPowerTypes.includes('current') ? '전류 (A)' : '',
+                            position: 'right',
+                            axisLine: {
+                                show: selectedPowerTypes.includes('current'),
+                                lineStyle: {
+                                    color: 'rgb(59, 130, 246)'
+                                }
+                            },
+                            axisLabel: {
+                                show: selectedPowerTypes.includes('current'),
+                                color: 'rgb(59, 130, 246)',
+                                formatter: '{value} A'
+                            },
+                            splitLine: {
+                                show: false
+                            },
+                            nameTextStyle: {
+                                color: 'rgb(59, 130, 246)'
+                            }
+                        },
+                        { // 전력량
+                            show: selectedPowerTypes.includes('power'),
+                            type: 'value',
+                            name: selectedPowerTypes.includes('power') ? '전력량 (kWh)' : '',
+                            position: 'right',
+                            offset: selectedPowerTypes.includes('current') ? 80 : 0,
+                            axisLine: {
+                                show: selectedPowerTypes.includes('power'),
+                                lineStyle: {
+                                    color: 'rgb(16, 185, 129)'
+                                }
+                            },
+                            axisLabel: {
+                                show: selectedPowerTypes.includes('power'),
+                                color: 'rgb(16, 185, 129)',
+                                formatter: '{value} kWh'
+                            },
+                            splitLine: {
+                                show: selectedPowerTypes.includes('power') && selectedPowerTypes.length === 1,
+                                lineStyle: {
+                                    color: 'rgba(255, 255, 255, 0.1)'
+                                }
+                            },
+                            nameTextStyle: {
+                                color: 'rgb(16, 185, 129)'
+                            }
+                        }
+                    ];
+
                     // Update chart
                     powerTrendChart.setOption({
                         legend: {
@@ -751,6 +885,7 @@
                         xAxis: {
                             data: xAxisData
                         },
+                        yAxis: yAxisOptions,
                         series: series
                     });
                     
