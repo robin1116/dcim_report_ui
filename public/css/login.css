@@ -134,20 +134,20 @@ body {
     }
 }
 
-/* Login Card - DCIM Enhanced */
+/* Login Card - Glassmorphism Enhanced */
 .login-card {
     position: relative;
     z-index: 1;
-    background: rgba(15, 15, 15, 0.95);
-    backdrop-filter: blur(30px);
-    -webkit-backdrop-filter: blur(30px);
-    border: 1px solid rgba(139, 92, 246, 0.4);
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 24px;
     padding: 3rem 2.5rem;
     box-shadow: 
-        0 30px 60px rgba(0, 0, 0, 0.8),
-        0 0 40px rgba(139, 92, 246, 0.2),
-        inset 0 1px 0 rgba(139, 92, 246, 0.3);
+        0 25px 50px rgba(0, 0, 0, 0.5),
+        0 0 30px rgba(139, 92, 246, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
     width: 100%;
     max-width: 420px;
     transition: all var(--transition-slow);
@@ -167,10 +167,12 @@ body {
 
 .login-card:hover {
     transform: translateY(-8px);
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(139, 92, 246, 0.4);
     box-shadow: 
-        0 35px 70px var(--shadow-dark),
-        0 0 50px rgba(139, 92, 246, 0.25),
-        inset 0 1px 0 rgba(139, 92, 246, 0.3);
+        0 35px 70px rgba(0, 0, 0, 0.6),
+        0 0 40px rgba(139, 92, 246, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 /* Logo Section */
@@ -183,11 +185,15 @@ body {
     display: inline-block;
     margin-bottom: 1.5rem;
     padding: 1.5rem;
-    background: rgba(139, 92, 246, 0.1);
+    background: rgba(255, 255, 255, 0.1);
     border-radius: 20px;
-    backdrop-filter: blur(15px);
-    border: 1px solid rgba(139, 92, 246, 0.3);
-    box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.2),
+        0 0 15px rgba(139, 92, 246, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .logo-svg {
@@ -238,28 +244,34 @@ body {
     width: 100%;
     height: 56px;
     padding: 1rem 1rem 1rem 3rem;
-    border: 2px solid rgba(139, 92, 246, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 16px;
-    background: rgba(26, 26, 26, 0.8);
+    background: rgba(255, 255, 255, 0.1);
     color: var(--text-primary);
     font-size: 1rem;
     font-weight: 400;
     transition: all var(--transition-normal);
-    backdrop-filter: blur(15px);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .modern-input::placeholder {
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(255, 255, 255, 0.7);
     font-weight: 300;
 }
 
 .modern-input:focus {
     outline: none;
-    border-color: var(--primary-color);
-    background: rgba(26, 26, 26, 0.9);
+    border-color: rgba(139, 92, 246, 0.5);
+    background: rgba(255, 255, 255, 0.15);
     box-shadow: 
-        0 0 0 4px rgba(139, 92, 246, 0.3),
-        0 0 20px rgba(139, 92, 246, 0.2);
+        0 0 0 3px rgba(139, 92, 246, 0.3),
+        0 0 25px rgba(139, 92, 246, 0.2),
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 .input-container.active .input-icon {
@@ -334,13 +346,18 @@ body {
 .checkbox-custom {
     width: 20px;
     height: 20px;
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 6px;
     margin-right: 0.75rem;
     position: relative;
     background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     transition: all var(--transition-normal);
     flex-shrink: 0;
+    box-shadow: 
+        0 4px 16px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .checkbox-custom::after {
@@ -366,13 +383,15 @@ body {
     opacity: 1;
 }
 
-/* Login Button - DCIM Enhanced */
+/* Login Button - Glassmorphism Enhanced */
 .login-btn {
     width: 100%;
     height: 56px;
-    border: 2px solid var(--primary-color);
+    border: 1px solid rgba(139, 92, 246, 0.5);
     border-radius: 16px;
-    background: var(--gradient-primary);
+    background: rgba(139, 92, 246, 0.2);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     color: var(--text-inverse);
     font-size: 1.1rem;
     font-weight: 600;
@@ -381,7 +400,8 @@ body {
     position: relative;
     overflow: hidden;
     box-shadow: 
-        0 4px 20px rgba(139, 92, 246, 0.4),
+        0 8px 32px rgba(139, 92, 246, 0.3),
+        0 0 20px rgba(139, 92, 246, 0.1),
         inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
@@ -398,9 +418,11 @@ body {
 
 .login-btn:hover {
     transform: translateY(-3px);
+    background: rgba(139, 92, 246, 0.3);
+    border-color: rgba(139, 92, 246, 0.7);
     box-shadow: 
-        0 8px 30px rgba(139, 92, 246, 0.6),
-        0 0 25px rgba(139, 92, 246, 0.4),
+        0 12px 40px rgba(139, 92, 246, 0.4),
+        0 0 30px rgba(139, 92, 246, 0.2),
         inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
