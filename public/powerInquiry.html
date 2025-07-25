@@ -181,87 +181,84 @@
 
             <div class="content-area">
                 <!-- Filter Controls -->
-                <div class="modern-card mb-4">
-                    <div class="card-body-modern py-3">
-                        <div class="row g-2 align-items-end">
-                            <!-- 첫 번째 행: 층/DCU/BUSWAY/라인 -->
-                            <div class="col-md-1-5">
-                                <label class="form-label-modern mb-1">층</label>
-                                <select class="form-control form-control-modern form-control-sm" id="floorSelect">
-                                    <option value="">전체 층</option>
-                                    <option value="B2">지하 2층</option>
-                                    <option value="B1">지하 1층</option>
-                                    <option value="1F">1층</option>
-                                    <option value="2F">2층</option>
-                                    <option value="3F">3층</option>
-                                    <option value="4F">4층</option>
-                                    <option value="5F">5층</option>
-                                </select>
-                            </div>
-                            <div class="col-md-1-5">
-                                <label class="form-label-modern mb-1">DCU</label>
-                                <select class="form-control form-control-modern form-control-sm" id="dcuSelect">
-                                    <option value="">전체 DCU</option>
-                                    <option value="DCU-001">DCU-001</option>
-                                    <option value="DCU-002">DCU-002</option>
-                                    <option value="DCU-003">DCU-003</option>
-                                    <option value="DCU-004">DCU-004</option>
-                                    <option value="DCU-005">DCU-005</option>
-                                </select>
-                            </div>
-                            <div class="col-md-1-5">
-                                <label class="form-label-modern mb-1">BUSWAY</label>
-                                <select class="form-control form-control-modern form-control-sm" id="buswaySelect">
-                                    <option value="">전체 BUSWAY</option>
-                                    <option value="BW-A">BUSWAY-A</option>
-                                    <option value="BW-B">BUSWAY-B</option>
-                                    <option value="BW-C">BUSWAY-C</option>
-                                    <option value="BW-D">BUSWAY-D</option>
-                                </select>
-                            </div>
-                            <div class="col-md-1-5">
-                                <label class="form-label-modern mb-1">라인</label>
-                                <select class="form-control form-control-modern form-control-sm" id="lineSelect">
-                                    <option value="">전체 라인</option>
-                                    <option value="L1">라인 1</option>
-                                    <option value="L2">라인 2</option>
-                                    <option value="L3">라인 3</option>
-                                    <option value="L4">라인 4</option>
-                                </select>
+                <div class="filter-container mb-4">
+                    <!-- 첫 번째 행: 드롭다운 선택 -->
+                    <div class="row g-2 mb-3">
+                        <div class="col-3">
+                            <select class="form-select form-select-light" id="totalFilter" style="border-radius: 25px; background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(139, 92, 246, 0.3); color: #666;">
+                                <option value="all">전체 중</option>
+                                <option value="zone1">Zone 1</option>
+                                <option value="zone2">Zone 2</option>
+                                <option value="zone3">Zone 3</option>
+                            </select>
+                        </div>
+                        <div class="col-3">
+                            <select class="form-select form-select-light" id="dcuFilter" style="border-radius: 25px; background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(139, 92, 246, 0.3); color: #666;">
+                                <option value="all">전체 DCU</option>
+                                <option value="dcu1">DCU-001</option>
+                                <option value="dcu2">DCU-002</option>
+                                <option value="dcu3">DCU-003</option>
+                            </select>
+                        </div>
+                        <div class="col-3">
+                            <select class="form-select form-select-light" id="buswayFilter" style="border-radius: 25px; background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(139, 92, 246, 0.3); color: #666;">
+                                <option value="all">전체 BUSWAY</option>
+                                <option value="busway1">BUSWAY-A</option>
+                                <option value="busway2">BUSWAY-B</option>
+                                <option value="busway3">BUSWAY-C</option>
+                            </select>
+                        </div>
+                        <div class="col-3">
+                            <select class="form-select form-select-light" id="lineFilter" style="border-radius: 25px; background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(139, 92, 246, 0.3); color: #666;">
+                                <option value="all">전체 라인</option>
+                                <option value="line1">Line-1</option>
+                                <option value="line2">Line-2</option>
+                                <option value="line3">Line-3</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- 두 번째 행: 날짜/시간/조회 버튼 - 어두운 배경 -->
+                    <div class="dark-filter-row" style="background: linear-gradient(135deg, rgba(0, 0, 0, 0.8) 0%, rgba(139, 92, 246, 0.1) 100%); padding: 15px; border-radius: 12px; backdrop-filter: blur(10px);">
+                        <div class="row g-2 align-items-center">
+                            <!-- 날짜 선택 -->
+                            <div class="col-2">
+                                <input type="date" class="form-control" id="searchDate" value="2025-07-18" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(139, 92, 246, 0.3); color: #fff; border-radius: 8px;">
                             </div>
                             
-                            <!-- 날짜 범위와 시간 -->
-                            <div class="col-md-1-5">
-                                <label class="form-label-modern mb-1">시작 날짜</label>
-                                <input type="date" class="form-control form-control-modern form-control-sm" id="startDate">
+                            <!-- 시작 시간 -->
+                            <div class="col-2">
+                                <div class="input-group">
+                                    <span class="input-group-text" style="background: rgba(139, 92, 246, 0.2); border: 1px solid rgba(139, 92, 246, 0.4); color: #8b5cf6; border-radius: 8px 0 0 8px;">오전</span>
+                                    <input type="time" class="form-control" id="startTime" value="12:00" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(139, 92, 246, 0.3); color: #fff; border-radius: 0 8px 8px 0;">
+                                </div>
                             </div>
-                            <div class="col-md-1">
-                                <label class="form-label-modern mb-1">시작 시간</label>
-                                <input type="time" class="form-control form-control-modern form-control-sm" id="startTime" value="00:00">
-                            </div>
-                            <div class="col-md-1-5">
-                                <label class="form-label-modern mb-1">종료 날짜</label>
-                                <input type="date" class="form-control form-control-modern form-control-sm" id="endDate">
-                            </div>
-                            <div class="col-md-1">
-                                <label class="form-label-modern mb-1">종료 시간</label>
-                                <input type="time" class="form-control form-control-modern form-control-sm" id="endTime" value="23:59">
+                            
+                            <!-- 종료 시간 -->
+                            <div class="col-2">
+                                <div class="input-group">
+                                    <span class="input-group-text" style="background: rgba(139, 92, 246, 0.2); border: 1px solid rgba(139, 92, 246, 0.4); color: #8b5cf6; border-radius: 8px 0 0 8px;">오전</span>
+                                    <input type="time" class="form-control" id="endTime" value="12:00" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(139, 92, 246, 0.3); color: #fff; border-radius: 0 8px 8px 0;">
+                                </div>
                             </div>
                             
                             <!-- 조회 버튼 -->
-                            <div class="col-md-2"></div>
-                            <div class="col-md-2">
-                                <div class="d-flex gap-1">
-                                    <button class="btn btn-primary-modern btn-sm flex-fill" id="searchPowerData">
-                                        <i class="fas fa-search"></i> 조회
-                                    </button>
-                                    <button class="btn btn-secondary-modern btn-sm" id="resetFilter">
+                            <div class="col-2">
+                                <button class="btn btn-primary w-100" id="searchPowerData" style="background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%); border: none; font-weight: 600; border-radius: 8px; color: white; padding: 8px 16px;">
+                                    <i class="fas fa-search me-1"></i> 조회
+                                </button>
+                            </div>
+                            
+                            <!-- Export buttons -->
+                            <div class="col-4">
+                                <div class="d-flex justify-content-end gap-2">
+                                    <button class="btn btn-secondary btn-sm" id="resetFilter" title="조건 초기화" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff;">
                                         <i class="fas fa-undo"></i>
                                     </button>
-                                    <button class="btn btn-success-modern btn-sm" id="exportPowerData">
+                                    <button class="btn btn-success btn-sm" id="exportPowerData" title="Excel 다운로드" style="background: rgba(16, 185, 129, 0.8); border: none; color: #fff;">
                                         <i class="fas fa-file-excel"></i>
                                     </button>
-                                    <button class="btn btn-info-modern btn-sm" id="exportCsvData">
+                                    <button class="btn btn-info btn-sm" id="exportCsvData" title="CSV 다운로드" style="background: rgba(59, 130, 246, 0.8); border: none; color: #fff;">
                                         <i class="fas fa-file-csv"></i>
                                     </button>
                                 </div>
