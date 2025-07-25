@@ -112,6 +112,21 @@ The architecture prioritizes modularity and separation of concerns, making it ea
 
 ## Recent Changes (2025-07-25)
 
+### Menu Structure Reorganization
+- **Updated Navigation**: Restructured sidebar menu to match user requirements:
+  - **조회 보고서**: 전력조회 (powerInquiry.html), 장애조회 (faultInquiry.html)
+  - **설정**: 장애 설정 (alarmConfig.html), 장애등급 설정 (alarmLevelConfig.html)  
+  - **사용자관리**: 사용자관리 (adminsysuser.html)
+- **Page Renaming**: Converted adminPortUsage.html to powerInquiry.html with updated content
+- **New Pages**: Created faultInquiry.html and alarmLevelConfig.html based on existing templates
+- **Breadcrumb Updates**: Modified navigation breadcrumbs to reflect new menu structure
+
+### Login Page Enhancements  
+- **Background Image**: Applied real datacenter images with blur effects for professional appearance
+- **Glassmorphism Design**: Implemented transparent glass effects across all UI elements
+- **Enhanced Input Fields**: Added backdrop-filter and translucent styling for modern look
+- **Improved Visual Hierarchy**: Unified design language with proper contrast and readability
+
 ### DCIM Theme Implementation
 - **Updated Color Palette**: Switched to dark theme with purple (#8b5cf6) and blue (#3b82f6) neon accents
 - **Enhanced Visual Effects**: Added glassmorphism, backdrop blur, neon glow, and hologram sweep animations
