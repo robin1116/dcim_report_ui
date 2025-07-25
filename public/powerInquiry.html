@@ -22,6 +22,39 @@
     <!-- Custom CSS -->
     <link href="css/themes.css" rel="stylesheet">
     <link href="css/modern-admin.css" rel="stylesheet">
+    
+    <style>
+        /* Custom column widths for compact layout */
+        .col-md-1-5 {
+            flex: 0 0 auto;
+            width: 12%;
+        }
+        
+        @media (max-width: 768px) {
+            .col-md-1-5 {
+                width: 50%;
+            }
+        }
+        
+        /* Compact form controls */
+        .form-control-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+        }
+        
+        .form-check-sm .form-check-input {
+            margin-top: 0.125em;
+        }
+        
+        .form-check-sm .form-check-label {
+            font-size: 0.875rem;
+        }
+        
+        /* Compact card body */
+        .card-body-modern.py-3 {
+            padding: 1rem 1.5rem;
+        }
+    </style>
 </head>
 <body>
     <!-- Theme Toggle -->
@@ -150,12 +183,12 @@
             <div class="content-area">
                 <!-- Filter Controls -->
                 <div class="modern-card mb-4">
-                    <div class="card-body-modern">
-                        <div class="row g-3">
+                    <div class="card-body-modern py-3">
+                        <div class="row g-2 align-items-end">
                             <!-- 첫 번째 행: 층/DCU/BUSWAY/라인 -->
-                            <div class="col-md-3">
-                                <label class="form-label-modern">층</label>
-                                <select class="form-control form-control-modern" id="floorSelect">
+                            <div class="col-md-1-5">
+                                <label class="form-label-modern mb-1">층</label>
+                                <select class="form-control form-control-modern form-control-sm" id="floorSelect">
                                     <option value="">전체 층</option>
                                     <option value="B2">지하 2층</option>
                                     <option value="B1">지하 1층</option>
@@ -166,9 +199,9 @@
                                     <option value="5F">5층</option>
                                 </select>
                             </div>
-                            <div class="col-md-3">
-                                <label class="form-label-modern">DCU</label>
-                                <select class="form-control form-control-modern" id="dcuSelect">
+                            <div class="col-md-1-5">
+                                <label class="form-label-modern mb-1">DCU</label>
+                                <select class="form-control form-control-modern form-control-sm" id="dcuSelect">
                                     <option value="">전체 DCU</option>
                                     <option value="DCU-001">DCU-001</option>
                                     <option value="DCU-002">DCU-002</option>
@@ -177,9 +210,9 @@
                                     <option value="DCU-005">DCU-005</option>
                                 </select>
                             </div>
-                            <div class="col-md-3">
-                                <label class="form-label-modern">BUSWAY</label>
-                                <select class="form-control form-control-modern" id="buswaySelect">
+                            <div class="col-md-1-5">
+                                <label class="form-label-modern mb-1">BUSWAY</label>
+                                <select class="form-control form-control-modern form-control-sm" id="buswaySelect">
                                     <option value="">전체 BUSWAY</option>
                                     <option value="BW-A">BUSWAY-A</option>
                                     <option value="BW-B">BUSWAY-B</option>
@@ -187,9 +220,9 @@
                                     <option value="BW-D">BUSWAY-D</option>
                                 </select>
                             </div>
-                            <div class="col-md-3">
-                                <label class="form-label-modern">라인</label>
-                                <select class="form-control form-control-modern" id="lineSelect">
+                            <div class="col-md-1-5">
+                                <label class="form-label-modern mb-1">라인</label>
+                                <select class="form-control form-control-modern form-control-sm" id="lineSelect">
                                     <option value="">전체 라인</option>
                                     <option value="L1">라인 1</option>
                                     <option value="L2">라인 2</option>
@@ -198,65 +231,55 @@
                                 </select>
                             </div>
                             
-                            <!-- 두 번째 행: 날짜 범위와 시간 -->
-                            <div class="col-md-3">
-                                <label class="form-label-modern">시작 날짜</label>
-                                <input type="date" class="form-control form-control-modern" id="startDate">
+                            <!-- 날짜 범위와 시간 -->
+                            <div class="col-md-1-5">
+                                <label class="form-label-modern mb-1">시작 날짜</label>
+                                <input type="date" class="form-control form-control-modern form-control-sm" id="startDate">
                             </div>
-                            <div class="col-md-3">
-                                <label class="form-label-modern">시작 시간</label>
-                                <input type="time" class="form-control form-control-modern" id="startTime" value="00:00">
+                            <div class="col-md-1">
+                                <label class="form-label-modern mb-1">시작 시간</label>
+                                <input type="time" class="form-control form-control-modern form-control-sm" id="startTime" value="00:00">
                             </div>
-                            <div class="col-md-3">
-                                <label class="form-label-modern">종료 날짜</label>
-                                <input type="date" class="form-control form-control-modern" id="endDate">
+                            <div class="col-md-1-5">
+                                <label class="form-label-modern mb-1">종료 날짜</label>
+                                <input type="date" class="form-control form-control-modern form-control-sm" id="endDate">
                             </div>
-                            <div class="col-md-3">
-                                <label class="form-label-modern">종료 시간</label>
-                                <input type="time" class="form-control form-control-modern" id="endTime" value="23:59">
+                            <div class="col-md-1">
+                                <label class="form-label-modern mb-1">종료 시간</label>
+                                <input type="time" class="form-control form-control-modern form-control-sm" id="endTime" value="23:59">
                             </div>
                             
-                            <!-- 세 번째 행: 라디오 버튼과 조회 버튼 -->
-                            <div class="col-md-6">
-                                <label class="form-label-modern">조회 항목</label>
-                                <div class="d-flex gap-4 mt-2">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="powerType" id="voltageRadio" value="voltage" checked>
-                                        <label class="form-check-label" for="voltageRadio">
-                                            전압 (V)
-                                        </label>
+                            <!-- 체크박스와 조회 버튼 -->
+                            <div class="col-md-2">
+                                <label class="form-label-modern mb-1">조회 항목</label>
+                                <div class="d-flex gap-3">
+                                    <div class="form-check form-check-sm">
+                                        <input class="form-check-input" type="checkbox" id="voltageCheck" value="voltage" checked>
+                                        <label class="form-check-label" for="voltageCheck">전압</label>
                                     </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="powerType" id="currentRadio" value="current">
-                                        <label class="form-check-label" for="currentRadio">
-                                            전류 (A)
-                                        </label>
+                                    <div class="form-check form-check-sm">
+                                        <input class="form-check-input" type="checkbox" id="currentCheck" value="current">
+                                        <label class="form-check-label" for="currentCheck">전류</label>
                                     </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="powerType" id="powerRadio" value="power">
-                                        <label class="form-check-label" for="powerRadio">
-                                            전력량 (kWh)
-                                        </label>
+                                    <div class="form-check form-check-sm">
+                                        <input class="form-check-input" type="checkbox" id="powerCheck" value="power">
+                                        <label class="form-check-label" for="powerCheck">전력량</label>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6 d-flex align-items-end">
-                                <div class="d-flex gap-2 w-100">
-                                    <button class="btn btn-primary-modern flex-fill" id="searchPowerData">
-                                        <i class="fas fa-search"></i>
-                                        조회
+                            <div class="col-md-2">
+                                <div class="d-flex gap-1">
+                                    <button class="btn btn-primary-modern btn-sm flex-fill" id="searchPowerData">
+                                        <i class="fas fa-search"></i> 조회
                                     </button>
-                                    <button class="btn btn-secondary-modern" id="resetFilter">
+                                    <button class="btn btn-secondary-modern btn-sm" id="resetFilter">
                                         <i class="fas fa-undo"></i>
-                                        초기화
                                     </button>
-                                    <button class="btn btn-success-modern" id="exportPowerData">
+                                    <button class="btn btn-success-modern btn-sm" id="exportPowerData">
                                         <i class="fas fa-file-excel"></i>
-                                        Excel
                                     </button>
-                                    <button class="btn btn-info-modern" id="exportCsvData">
+                                    <button class="btn btn-info-modern btn-sm" id="exportCsvData">
                                         <i class="fas fa-file-csv"></i>
-                                        CSV
                                     </button>
                                 </div>
                             </div>
@@ -304,12 +327,9 @@
                                 <thead>
                                     <tr>
                                         <th>시간</th>
-                                        <th>랩명</th>
-                                        <th>층</th>
-                                        <th>평균 전류수</th>
-                                        <th>계측수</th>
-                                        <th>미래량 전류수</th>
-                                        <th>사용률(%)</th>
+                                        <th>전압 (V)</th>
+                                        <th>전류 (A)</th>
+                                        <th>전력량 (kWh)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -361,7 +381,7 @@
         $(document).ready(function() {
             let powerDataTable;
             let powerTrendChart;
-            let currentPowerType = 'voltage';
+            let selectedPowerTypes = ['voltage'];
 
             // Set default dates (last 7 days)
             const today = new Date();
@@ -385,31 +405,22 @@
                             return new Date(data).toLocaleString('ko-KR');
                         }
                     },
-                    { data: 'labName' },
-                    { data: 'floor' },
                     { 
-                        data: 'avgCurrent',
+                        data: 'voltage',
+                        render: function(data) {
+                            return data.toFixed(1);
+                        }
+                    },
+                    { 
+                        data: 'current',
                         render: function(data) {
                             return data.toFixed(2);
                         }
                     },
                     { 
-                        data: 'measurement',
+                        data: 'power',
                         render: function(data) {
-                            return data.toFixed(2);
-                        }
-                    },
-                    { 
-                        data: 'futureCurrent',
-                        render: function(data) {
-                            return data.toFixed(2);
-                        }
-                    },
-                    { 
-                        data: 'usage',
-                        render: function(data) {
-                            const color = data > 80 ? 'danger' : data > 60 ? 'warning' : 'success';
-                            return `<span class="text-${color} fw-bold">${data.toFixed(1)}</span>`;
+                            return data.toFixed(3);
                         }
                     }
                 ],
@@ -424,22 +435,16 @@
             // Generate mock power data
             function generateMockPowerData() {
                 const data = [];
-                const labNames = ['aaaa', 'bbbb', 'cccc', 'dddd', 'eeee'];
-                const floors = ['1111', '2222', '3333', '4444', '5555'];
                 const startDate = new Date($('#startDate').val() || lastWeek);
                 const endDate = new Date($('#endDate').val() || today);
                 
                 // Generate hourly data points
                 for (let d = new Date(startDate); d <= endDate; d.setHours(d.getHours() + 1)) {
-                    const randomLab = Math.floor(Math.random() * labNames.length);
                     data.push({
                         timestamp: new Date(d).toISOString(),
-                        labName: labNames[randomLab],
-                        floor: floors[randomLab],
-                        avgCurrent: Math.random() * 150 + 50,
-                        measurement: Math.random() * 200 + 100,
-                        futureCurrent: Math.random() * 50 + 10,
-                        usage: Math.random() * 40 + 60
+                        voltage: Math.random() * 50 + 200, // 200-250V
+                        current: Math.random() * 30 + 10,  // 10-40A
+                        power: Math.random() * 10 + 5      // 5-15 kWh
                     });
                 }
                 
@@ -453,16 +458,7 @@
                     type: 'line',
                     data: {
                         labels: [],
-                        datasets: [{
-                            label: '전압 (V)',
-                            data: [],
-                            borderColor: 'rgb(139, 92, 246)',
-                            backgroundColor: 'rgba(139, 92, 246, 0.1)',
-                            fill: true,
-                            tension: 0.4,
-                            pointRadius: 2,
-                            pointHoverRadius: 5
-                        }]
+                        datasets: []
                     },
                     options: {
                         responsive: true,
@@ -518,45 +514,76 @@
                 updateChart();
             }
 
-            // Update chart based on selected power type
+            // Update chart based on selected power types
             function updateChart() {
                 const data = powerDataTable.data().toArray();
                 const labels = [];
-                const values = [];
                 
                 // Sort by timestamp
                 data.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
                 
+                // Extract unique timestamps
                 data.forEach(item => {
                     labels.push(new Date(item.timestamp));
-                    switch(currentPowerType) {
-                        case 'voltage':
-                            values.push(item.avgCurrent * 2.2); // Mock voltage calculation
-                            break;
-                        case 'current':
-                            values.push(item.avgCurrent);
-                            break;
-                        case 'power':
-                            values.push(item.measurement / 10); // Mock power calculation
-                            break;
-                    }
                 });
 
-                const powerTypeLabels = {
-                    'voltage': '전압 (V)',
-                    'current': '전류 (A)',
-                    'power': '전력량 (kWh)'
+                const powerTypeConfig = {
+                    'voltage': {
+                        label: '전압 (V)',
+                        borderColor: 'rgb(139, 92, 246)',
+                        backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                        data: data.map(item => item.voltage)
+                    },
+                    'current': {
+                        label: '전류 (A)',
+                        borderColor: 'rgb(59, 130, 246)',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        data: data.map(item => item.current)
+                    },
+                    'power': {
+                        label: '전력량 (kWh)',
+                        borderColor: 'rgb(16, 185, 129)',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        data: data.map(item => item.power)
+                    }
                 };
 
+                // Create datasets based on selected types
+                const datasets = selectedPowerTypes.map(type => ({
+                    label: powerTypeConfig[type].label,
+                    data: powerTypeConfig[type].data,
+                    borderColor: powerTypeConfig[type].borderColor,
+                    backgroundColor: powerTypeConfig[type].backgroundColor,
+                    fill: false,
+                    tension: 0.4,
+                    pointRadius: 2,
+                    pointHoverRadius: 5
+                }));
+
                 powerTrendChart.data.labels = labels;
-                powerTrendChart.data.datasets[0].label = powerTypeLabels[currentPowerType];
-                powerTrendChart.data.datasets[0].data = values;
+                powerTrendChart.data.datasets = datasets;
                 powerTrendChart.update('active');
             }
 
-            // Radio button change event
-            $('input[name="powerType"]').change(function() {
-                currentPowerType = $(this).val();
+            // Checkbox change event
+            $('input[type="checkbox"][id$="Check"]').change(function() {
+                const value = $(this).val();
+                if ($(this).is(':checked')) {
+                    if (!selectedPowerTypes.includes(value)) {
+                        selectedPowerTypes.push(value);
+                    }
+                } else {
+                    selectedPowerTypes = selectedPowerTypes.filter(type => type !== value);
+                }
+                
+                // Ensure at least one type is selected
+                if (selectedPowerTypes.length === 0) {
+                    $(this).prop('checked', true);
+                    selectedPowerTypes.push(value);
+                    window.ToastNotifications.warning('최소 하나의 항목은 선택되어야 합니다.');
+                    return;
+                }
+                
                 updateChart();
             });
 
@@ -609,9 +636,13 @@
                 $('#endDate').val(today.toISOString().split('T')[0]);
                 $('#startTime').val('00:00');
                 $('#endTime').val('23:59');
-                $('input[name="powerType"][value="voltage"]').prop('checked', true);
-                currentPowerType = 'voltage';
                 
+                // Reset checkboxes
+                $('input[type="checkbox"][id$="Check"]').prop('checked', false);
+                $('#voltageCheck').prop('checked', true);
+                selectedPowerTypes = ['voltage'];
+                
+                updateChart();
                 window.ToastNotifications.info('필터가 초기화되었습니다.');
             });
 
