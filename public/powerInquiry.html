@@ -15,6 +15,10 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    
     <!-- Custom CSS -->
     <link href="css/themes.css" rel="stylesheet">
     <link href="css/modern-admin.css" rel="stylesheet">
@@ -147,173 +151,189 @@
                 <!-- Filter Controls -->
                 <div class="modern-card mb-4">
                     <div class="card-body-modern">
-                        <div class="row align-items-end">
+                        <div class="row g-3">
+                            <!-- 첫 번째 행: 층/DCU/BUSWAY/라인 -->
                             <div class="col-md-3">
-                                <label class="form-label-modern">서버 그룹</label>
-                                <select class="form-control form-control-modern" id="serverGroup">
-                                    <option value="">전체 서버</option>
-                                    <option value="web">웹 서버</option>
-                                    <option value="db">데이터베이스 서버</option>
-                                    <option value="storage">스토리지 서버</option>
-                                    <option value="network">네트워크 장비</option>
+                                <label class="form-label-modern">층</label>
+                                <select class="form-control form-control-modern" id="floorSelect">
+                                    <option value="">전체 층</option>
+                                    <option value="B2">지하 2층</option>
+                                    <option value="B1">지하 1층</option>
+                                    <option value="1F">1층</option>
+                                    <option value="2F">2층</option>
+                                    <option value="3F">3층</option>
+                                    <option value="4F">4층</option>
+                                    <option value="5F">5층</option>
                                 </select>
                             </div>
                             <div class="col-md-3">
-                                <label class="form-label-modern">기간</label>
-                                <select class="form-control form-control-modern" id="timePeriod">
-                                    <option value="1h">최근 1시간</option>
-                                    <option value="24h" selected>최근 24시간</option>
-                                    <option value="7d">최근 7일</option>
-                                    <option value="30d">최근 30일</option>
+                                <label class="form-label-modern">DCU</label>
+                                <select class="form-control form-control-modern" id="dcuSelect">
+                                    <option value="">전체 DCU</option>
+                                    <option value="DCU-001">DCU-001</option>
+                                    <option value="DCU-002">DCU-002</option>
+                                    <option value="DCU-003">DCU-003</option>
+                                    <option value="DCU-004">DCU-004</option>
+                                    <option value="DCU-005">DCU-005</option>
                                 </select>
                             </div>
                             <div class="col-md-3">
-                                <label class="form-label-modern">포트 타입</label>
-                                <select class="form-control form-control-modern" id="portType">
-                                    <option value="">모든 포트</option>
-                                    <option value="ethernet">이더넷</option>
-                                    <option value="fiber">파이버</option>
-                                    <option value="copper">구리</option>
+                                <label class="form-label-modern">BUSWAY</label>
+                                <select class="form-control form-control-modern" id="buswaySelect">
+                                    <option value="">전체 BUSWAY</option>
+                                    <option value="BW-A">BUSWAY-A</option>
+                                    <option value="BW-B">BUSWAY-B</option>
+                                    <option value="BW-C">BUSWAY-C</option>
+                                    <option value="BW-D">BUSWAY-D</option>
                                 </select>
                             </div>
                             <div class="col-md-3">
-                                <div class="d-flex gap-2">
-                                    <button class="btn btn-primary-modern" id="applyFilter">
-                                        <i class="fas fa-filter"></i>
-                                        필터 적용
+                                <label class="form-label-modern">라인</label>
+                                <select class="form-control form-control-modern" id="lineSelect">
+                                    <option value="">전체 라인</option>
+                                    <option value="L1">라인 1</option>
+                                    <option value="L2">라인 2</option>
+                                    <option value="L3">라인 3</option>
+                                    <option value="L4">라인 4</option>
+                                </select>
+                            </div>
+                            
+                            <!-- 두 번째 행: 날짜 범위와 시간 -->
+                            <div class="col-md-3">
+                                <label class="form-label-modern">시작 날짜</label>
+                                <input type="date" class="form-control form-control-modern" id="startDate">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label-modern">시작 시간</label>
+                                <input type="time" class="form-control form-control-modern" id="startTime" value="00:00">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label-modern">종료 날짜</label>
+                                <input type="date" class="form-control form-control-modern" id="endDate">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label-modern">종료 시간</label>
+                                <input type="time" class="form-control form-control-modern" id="endTime" value="23:59">
+                            </div>
+                            
+                            <!-- 세 번째 행: 라디오 버튼과 조회 버튼 -->
+                            <div class="col-md-6">
+                                <label class="form-label-modern">조회 항목</label>
+                                <div class="d-flex gap-4 mt-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="powerType" id="voltageRadio" value="voltage" checked>
+                                        <label class="form-check-label" for="voltageRadio">
+                                            전압 (V)
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="powerType" id="currentRadio" value="current">
+                                        <label class="form-check-label" for="currentRadio">
+                                            전류 (A)
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="powerType" id="powerRadio" value="power">
+                                        <label class="form-check-label" for="powerRadio">
+                                            전력량 (kWh)
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 d-flex align-items-end">
+                                <div class="d-flex gap-2 w-100">
+                                    <button class="btn btn-primary-modern flex-fill" id="searchPowerData">
+                                        <i class="fas fa-search"></i>
+                                        조회
                                     </button>
                                     <button class="btn btn-secondary-modern" id="resetFilter">
                                         <i class="fas fa-undo"></i>
                                         초기화
                                     </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Statistics Cards -->
-                <div class="row mb-4">
-                    <div class="col-md-3">
-                        <div class="modern-card">
-                            <div class="card-body-modern text-center">
-                                <div class="stat-icon mb-3">
-                                    <i class="fas fa-ethernet text-gradient" style="font-size: 2.5rem;"></i>
-                                </div>
-                                <h3 class="mb-1" id="totalPorts">-</h3>
-                                <p class="text-muted mb-0">전체 포트</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="modern-card">
-                            <div class="card-body-modern text-center">
-                                <div class="stat-icon mb-3">
-                                    <i class="fas fa-plug text-gradient" style="font-size: 2.5rem;"></i>
-                                </div>
-                                <h3 class="mb-1" id="activePorts">-</h3>
-                                <p class="text-muted mb-0">사용 중인 포트</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="modern-card">
-                            <div class="card-body-modern text-center">
-                                <div class="stat-icon mb-3">
-                                    <i class="fas fa-chart-line text-gradient" style="font-size: 2.5rem;"></i>
-                                </div>
-                                <h3 class="mb-1" id="avgUtilization">-</h3>
-                                <p class="text-muted mb-0">평균 사용률</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="modern-card">
-                            <div class="card-body-modern text-center">
-                                <div class="stat-icon mb-3">
-                                    <i class="fas fa-exclamation-triangle text-gradient" style="font-size: 2.5rem;"></i>
-                                </div>
-                                <h3 class="mb-1" id="alertCount">-</h3>
-                                <p class="text-muted mb-0">알림 발생</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Charts Row -->
-                <div class="row mb-4">
-                    <div class="col-lg-8">
-                        <div class="modern-card">
-                            <div class="card-header-modern">
-                                <h3 class="card-title-modern">포트 사용량 추이</h3>
-                                <div class="dropdown">
-                                    <button class="btn btn-secondary-modern dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                                        <i class="fas fa-ellipsis-v"></i>
+                                    <button class="btn btn-success-modern" id="exportPowerData">
+                                        <i class="fas fa-file-excel"></i>
+                                        Excel
                                     </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="#" id="exportChart"><i class="fas fa-download me-2"></i>차트 내보내기</a></li>
-                                        <li><a class="dropdown-item" href="#" id="fullscreenChart"><i class="fas fa-expand me-2"></i>전체화면</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="card-body-modern">
-                                <div class="chart-container">
-                                    <canvas id="usageChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="modern-card">
-                            <div class="card-header-modern">
-                                <h3 class="card-title-modern">포트 상태 분포</h3>
-                            </div>
-                            <div class="card-body-modern">
-                                <div class="chart-container">
-                                    <canvas id="statusChart"></canvas>
+                                    <button class="btn btn-info-modern" id="exportCsvData">
+                                        <i class="fas fa-file-csv"></i>
+                                        CSV
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Port Details Table -->
+                <!-- Chart Section -->
+                <div class="modern-card mb-4">
+                    <div class="card-header-modern">
+                        <h3 class="card-title-modern">전력 트렌드 차트</h3>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-sm btn-secondary-modern" id="chartFullscreen">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-secondary-modern dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                    <i class="fas fa-cog"></i>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#" id="chartSettings"><i class="fas fa-sliders-h me-2"></i>차트 설정</a></li>
+                                    <li><a class="dropdown-item" href="#" id="exportChartImage"><i class="fas fa-image me-2"></i>이미지로 저장</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body-modern">
+                        <div class="chart-container" style="height: 400px;">
+                            <canvas id="powerTrendChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data Table -->
                 <div class="modern-card">
                     <div class="card-header-modern">
-                        <h3 class="card-title-modern">포트 상세 정보</h3>
+                        <h3 class="card-title-modern">전력 데이터 상세</h3>
                         <div class="d-flex gap-2">
-                            <button class="btn btn-secondary-modern" id="bulkAction" disabled>
-                                <i class="fas fa-tasks"></i>
-                                일괄 작업
-                            </button>
-                            <button class="btn btn-primary-modern" id="addPort">
-                                <i class="fas fa-plus"></i>
-                                포트 추가
-                            </button>
+                            <span class="badge bg-info" id="dataCount">총 0건</span>
                         </div>
                     </div>
                     <div class="card-body-modern">
                         <div class="table-container">
-                            <table id="portsTable" class="table table-modern" style="width:100%">
+                            <table id="powerDataTable" class="table table-modern" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th>
-                                            <input type="checkbox" class="form-check-input" id="selectAll">
-                                        </th>
-                                        <th>포트 ID</th>
-                                        <th>서버명</th>
-                                        <th>포트 타입</th>
-                                        <th>상태</th>
-                                        <th>사용률</th>
-                                        <th>대역폭</th>
-                                        <th>마지막 업데이트</th>
-                                        <th>작업</th>
+                                        <th>시간</th>
+                                        <th>랩명</th>
+                                        <th>층</th>
+                                        <th>평균 전류수</th>
+                                        <th>계측수</th>
+                                        <th>미래량 전류수</th>
+                                        <th>사용률(%)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <!-- Data will be loaded via JavaScript -->
                                 </tbody>
                             </table>
+                        </div>
+                        
+                        <!-- Pagination -->
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <div class="d-flex align-items-center gap-2">
+                                <label class="form-label-modern mb-0">페이지당 항목:</label>
+                                <select class="form-select form-select-sm" id="pageSize" style="width: auto;">
+                                    <option value="10">10</option>
+                                    <option value="25" selected>25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                            </div>
+                            <nav aria-label="Table pagination">
+                                <ul class="pagination pagination-sm mb-0" id="tablePagination">
+                                    <!-- Pagination will be generated by JavaScript -->
+                                </ul>
+                            </nav>
                         </div>
                     </div>
                 </div>
@@ -339,164 +359,109 @@
 
     <script>
         $(document).ready(function() {
-            let portsTable;
-            let usageChart;
-            let statusChart;
+            let powerDataTable;
+            let powerTrendChart;
+            let currentPowerType = 'voltage';
+
+            // Set default dates (last 7 days)
+            const today = new Date();
+            const lastWeek = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+            $('#startDate').val(lastWeek.toISOString().split('T')[0]);
+            $('#endDate').val(today.toISOString().split('T')[0]);
 
             // Initialize DataTable
-            portsTable = $('#portsTable').DataTable({
-                ...window.DataTableDefaults,
-                ajax: {
-                    url: '/api/port-usage',
-                    dataSrc: function(json) {
-                        // Generate mock port data
-                        const ports = [];
-                        const servers = ['WEB-01', 'WEB-02', 'DB-01', 'DB-02', 'STORAGE-01', 'NET-01'];
-                        const types = ['ethernet', 'fiber', 'copper'];
-                        const statuses = ['active', 'inactive', 'warning', 'error'];
-                        
-                        for (let i = 1; i <= 50; i++) {
-                            ports.push({
-                                id: `PORT-${i.toString().padStart(3, '0')}`,
-                                server: servers[Math.floor(Math.random() * servers.length)],
-                                type: types[Math.floor(Math.random() * types.length)],
-                                status: statuses[Math.floor(Math.random() * statuses.length)],
-                                utilization: Math.floor(Math.random() * 100),
-                                bandwidth: ['1Gbps', '10Gbps', '40Gbps'][Math.floor(Math.random() * 3)],
-                                lastUpdate: new Date(Date.now() - Math.random() * 24 * 60 * 60 * 1000).toISOString()
-                            });
-                        }
-                        return ports;
-                    }
+            powerDataTable = $('#powerDataTable').DataTable({
+                processing: true,
+                serverSide: false,
+                responsive: true,
+                language: {
+                    url: "//cdn.datatables.net/plug-ins/1.13.7/i18n/ko.json"
                 },
+                data: generateMockPowerData(),
                 columns: [
-                    {
-                        data: null,
-                        orderable: false,
-                        render: function(data, type, row, meta) {
-                            return `<input type="checkbox" class="form-check-input row-select" value="${row.id}">`;
-                        }
-                    },
-                    { data: 'id' },
-                    { data: 'server' },
                     { 
-                        data: 'type',
+                        data: 'timestamp',
                         render: function(data) {
-                            const icons = {
-                                ethernet: 'fas fa-ethernet',
-                                fiber: 'fas fa-wifi',
-                                copper: 'fas fa-plug'
-                            };
-                            return `<i class="${icons[data]} me-2"></i>${data.toUpperCase()}`;
+                            return new Date(data).toLocaleString('ko-KR');
                         }
                     },
-                    {
-                        data: 'status',
+                    { data: 'labName' },
+                    { data: 'floor' },
+                    { 
+                        data: 'avgCurrent',
                         render: function(data) {
-                            const classes = {
-                                active: 'status-active',
-                                inactive: 'status-inactive',
-                                warning: 'status-pending',
-                                error: 'status-inactive'
-                            };
-                            const labels = {
-                                active: '정상',
-                                inactive: '비활성',
-                                warning: '경고',
-                                error: '오류'
-                            };
-                            return `<span class="status-badge ${classes[data]}">${labels[data]}</span>`;
+                            return data.toFixed(2);
                         }
                     },
-                    {
-                        data: 'utilization',
+                    { 
+                        data: 'measurement',
+                        render: function(data) {
+                            return data.toFixed(2);
+                        }
+                    },
+                    { 
+                        data: 'futureCurrent',
+                        render: function(data) {
+                            return data.toFixed(2);
+                        }
+                    },
+                    { 
+                        data: 'usage',
                         render: function(data) {
                             const color = data > 80 ? 'danger' : data > 60 ? 'warning' : 'success';
-                            return `
-                                <div class="d-flex align-items-center">
-                                    <div class="progress me-2" style="width: 60px; height: 8px;">
-                                        <div class="progress-bar bg-${color}" style="width: ${data}%"></div>
-                                    </div>
-                                    <span class="text-${color} fw-bold">${data}%</span>
-                                </div>
-                            `;
-                        }
-                    },
-                    { data: 'bandwidth' },
-                    {
-                        data: 'lastUpdate',
-                        render: function(data) {
-                            return window.AdminUtils.formatDateTime(data);
-                        }
-                    },
-                    {
-                        data: null,
-                        orderable: false,
-                        render: function(data, type, row) {
-                            return `
-                                <div class="btn-group" role="group">
-                                    <button type="button" class="btn btn-sm-modern btn-secondary-modern view-details-btn" 
-                                            data-port='${JSON.stringify(row)}' title="상세보기">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-sm-modern btn-primary-modern edit-port-btn" 
-                                            data-port='${JSON.stringify(row)}' title="수정">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-sm-modern btn-danger-modern delete-port-btn" 
-                                            data-id="${row.id}" title="삭제">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            `;
+                            return `<span class="text-${color} fw-bold">${data.toFixed(1)}</span>`;
                         }
                     }
                 ],
-                drawCallback: function() {
-                    updateStatistics();
-                    updateBulkActionButton();
-                }
+                order: [[0, 'desc']],
+                pageLength: 25,
+                lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]]
             });
 
-            // Initialize Charts
-            initializeCharts();
+            // Initialize Chart
+            initializePowerChart();
 
-            // Update statistics
-            function updateStatistics() {
-                const data = portsTable.data();
-                const totalPorts = data.length;
-                const activePorts = data.filter(port => port.status === 'active').length;
-                const avgUtilization = Math.round(data.reduce((sum, port) => sum + port.utilization, 0) / totalPorts);
-                const alertCount = data.filter(port => port.status === 'warning' || port.status === 'error').length;
-
-                $('#totalPorts').text(totalPorts);
-                $('#activePorts').text(activePorts);
-                $('#avgUtilization').text(avgUtilization + '%');
-                $('#alertCount').text(alertCount);
+            // Generate mock power data
+            function generateMockPowerData() {
+                const data = [];
+                const labNames = ['aaaa', 'bbbb', 'cccc', 'dddd', 'eeee'];
+                const floors = ['1111', '2222', '3333', '4444', '5555'];
+                const startDate = new Date($('#startDate').val() || lastWeek);
+                const endDate = new Date($('#endDate').val() || today);
+                
+                // Generate hourly data points
+                for (let d = new Date(startDate); d <= endDate; d.setHours(d.getHours() + 1)) {
+                    const randomLab = Math.floor(Math.random() * labNames.length);
+                    data.push({
+                        timestamp: new Date(d).toISOString(),
+                        labName: labNames[randomLab],
+                        floor: floors[randomLab],
+                        avgCurrent: Math.random() * 150 + 50,
+                        measurement: Math.random() * 200 + 100,
+                        futureCurrent: Math.random() * 50 + 10,
+                        usage: Math.random() * 40 + 60
+                    });
+                }
+                
+                return data.slice(-100); // Limit to last 100 records for performance
             }
 
-            // Initialize charts
-            function initializeCharts() {
-                // Usage trend chart
-                const usageCtx = document.getElementById('usageChart').getContext('2d');
-                usageChart = new Chart(usageCtx, {
+            // Initialize power trend chart
+            function initializePowerChart() {
+                const ctx = document.getElementById('powerTrendChart').getContext('2d');
+                powerTrendChart = new Chart(ctx, {
                     type: 'line',
                     data: {
-                        labels: generateTimeLabels(),
+                        labels: [],
                         datasets: [{
-                            label: '평균 사용률',
-                            data: generateUsageData(),
-                            borderColor: 'rgb(3, 52, 149)',
-                            backgroundColor: 'rgba(3, 52, 149, 0.1)',
+                            label: '전압 (V)',
+                            data: [],
+                            borderColor: 'rgb(139, 92, 246)',
+                            backgroundColor: 'rgba(139, 92, 246, 0.1)',
                             fill: true,
-                            tension: 0.4
-                        }, {
-                            label: '최대 사용률',
-                            data: generateUsageData(20),
-                            borderColor: 'rgb(174, 228, 255)',
-                            backgroundColor: 'rgba(174, 228, 255, 0.1)',
-                            fill: false,
-                            tension: 0.4
+                            tension: 0.4,
+                            pointRadius: 2,
+                            pointHoverRadius: 5
                         }]
                     },
                     options: {
@@ -504,14 +469,29 @@
                         maintainAspectRatio: false,
                         interaction: {
                             intersect: false,
+                            mode: 'index'
                         },
                         scales: {
+                            x: {
+                                type: 'time',
+                                time: {
+                                    unit: 'hour',
+                                    displayFormats: {
+                                        hour: 'MM-dd HH:mm'
+                                    }
+                                },
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.1)'
+                                }
+                            },
                             y: {
-                                beginAtZero: true,
-                                max: 100,
+                                beginAtZero: false,
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.1)'
+                                },
                                 ticks: {
                                     callback: function(value) {
-                                        return value + '%';
+                                        return value.toFixed(1);
                                     }
                                 }
                             }
@@ -519,135 +499,172 @@
                         plugins: {
                             legend: {
                                 position: 'top',
+                                labels: {
+                                    usePointStyle: true,
+                                    color: '#fff'
+                                }
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                titleColor: '#fff',
+                                bodyColor: '#fff',
+                                borderColor: 'rgb(139, 92, 246)',
+                                borderWidth: 1
                             }
                         }
                     }
                 });
-
-                // Status distribution chart
-                const statusCtx = document.getElementById('statusChart').getContext('2d');
-                statusChart = new Chart(statusCtx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: ['정상', '경고', '오류', '비활성'],
-                        datasets: [{
-                            data: [70, 15, 5, 10],
-                            backgroundColor: [
-                                'rgba(25, 135, 84, 0.8)',
-                                'rgba(255, 193, 7, 0.8)',
-                                'rgba(220, 53, 69, 0.8)',
-                                'rgba(108, 117, 125, 0.8)'
-                            ],
-                            borderColor: [
-                                'rgb(25, 135, 84)',
-                                'rgb(255, 193, 7)',
-                                'rgb(220, 53, 69)',
-                                'rgb(108, 117, 125)'
-                            ],
-                            borderWidth: 2
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                position: 'bottom'
-                            }
-                        }
-                    }
-                });
+                
+                updateChart();
             }
 
-            // Generate time labels for chart
-            function generateTimeLabels() {
+            // Update chart based on selected power type
+            function updateChart() {
+                const data = powerDataTable.data().toArray();
                 const labels = [];
-                const now = new Date();
-                for (let i = 23; i >= 0; i--) {
-                    const time = new Date(now.getTime() - i * 60 * 60 * 1000);
-                    labels.push(time.getHours().toString().padStart(2, '0') + ':00');
-                }
-                return labels;
+                const values = [];
+                
+                // Sort by timestamp
+                data.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+                
+                data.forEach(item => {
+                    labels.push(new Date(item.timestamp));
+                    switch(currentPowerType) {
+                        case 'voltage':
+                            values.push(item.avgCurrent * 2.2); // Mock voltage calculation
+                            break;
+                        case 'current':
+                            values.push(item.avgCurrent);
+                            break;
+                        case 'power':
+                            values.push(item.measurement / 10); // Mock power calculation
+                            break;
+                    }
+                });
+
+                const powerTypeLabels = {
+                    'voltage': '전압 (V)',
+                    'current': '전류 (A)',
+                    'power': '전력량 (kWh)'
+                };
+
+                powerTrendChart.data.labels = labels;
+                powerTrendChart.data.datasets[0].label = powerTypeLabels[currentPowerType];
+                powerTrendChart.data.datasets[0].data = values;
+                powerTrendChart.update('active');
             }
 
-            // Generate usage data for chart
-            function generateUsageData(offset = 0) {
-                const data = [];
-                for (let i = 0; i < 24; i++) {
-                    data.push(Math.floor(Math.random() * 60) + 20 + offset);
+            // Radio button change event
+            $('input[name="powerType"]').change(function() {
+                currentPowerType = $(this).val();
+                updateChart();
+            });
+
+            // Search button
+            $('#searchPowerData').click(function() {
+                const startDate = $('#startDate').val();
+                const endDate = $('#endDate').val();
+                const floor = $('#floorSelect').val();
+                const dcu = $('#dcuSelect').val();
+                const busway = $('#buswaySelect').val();
+                const line = $('#lineSelect').val();
+                
+                if (!startDate || !endDate) {
+                    window.ToastNotifications.warning('시작 날짜와 종료 날짜를 선택해주세요.');
+                    return;
                 }
-                return data;
-            }
-
-            // Select all checkbox
-            $('#selectAll').change(function() {
-                $('.row-select').prop('checked', this.checked);
-                updateBulkActionButton();
-            });
-
-            // Individual row select
-            $(document).on('change', '.row-select', function() {
-                updateBulkActionButton();
-                const totalRows = $('.row-select').length;
-                const checkedRows = $('.row-select:checked').length;
-                $('#selectAll').prop('checked', totalRows === checkedRows);
-                $('#selectAll').prop('indeterminate', checkedRows > 0 && checkedRows < totalRows);
-            });
-
-            // Update bulk action button
-            function updateBulkActionButton() {
-                const selectedCount = $('.row-select:checked').length;
-                $('#bulkAction').prop('disabled', selectedCount === 0);
-                if (selectedCount > 0) {
-                    $('#bulkAction').html(`<i class="fas fa-tasks"></i> 일괄 작업 (${selectedCount})`);
-                } else {
-                    $('#bulkAction').html('<i class="fas fa-tasks"></i> 일괄 작업');
+                
+                if (new Date(startDate) > new Date(endDate)) {
+                    window.ToastNotifications.error('시작 날짜는 종료 날짜보다 이전이어야 합니다.');
+                    return;
                 }
-            }
 
-            // Filter functionality
-            $('#applyFilter').click(function() {
-                window.ToastNotifications.info('필터가 적용되었습니다.');
-                portsTable.ajax.reload();
-            });
-
-            $('#resetFilter').click(function() {
-                $('#serverGroup, #timePeriod, #portType').val('');
-                $('#timePeriod').val('24h');
-                window.ToastNotifications.info('필터가 초기화되었습니다.');
-                portsTable.ajax.reload();
-            });
-
-            // Refresh data
-            $('#refreshData').click(function() {
+                // Show loading
                 const btn = $(this);
-                btn.find('i').addClass('fa-spin');
-                portsTable.ajax.reload();
-                usageChart.data.datasets[0].data = generateUsageData();
-                usageChart.data.datasets[1].data = generateUsageData(20);
-                usageChart.update();
+                const originalText = btn.html();
+                btn.html('<i class="fas fa-spinner fa-spin"></i> 조회 중...');
+                btn.prop('disabled', true);
+
+                // Simulate API call
                 setTimeout(() => {
-                    btn.find('i').removeClass('fa-spin');
-                    window.ToastNotifications.success('데이터가 새로고침되었습니다.');
-                }, 1000);
+                    const newData = generateMockPowerData();
+                    powerDataTable.clear();
+                    powerDataTable.rows.add(newData);
+                    powerDataTable.draw();
+                    
+                    updateChart();
+                    updateDataCount(newData.length);
+                    
+                    btn.html(originalText);
+                    btn.prop('disabled', false);
+                    
+                    window.ToastNotifications.success(`${newData.length}건의 데이터를 조회했습니다.`);
+                }, 1500);
             });
 
-            // Export data
-            $('#exportData').click(function() {
-                window.ToastNotifications.info('데이터를 내보내는 중입니다...');
-                // In production, this would trigger actual export
+            // Reset filter
+            $('#resetFilter').click(function() {
+                $('#floorSelect, #dcuSelect, #buswaySelect, #lineSelect').val('');
+                $('#startDate').val(lastWeek.toISOString().split('T')[0]);
+                $('#endDate').val(today.toISOString().split('T')[0]);
+                $('#startTime').val('00:00');
+                $('#endTime').val('23:59');
+                $('input[name="powerType"][value="voltage"]').prop('checked', true);
+                currentPowerType = 'voltage';
+                
+                window.ToastNotifications.info('필터가 초기화되었습니다.');
+            });
+
+            // Export functions
+            $('#exportPowerData').click(function() {
+                window.ToastNotifications.info('Excel 파일을 생성하는 중입니다...');
                 setTimeout(() => {
-                    window.ToastNotifications.success('데이터 내보내기가 완료되었습니다.');
+                    window.ToastNotifications.success('Excel 파일이 다운로드되었습니다.');
                 }, 2000);
             });
 
-            // Auto refresh every 30 seconds
+            $('#exportCsvData').click(function() {
+                window.ToastNotifications.info('CSV 파일을 생성하는 중입니다...');
+                setTimeout(() => {
+                    window.ToastNotifications.success('CSV 파일이 다운로드되었습니다.');
+                }, 2000);
+            });
+
+            // Chart controls
+            $('#chartFullscreen').click(function() {
+                if (powerTrendChart.canvas.requestFullscreen) {
+                    powerTrendChart.canvas.requestFullscreen();
+                }
+            });
+
+            $('#exportChartImage').click(function() {
+                const url = powerTrendChart.toBase64Image();
+                const link = document.createElement('a');
+                link.download = `power-trend-${new Date().toISOString().split('T')[0]}.png`;
+                link.href = url;
+                link.click();
+                window.ToastNotifications.success('차트 이미지가 저장되었습니다.');
+            });
+
+            // Update data count
+            function updateDataCount(count) {
+                $('#dataCount').text(`총 ${count}건`);
+            }
+
+            // Initialize data count
+            updateDataCount(powerDataTable.data().length);
+
+            // Page size change
+            $('#pageSize').change(function() {
+                powerDataTable.page.len(parseInt($(this).val())).draw();
+            });
+
+            // Auto refresh every 5 minutes
             setInterval(() => {
-                portsTable.ajax.reload(null, false);
-                usageChart.data.datasets[0].data = generateUsageData();
-                usageChart.data.datasets[1].data = generateUsageData(20);
-                usageChart.update('none');
-            }, 30000);
+                if ($('#autoRefresh').is(':checked')) {
+                    $('#searchPowerData').click();
+                }
+            }, 300000);
         });
     </script>
 </body>
