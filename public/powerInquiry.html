@@ -408,6 +408,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+
     
     <script src="js/theme-manager.js"></script>
     <script src="js/admin-common.js"></script>
@@ -1198,38 +1199,38 @@
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF('p', 'mm', 'a4');
                 
-                // Add Korean font support
-                doc.addFont('https://fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Regular.woff2', 'NotoSansKR', 'normal');
-                doc.setFont('NotoSansKR', 'normal');
-                
                 let yPosition = 20;
                 
-                // Header
-                doc.setFontSize(20);
-                doc.text('전력조회 보고서', 105, yPosition, { align: 'center' });
+                // Header (using English to avoid font issues)
+                doc.setFontSize(18);
+                doc.text('Power Inquiry Report', 105, yPosition, { align: 'center' });
+                yPosition += 10;
+                
+                doc.setFontSize(12);
+                doc.text('simpleEye DCIM System', 105, yPosition, { align: 'center' });
                 yPosition += 15;
                 
                 // Report generation time
-                doc.setFontSize(10);
+                doc.setFontSize(11);
                 const now = new Date();
-                const reportTime = now.toLocaleDateString('ko-KR') + ' ' + now.toLocaleTimeString('ko-KR');
-                doc.text(`생성일시: ${reportTime}`, 20, yPosition);
-                yPosition += 10;
+                const reportTime = now.toLocaleDateString('en-US') + ' ' + now.toLocaleTimeString('en-US');
+                doc.text(`Generated: ${reportTime}`, 20, yPosition);
+                yPosition += 12;
                 
                 // Filter information
                 doc.setFontSize(12);
-                doc.text('조회 조건', 20, yPosition);
-                yPosition += 7;
+                doc.text('Search Conditions', 20, yPosition);
+                yPosition += 8;
                 
                 doc.setFontSize(10);
                 const searchDate = $('#searchDate').val() || '2025-07-18';
                 const startTime = $('#startTime').val() || '12:00';
                 const endTime = $('#endTime').val() || '12:00';
                 
-                doc.text(`조회일자: ${searchDate}`, 25, yPosition);
-                yPosition += 5;
-                doc.text(`시간범위: ${startTime} ~ ${endTime}`, 25, yPosition);
-                yPosition += 10;
+                doc.text(`Date: ${searchDate}`, 25, yPosition);
+                yPosition += 6;
+                doc.text(`Time Range: ${startTime} ~ ${endTime}`, 25, yPosition);
+                yPosition += 12;
                 
                 // Add chart image if available
                 if (powerTrendChart) {
@@ -1241,7 +1242,7 @@
                         });
                         
                         doc.setFontSize(12);
-                        doc.text('전력 트렌드 차트', 20, yPosition);
+                        doc.text('Power Trend Chart', 20, yPosition);
                         yPosition += 10;
                         
                         // Add chart image (scaled to fit page)
@@ -1251,14 +1252,14 @@
                         yPosition += imgHeight + 15;
                     } catch (e) {
                         console.warn('Chart image could not be added to PDF:', e);
-                        doc.text('차트 이미지를 불러올 수 없습니다.', 20, yPosition);
+                        doc.text('Chart image could not be loaded.', 20, yPosition);
                         yPosition += 10;
                     }
                 }
                 
                 // Data table
                 doc.setFontSize(12);
-                doc.text('전력 데이터', 20, yPosition);
+                doc.text('Power Data', 20, yPosition);
                 yPosition += 10;
                 
                 // Get table data
@@ -1267,12 +1268,13 @@
                 
                 tableData.forEach(row => {
                     const date = new Date(row.timestamp);
-                    const formattedTime = date.toLocaleDateString('ko-KR', {
+                    const formattedTime = date.toLocaleDateString('en-US', {
                         month: '2-digit', 
                         day: '2-digit'
-                    }) + ' ' + date.toLocaleTimeString('ko-KR', {
+                    }) + ' ' + date.toLocaleTimeString('en-US', {
                         hour: '2-digit', 
-                        minute: '2-digit'
+                        minute: '2-digit',
+                        hour12: false
                     });
                     
                     tableRows.push([
@@ -1285,26 +1287,18 @@
                 
                 // Add table using autoTable plugin
                 doc.autoTable({
-                    head: [['시간', '전압', '전류', '전력량']],
+                    head: [['Time', 'Voltage', 'Current', 'Power']],
                     body: tableRows.slice(0, 20), // Limit to first 20 rows for PDF
                     startY: yPosition,
                     theme: 'grid',
-                    styles: {
-                        font: 'NotoSansKR',
-                        fontStyle: 'normal'
-                    },
                     headStyles: {
                         fillColor: [139, 92, 246],
                         textColor: 255,
-                        fontSize: 10,
-                        font: 'NotoSansKR',
-                        fontStyle: 'normal'
+                        fontSize: 10
                     },
                     bodyStyles: {
                         fontSize: 9,
-                        textColor: 50,
-                        font: 'NotoSansKR',
-                        fontStyle: 'normal'
+                        textColor: 50
                     },
                     alternateRowStyles: {
                         fillColor: [248, 249, 250]
@@ -1322,14 +1316,13 @@
                 const pageCount = doc.internal.getNumberOfPages();
                 for (let i = 1; i <= pageCount; i++) {
                     doc.setPage(i);
-                    doc.setFont('NotoSansKR', 'normal');
                     doc.setFontSize(8);
                     doc.text(`Page ${i} of ${pageCount}`, 105, 290, { align: 'center' });
-                    doc.text('죽전 퍼시픽써니 DC DCIM 시스템', 20, 290);
+                    doc.text('simpleEye DCIM System', 20, 290);
                 }
                 
                 // Generate filename and save
-                const filename = `전력조회보고서_${now.toISOString().slice(0, 19).replace(/:/g, '-')}.pdf`;
+                const filename = `PowerReport_${now.toISOString().slice(0, 19).replace(/:/g, '-')}.pdf`;
                 doc.save(filename);
             }
 
