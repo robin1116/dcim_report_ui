@@ -14,14 +14,29 @@ body {
     position: relative;
     min-height: 100vh;
     background: 
-        linear-gradient(135deg, rgba(15, 15, 15, 0.95) 0%, rgba(26, 26, 26, 0.9) 50%, rgba(15, 15, 15, 0.95) 100%),
-        url('../images/dcim-background.svg');
+        linear-gradient(135deg, rgba(15, 15, 15, 0.85) 0%, rgba(26, 26, 26, 0.8) 30%, rgba(139, 92, 246, 0.1) 50%, rgba(26, 26, 26, 0.8) 70%, rgba(15, 15, 15, 0.85) 100%),
+        url('../images/datacenter-bg.png');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.login-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('../images/datacenter-bg.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    filter: blur(3px) brightness(0.4) contrast(1.2);
+    z-index: -1;
 }
 
 /* DCIM Animated Background */
@@ -43,9 +58,9 @@ body {
 
 .shape {
     position: absolute;
-    opacity: 0.15;
-    animation: dcim-float 25s infinite linear;
-    filter: blur(1px);
+    opacity: 0.08;
+    animation: dcim-float 30s infinite linear;
+    filter: blur(2px);
 }
 
 .shape-1 {
@@ -123,16 +138,16 @@ body {
 .login-card {
     position: relative;
     z-index: 1;
-    background: var(--bg-card);
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
-    border: 1px solid var(--border-light);
+    background: rgba(15, 15, 15, 0.95);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border: 1px solid rgba(139, 92, 246, 0.4);
     border-radius: 24px;
     padding: 3rem 2.5rem;
     box-shadow: 
-        0 25px 50px var(--shadow-dark),
-        0 0 30px rgba(139, 92, 246, 0.15),
-        inset 0 1px 0 rgba(139, 92, 246, 0.2);
+        0 30px 60px rgba(0, 0, 0, 0.8),
+        0 0 40px rgba(139, 92, 246, 0.2),
+        inset 0 1px 0 rgba(139, 92, 246, 0.3);
     width: 100%;
     max-width: 420px;
     transition: all var(--transition-slow);
@@ -184,14 +199,15 @@ body {
     font-weight: 700;
     color: var(--text-inverse);
     margin-bottom: 0.5rem;
-    text-shadow: 0 2px 4px var(--shadow-light);
+    text-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
 }
 
 .login-subtitle {
     font-size: 1rem;
     color: rgba(255, 255, 255, 0.9);
     margin-bottom: 0;
-    font-weight: 300;
+    font-weight: 400;
+    text-shadow: 0 0 5px rgba(59, 130, 246, 0.3);
 }
 
 /* Form Styles */
