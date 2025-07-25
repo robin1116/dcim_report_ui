@@ -248,24 +248,7 @@
                                 <input type="time" class="form-control form-control-modern form-control-sm" id="endTime" value="23:59">
                             </div>
                             
-                            <!-- 체크박스와 조회 버튼 -->
-                            <div class="col-md-2">
-                                <label class="form-label-modern mb-1">조회 항목</label>
-                                <div class="d-flex gap-3">
-                                    <div class="form-check form-check-sm">
-                                        <input class="form-check-input" type="checkbox" id="voltageCheck" value="voltage" checked>
-                                        <label class="form-check-label" for="voltageCheck">전압</label>
-                                    </div>
-                                    <div class="form-check form-check-sm">
-                                        <input class="form-check-input" type="checkbox" id="currentCheck" value="current">
-                                        <label class="form-check-label" for="currentCheck">전류</label>
-                                    </div>
-                                    <div class="form-check form-check-sm">
-                                        <input class="form-check-input" type="checkbox" id="powerCheck" value="power">
-                                        <label class="form-check-label" for="powerCheck">전력량</label>
-                                    </div>
-                                </div>
-                            </div>
+                            <!-- 조회 버튼 -->
                             <div class="col-md-2">
                                 <div class="d-flex gap-1">
                                     <button class="btn btn-primary-modern btn-sm flex-fill" id="searchPowerData">
@@ -305,6 +288,22 @@
                             </div>
                         </div>
                     </div>
+                    <div class="card-body-modern">
+                        <!-- Chart Controls -->
+                        <div class="d-flex justify-content-center gap-4 mb-3">
+                            <div class="form-check form-check-sm">
+                                <input class="form-check-input" type="checkbox" id="voltageCheck" value="voltage" checked>
+                                <label class="form-check-label text-white" for="voltageCheck">전압</label>
+                            </div>
+                            <div class="form-check form-check-sm">
+                                <input class="form-check-input" type="checkbox" id="currentCheck" value="current">
+                                <label class="form-check-label text-white" for="currentCheck">전류</label>
+                            </div>
+                            <div class="form-check form-check-sm">
+                                <input class="form-check-input" type="checkbox" id="powerCheck" value="power">
+                                <label class="form-check-label text-white" for="powerCheck">전력량</label>
+                            </div>
+                        </div>
                     <div class="card-body-modern">
                         <div class="chart-container" style="height: 400px;">
                             <div id="powerTrendChart" style="width: 100%; height: 100%;"></div>
@@ -546,8 +545,10 @@
                         powerTrendChart.dispose();
                     }
                     
-                    // Initialize ECharts instance
-                    powerTrendChart = echarts.init(chartContainer, 'dark');
+                    // Initialize ECharts instance with custom theme
+                    powerTrendChart = echarts.init(chartContainer, {
+                        backgroundColor: 'rgba(30, 32, 42, 0.8)'
+                    });
                     
                     // Basic chart configuration
                     const option = {
@@ -558,10 +559,12 @@
                                 fontSize: 16
                             }
                         },
+                        backgroundColor: 'rgba(30, 32, 42, 0.9)',
                         tooltip: {
                             trigger: 'axis',
-                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            backgroundColor: 'rgba(30, 32, 42, 0.95)',
                             borderColor: 'rgb(139, 92, 246)',
+                            borderWidth: 1,
                             textStyle: {
                                 color: '#fff'
                             }
@@ -586,26 +589,29 @@
                             data: [],
                             axisLine: {
                                 lineStyle: {
-                                    color: 'rgba(255, 255, 255, 0.3)'
+                                    color: 'rgba(255, 255, 255, 0.4)'
                                 }
                             },
                             axisLabel: {
-                                color: '#fff'
+                                color: '#e2e8f0',
+                                fontSize: 11
                             }
                         },
                         yAxis: {
                             type: 'value',
                             axisLine: {
                                 lineStyle: {
-                                    color: 'rgba(255, 255, 255, 0.3)'
+                                    color: 'rgba(255, 255, 255, 0.4)'
                                 }
                             },
                             axisLabel: {
-                                color: '#fff'
+                                color: '#e2e8f0',
+                                fontSize: 11
                             },
                             splitLine: {
                                 lineStyle: {
-                                    color: 'rgba(255, 255, 255, 0.1)'
+                                    color: 'rgba(255, 255, 255, 0.15)',
+                                    type: 'dashed'
                                 }
                             }
                         },
@@ -884,7 +890,7 @@
                 if (powerTrendChart) {
                     const url = powerTrendChart.getDataURL({
                         type: 'png',
-                        backgroundColor: '#1a1a1a'
+                        backgroundColor: 'rgba(30, 32, 42, 0.9)'
                     });
                     const link = document.createElement('a');
                     link.download = `power-trend-${new Date().toISOString().split('T')[0]}.png`;
