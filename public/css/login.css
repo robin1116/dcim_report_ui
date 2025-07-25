@@ -175,33 +175,33 @@ body {
         inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
-/* Logo Section */
-.logo-section {
+/* Title Section */
+.title-section {
     text-align: center;
     padding: 2rem;
 }
 
-.logo-container {
-    display: inline-block;
-    margin-bottom: 2rem;
-    padding: 2rem;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 30px;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 
-        0 8px 32px rgba(0, 0, 0, 0.2),
-        0 0 15px rgba(139, 92, 246, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    animation: logoFloat 3s ease-in-out infinite;
+.main-title {
+    font-size: 4.5rem;
+    font-weight: 800;
+    color: var(--text-inverse);
+    margin-bottom: 1.5rem;
+    text-shadow: 
+        0 0 20px rgba(139, 92, 246, 0.6),
+        0 0 40px rgba(139, 92, 246, 0.4),
+        0 4px 8px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(135deg, #ffffff 0%, #a78bfa 50%, #8b5cf6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: titleGlow 3s ease-in-out infinite alternate;
 }
 
-.logo-description {
+.title-description {
     margin-top: 1rem;
 }
 
-.logo-description h3 {
+.title-description h3 {
     font-size: 1.5rem;
     font-weight: 600;
     color: var(--text-inverse);
@@ -209,15 +209,26 @@ body {
     text-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
 }
 
-.logo-description p {
+.title-description p {
     font-size: 1rem;
     color: rgba(255, 255, 255, 0.8);
     margin-bottom: 0;
     font-weight: 300;
 }
 
-.logo-svg {
-    filter: drop-shadow(0 4px 8px var(--shadow-light));
+@keyframes titleGlow {
+    0% {
+        text-shadow: 
+            0 0 20px rgba(139, 92, 246, 0.6),
+            0 0 40px rgba(139, 92, 246, 0.4),
+            0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+    100% {
+        text-shadow: 
+            0 0 30px rgba(139, 92, 246, 0.8),
+            0 0 60px rgba(139, 92, 246, 0.6),
+            0 4px 8px rgba(0, 0, 0, 0.3);
+    }
 }
 
 /* Form Header */
@@ -518,19 +529,14 @@ body {
 
 /* Responsive Design */
 @media (max-width: 991px) {
-    .logo-section {
+    .title-section {
         margin-top: 2rem;
         order: -1;
     }
     
-    .logo-container {
+    .main-title {
+        font-size: 3.5rem;
         margin-bottom: 1rem;
-        padding: 1.5rem;
-    }
-    
-    .logo-svg {
-        width: 150px;
-        height: 120px;
     }
 }
 
@@ -562,16 +568,15 @@ body {
         left: 0.875rem;
     }
     
-    .logo-svg {
-        width: 120px;
-        height: 100px;
+    .main-title {
+        font-size: 2.8rem;
     }
     
-    .logo-description h3 {
+    .title-description h3 {
         font-size: 1.25rem;
     }
     
-    .logo-description p {
+    .title-description p {
         font-size: 0.9rem;
     }
 }
