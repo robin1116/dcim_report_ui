@@ -15,9 +15,8 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <!-- ECharts -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
     
     <!-- Custom CSS -->
     <link href="css/themes.css" rel="stylesheet">
@@ -308,7 +307,7 @@
                     </div>
                     <div class="card-body-modern">
                         <div class="chart-container" style="height: 400px;">
-                            <canvas id="powerTrendChart"></canvas>
+                            <div id="powerTrendChart" style="width: 100%; height: 100%;"></div>
                         </div>
                     </div>
                 </div>
@@ -388,12 +387,12 @@
             $('#startDate').val(lastWeek.toISOString().split('T')[0]);
             $('#endDate').val(today.toISOString().split('T')[0]);
             
-            // Check if Chart.js is loaded
-            if (typeof Chart === 'undefined') {
-                console.error('Chart.js not loaded');
+            // Check if ECharts is loaded
+            if (typeof echarts === 'undefined') {
+                console.error('ECharts not loaded');
                 return;
             } else {
-                console.log('Chart.js loaded successfully');
+                console.log('ECharts loaded successfully');
             }
 
             // Initialize DataTable
@@ -526,85 +525,136 @@
                 }
             }
 
-            // Initialize power trend chart
+            // Initialize power trend chart with ECharts
             function initializePowerChart() {
                 try {
-                    if (typeof Chart === 'undefined') {
-                        console.error('Chart.js not available');
+                    if (typeof echarts === 'undefined') {
+                        console.error('ECharts not available');
                         return;
                     }
                     
-                    const canvas = document.getElementById('powerTrendChart');
-                    if (!canvas) {
-                        console.error('Chart canvas element not found');
+                    const chartContainer = document.getElementById('powerTrendChart');
+                    if (!chartContainer) {
+                        console.error('Chart container element not found');
                         return;
                     }
                     
-                    console.log('Initializing chart...');
-                    const ctx = canvas.getContext('2d');
+                    console.log('Initializing ECharts...');
                     
-                    // Destroy existing chart if any
+                    // Dispose existing chart if any
                     if (powerTrendChart) {
-                        powerTrendChart.destroy();
+                        powerTrendChart.dispose();
                     }
                     
-                    powerTrendChart = new Chart(ctx, {
-                        type: 'line',
-                        data: {
-                            datasets: [{
-                                label: '전압 (V)',
-                                data: [],
-                                borderColor: 'rgb(139, 92, 246)',
-                                backgroundColor: 'rgba(139, 92, 246, 0.1)',
-                                fill: false,
-                                tension: 0.4,
-                                pointRadius: 4,
-                                pointHoverRadius: 8,
-                                borderWidth: 3
-                            }]
+                    // Initialize ECharts instance
+                    powerTrendChart = echarts.init(chartContainer, 'dark');
+                    
+                    // Basic chart configuration
+                    const option = {
+                        title: {
+                            text: '전력 트렌드 차트',
+                            textStyle: {
+                                color: '#fff',
+                                fontSize: 16
+                            }
                         },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            scales: {
-                                x: {
-                                    type: 'linear',
-                                    position: 'bottom',
-                                    grid: {
-                                        color: 'rgba(255, 255, 255, 0.1)'
-                                    },
-                                    ticks: {
-                                        color: '#fff'
-                                    }
-                                },
-                                y: {
-                                    beginAtZero: false,
-                                    grid: {
-                                        color: 'rgba(255, 255, 255, 0.1)'
-                                    },
-                                    ticks: {
-                                        color: '#fff'
-                                    }
+                        tooltip: {
+                            trigger: 'axis',
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            borderColor: 'rgb(139, 92, 246)',
+                            textStyle: {
+                                color: '#fff'
+                            }
+                        },
+                        legend: {
+                            data: ['전압 (V)'],
+                            textStyle: {
+                                color: '#fff'
+                            },
+                            top: '8%'
+                        },
+                        grid: {
+                            left: '3%',
+                            right: '4%',
+                            bottom: '3%',
+                            top: '20%',
+                            containLabel: true
+                        },
+                        xAxis: {
+                            type: 'category',
+                            boundaryGap: false,
+                            data: [],
+                            axisLine: {
+                                lineStyle: {
+                                    color: 'rgba(255, 255, 255, 0.3)'
                                 }
                             },
-                            plugins: {
-                                legend: {
-                                    position: 'top',
-                                    labels: {
-                                        color: '#fff'
-                                    }
+                            axisLabel: {
+                                color: '#fff'
+                            }
+                        },
+                        yAxis: {
+                            type: 'value',
+                            axisLine: {
+                                lineStyle: {
+                                    color: 'rgba(255, 255, 255, 0.3)'
+                                }
+                            },
+                            axisLabel: {
+                                color: '#fff'
+                            },
+                            splitLine: {
+                                lineStyle: {
+                                    color: 'rgba(255, 255, 255, 0.1)'
                                 }
                             }
+                        },
+                        series: [{
+                            name: '전압 (V)',
+                            type: 'line',
+                            smooth: true,
+                            lineStyle: {
+                                color: 'rgb(139, 92, 246)',
+                                width: 3
+                            },
+                            itemStyle: {
+                                color: 'rgb(139, 92, 246)'
+                            },
+                            areaStyle: {
+                                color: {
+                                    type: 'linear',
+                                    x: 0,
+                                    y: 0,
+                                    x2: 0,
+                                    y2: 1,
+                                    colorStops: [{
+                                        offset: 0, color: 'rgba(139, 92, 246, 0.3)'
+                                    }, {
+                                        offset: 1, color: 'rgba(139, 92, 246, 0.1)'
+                                    }]
+                                }
+                            },
+                            data: []
+                        }]
+                    };
+                    
+                    // Set the configuration option to chart
+                    powerTrendChart.setOption(option);
+                    
+                    // Make chart responsive
+                    window.addEventListener('resize', () => {
+                        if (powerTrendChart) {
+                            powerTrendChart.resize();
                         }
                     });
                     
-                    console.log('Chart initialized successfully');
+                    console.log('ECharts initialized successfully');
                     
                     // Update chart with current data
                     updateChart();
                     
                 } catch (error) {
-                    console.error('Error initializing chart:', error);
+                    console.error('Error initializing ECharts:', error);
                 }
             }
 
@@ -621,45 +671,91 @@
                     
                     if (data.length === 0) {
                         console.log('No data to display in chart');
-                        powerTrendChart.data.datasets = [{
-                            label: '데이터 없음',
-                            data: [],
-                            borderColor: 'rgb(139, 92, 246)',
-                            backgroundColor: 'rgba(139, 92, 246, 0.1)',
-                            fill: false
-                        }];
-                        powerTrendChart.update();
+                        powerTrendChart.setOption({
+                            xAxis: {
+                                data: []
+                            },
+                            series: [{
+                                name: '전압 (V)',
+                                data: []
+                            }]
+                        });
                         return;
                     }
                     
                     // Sort data by timestamp
                     data.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
                     
-                    // Create simple data for testing - just use voltage first
-                    const chartData = data.map((item, index) => ({
-                        x: index,
-                        y: parseFloat(item.voltage)
+                    // Prepare chart data
+                    const xAxisData = data.map(item => {
+                        const date = new Date(item.timestamp);
+                        return date.toLocaleDateString('ko-KR') + ' ' + date.toLocaleTimeString('ko-KR', {hour: '2-digit', minute: '2-digit'});
+                    });
+                    
+                    const powerTypeConfig = {
+                        'voltage': {
+                            name: '전압 (V)',
+                            color: 'rgb(139, 92, 246)',
+                            data: data.map(item => parseFloat(item.voltage).toFixed(1))
+                        },
+                        'current': {
+                            name: '전류 (A)',
+                            color: 'rgb(59, 130, 246)',
+                            data: data.map(item => parseFloat(item.current).toFixed(2))
+                        },
+                        'power': {
+                            name: '전력량 (kWh)',
+                            color: 'rgb(16, 185, 129)',
+                            data: data.map(item => parseFloat(item.power).toFixed(3))
+                        }
+                    };
+                    
+                    // Create series based on selected types
+                    const series = selectedPowerTypes.map(type => ({
+                        name: powerTypeConfig[type].name,
+                        type: 'line',
+                        smooth: true,
+                        lineStyle: {
+                            color: powerTypeConfig[type].color,
+                            width: 3
+                        },
+                        itemStyle: {
+                            color: powerTypeConfig[type].color
+                        },
+                        areaStyle: {
+                            color: {
+                                type: 'linear',
+                                x: 0,
+                                y: 0,
+                                x2: 0,
+                                y2: 1,
+                                colorStops: [{
+                                    offset: 0, color: powerTypeConfig[type].color.replace('rgb', 'rgba').replace(')', ', 0.3)')
+                                }, {
+                                    offset: 1, color: powerTypeConfig[type].color.replace('rgb', 'rgba').replace(')', ', 0.1)')
+                                }]
+                            }
+                        },
+                        data: powerTypeConfig[type].data
                     }));
                     
-                    console.log('Chart data points:', chartData.length);
+                    console.log('Chart series:', series.length);
                     
-                    powerTrendChart.data.datasets = [{
-                        label: '전압 (V)',
-                        data: chartData,
-                        borderColor: 'rgb(139, 92, 246)',
-                        backgroundColor: 'rgba(139, 92, 246, 0.1)',
-                        fill: false,
-                        tension: 0.4,
-                        pointRadius: 4,
-                        pointHoverRadius: 8,
-                        borderWidth: 3
-                    }];
+                    // Update chart
+                    powerTrendChart.setOption({
+                        legend: {
+                            data: selectedPowerTypes.map(type => powerTypeConfig[type].name)
+                        },
+                        xAxis: {
+                            data: xAxisData
+                        },
+                        series: series
+                    });
                     
-                    powerTrendChart.update();
-                    console.log('Chart updated successfully');
+                    console.log('ECharts updated successfully');
                     
                 } catch (error) {
-                    console.error('Error updating chart:', error);
+                    console.error('Error updating ECharts:', error);
                 }
             }
 
@@ -778,18 +874,24 @@
 
             // Chart controls
             $('#chartFullscreen').click(function() {
-                if (powerTrendChart.canvas.requestFullscreen) {
-                    powerTrendChart.canvas.requestFullscreen();
+                const chartContainer = document.getElementById('powerTrendChart');
+                if (chartContainer.requestFullscreen) {
+                    chartContainer.requestFullscreen();
                 }
             });
 
             $('#exportChartImage').click(function() {
-                const url = powerTrendChart.toBase64Image();
-                const link = document.createElement('a');
-                link.download = `power-trend-${new Date().toISOString().split('T')[0]}.png`;
-                link.href = url;
-                link.click();
-                window.ToastNotifications.success('차트 이미지가 저장되었습니다.');
+                if (powerTrendChart) {
+                    const url = powerTrendChart.getDataURL({
+                        type: 'png',
+                        backgroundColor: '#1a1a1a'
+                    });
+                    const link = document.createElement('a');
+                    link.download = `power-trend-${new Date().toISOString().split('T')[0]}.png`;
+                    link.href = url;
+                    link.click();
+                    window.ToastNotifications.success('차트 이미지가 저장되었습니다.');
+                }
             });
 
             // Update data count
