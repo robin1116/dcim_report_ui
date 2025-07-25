@@ -1,41 +1,46 @@
-/* CSS Custom Properties for Theme System */
+/* CSS Custom Properties for DCIM Theme System */
 :root {
-    /* Light Theme Colors */
-    --primary-color: #033495;
-    --secondary-color: #aee4ff;
-    --accent-color: #0066cc;
-    --success-color: #198754;
-    --warning-color: #ffc107;
-    --danger-color: #dc3545;
-    --info-color: #0dcaf0;
+    /* DCIM Dashboard Colors - matching main dashboard */
+    --primary-color: #8b5cf6;        /* Purple neon */
+    --secondary-color: #a78bfa;      /* Light purple */
+    --accent-color: #3b82f6;         /* Blue accent */
+    --success-color: #10b981;        /* Emerald green */
+    --warning-color: #f59e0b;        /* Amber warning */
+    --danger-color: #ef4444;         /* Red danger */
+    --info-color: #06b6d4;           /* Cyan info */
     
-    /* Background Colors */
-    --bg-primary: #ffffff;
-    --bg-secondary: #f8f9fa;
-    --bg-tertiary: #e9ecef;
-    --bg-glass: rgba(255, 255, 255, 0.25);
-    --bg-modal: rgba(255, 255, 255, 0.95);
+    /* Dark Theme Background Colors (matching dashboard) */
+    --bg-primary: #0f0f0f;           /* Very dark background */
+    --bg-secondary: #1a1a1a;         /* Dark secondary */
+    --bg-tertiary: #262626;          /* Medium dark */
+    --bg-glass: rgba(139, 92, 246, 0.15);   /* Purple glass effect */
+    --bg-modal: rgba(15, 15, 15, 0.95);     /* Dark modal */
+    --bg-card: rgba(26, 26, 26, 0.8);       /* Card background */
     
     /* Text Colors */
-    --text-primary: #212529;
-    --text-secondary: #6c757d;
-    --text-muted: #adb5bd;
-    --text-inverse: #ffffff;
+    --text-primary: #ffffff;         /* White text */
+    --text-secondary: #e5e7eb;       /* Light gray */
+    --text-muted: #9ca3af;           /* Muted gray */
+    --text-inverse: #0f0f0f;         /* Dark text for light backgrounds */
+    --text-neon: #8b5cf6;            /* Neon purple text */
     
     /* Border Colors */
-    --border-color: #dee2e6;
-    --border-light: rgba(255, 255, 255, 0.3);
-    --border-dark: rgba(0, 0, 0, 0.1);
+    --border-color: #374151;         /* Dark border */
+    --border-light: rgba(139, 92, 246, 0.3);   /* Purple light border */
+    --border-dark: rgba(0, 0, 0, 0.5);         /* Dark border */
+    --border-neon: #8b5cf6;          /* Neon border */
     
     /* Shadow Colors */
-    --shadow-light: rgba(0, 0, 0, 0.1);
-    --shadow-medium: rgba(0, 0, 0, 0.15);
-    --shadow-dark: rgba(0, 0, 0, 0.25);
+    --shadow-light: rgba(0, 0, 0, 0.5);
+    --shadow-medium: rgba(0, 0, 0, 0.7);
+    --shadow-dark: rgba(0, 0, 0, 0.9);
+    --shadow-neon: 0 0 20px rgba(139, 92, 246, 0.5);
     
     /* Gradient Definitions */
-    --gradient-primary: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-    --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 100%);
-    --gradient-neumorphism: linear-gradient(145deg, #ffffff 0%, #f0f0f0 100%);
+    --gradient-primary: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
+    --gradient-glass: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(59, 130, 246, 0.1) 100%);
+    --gradient-neumorphism: linear-gradient(145deg, #1a1a1a 0%, #0f0f0f 100%);
+    --gradient-neon: linear-gradient(90deg, #8b5cf6 0%, #a78bfa 50%, #3b82f6 100%);
     
     /* Animation Durations */
     --transition-fast: 0.2s ease;
@@ -43,35 +48,30 @@
     --transition-slow: 0.5s ease;
 }
 
-/* Dark Theme */
-[data-theme="dark"] {
-    /* Primary Colors (keep brand colors) */
-    --primary-color: #4d7bff;
-    --secondary-color: #7dd3fc;
-    --accent-color: #3b82f6;
+/* Light Theme (optional alternative - keeping DCIM dark aesthetic) */
+[data-theme="light"] {
+    /* Lighter version while maintaining DCIM aesthetics */
+    --bg-primary: #f8fafc;
+    --bg-secondary: #f1f5f9;
+    --bg-tertiary: #e2e8f0;
+    --bg-glass: rgba(139, 92, 246, 0.1);
+    --bg-modal: rgba(248, 250, 252, 0.95);
+    --bg-card: rgba(255, 255, 255, 0.8);
     
-    /* Background Colors */
-    --bg-primary: #1a1a1a;
-    --bg-secondary: #2d2d2d;
-    --bg-tertiary: #404040;
-    --bg-glass: rgba(0, 0, 0, 0.4);
-    --bg-modal: rgba(42, 42, 42, 0.95);
+    --text-primary: #1e293b;
+    --text-secondary: #475569;
+    --text-muted: #64748b;
+    --text-inverse: #ffffff;
+    --text-neon: #7c3aed;
     
-    /* Text Colors */
-    --text-primary: #ffffff;
-    --text-secondary: #b3b3b3;
-    --text-muted: #808080;
-    --text-inverse: #1a1a1a;
+    --border-color: #e2e8f0;
+    --border-light: rgba(139, 92, 246, 0.2);
+    --border-dark: rgba(0, 0, 0, 0.1);
     
-    /* Border Colors */
-    --border-color: #404040;
-    --border-light: rgba(255, 255, 255, 0.1);
-    --border-dark: rgba(255, 255, 255, 0.05);
-    
-    /* Shadow Colors */
-    --shadow-light: rgba(0, 0, 0, 0.3);
-    --shadow-medium: rgba(0, 0, 0, 0.5);
-    --shadow-dark: rgba(0, 0, 0, 0.7);
+    --shadow-light: rgba(0, 0, 0, 0.1);
+    --shadow-medium: rgba(0, 0, 0, 0.15);
+    --shadow-dark: rgba(0, 0, 0, 0.25);
+    --shadow-neon: 0 0 15px rgba(139, 92, 246, 0.3);
     
     /* Gradient Updates */
     --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);

@@ -2,7 +2,9 @@
 
 ## Overview
 
-This is a web-based DCIM (Data Center Infrastructure Management) admin system called "simpleEye" that provides a modern, responsive interface for managing data center infrastructure. The application is currently set up as a frontend-focused Express.js application with mock API endpoints, designed to eventually integrate with a Spring Boot backend.
+This is a web-based DCIM (Data Center Infrastructure Management) admin system called "simpleEye" that provides a modern, responsive interface for managing data center infrastructure. The application features a dual server setup with Flask/Gunicorn for Replit deployment and Express.js for development, designed to eventually integrate with a Spring Boot backend.
+
+**Recent Update (2025-07-25)**: Redesigned entire theme to match main DCIM dashboard aesthetics with dark background, purple/blue neon effects, glassmorphism, and futuristic styling.
 
 ## User Preferences
 
@@ -36,9 +38,10 @@ Preferred communication style: Simple, everyday language.
 - **Rationale**: Simple static hosting for development with easy deployment transition
 
 ### 2. Theme Management System
-- **Implementation**: CSS custom properties with JavaScript theme controller
-- **Features**: Light/dark mode toggle, system preference detection, localStorage persistence
-- **Benefits**: Consistent theming across all components, accessible design patterns
+- **Implementation**: CSS custom properties with JavaScript theme controller, redesigned for DCIM aesthetics
+- **Current Theme**: Dark-first design with purple/blue neon accents, glassmorphism effects, and cyber-inspired styling
+- **Features**: Neon glow effects, hologram animations, backdrop blur, gradient borders
+- **Benefits**: Consistent with main DCIM dashboard, futuristic appearance, enhanced visual hierarchy
 
 ### 3. Admin Dashboard Interface
 - **Components**: Sidebar navigation, responsive layouts, data tables with DataTables.js
@@ -106,3 +109,18 @@ Preferred communication style: Simple, everyday language.
 - **Error Handling**: Consistent error response format established
 
 The architecture prioritizes modularity and separation of concerns, making it easy to integrate with backend services while maintaining a polished, professional frontend experience.
+
+## Recent Changes (2025-07-25)
+
+### DCIM Theme Implementation
+- **Updated Color Palette**: Switched to dark theme with purple (#8b5cf6) and blue (#3b82f6) neon accents
+- **Enhanced Visual Effects**: Added glassmorphism, backdrop blur, neon glow, and hologram sweep animations
+- **Improved Cards**: Modern cards with gradient borders, enhanced shadows, and cyber-inspired styling
+- **Navigation Updates**: Neon accent lines, enhanced hover effects, and improved visual feedback
+- **Button Enhancements**: Added neon button variants with shimmer effects and glow animations
+- **Background Integration**: Implemented cyber grid patterns and gradient backgrounds matching main dashboard
+
+### Technical Improvements
+- **Dual Server Setup**: Created Flask application (main.py) for Replit workflow compatibility
+- **Fixed Port Conflicts**: Resolved deployment issues by implementing proper server management
+- **Enhanced CSS Architecture**: Expanded theme system with DCIM-specific design tokens and animations
