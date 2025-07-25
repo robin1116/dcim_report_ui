@@ -55,32 +55,24 @@
             padding: 1rem 1.5rem;
         }
         
-        /* DataTables Buttons Styling */
+        /* Hide DataTables default buttons and search */
         .dt-buttons {
-            margin-bottom: 1rem;
+            display: none;
         }
         
-        .dt-button {
-            border-radius: 8px !important;
-            padding: 0.5rem 1rem;
-            font-size: 0.875rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            border: 1px solid var(--border-color);
-            background: var(--bg-card);
-            color: var(--text-primary);
-            backdrop-filter: blur(10px);
+        .hidden-csv-btn, .hidden-excel-btn {
+            display: none !important;
         }
         
-        .dt-button:hover {
-            background: var(--primary-color);
-            color: white;
-            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
-            border-color: var(--primary-color);
+        .dataTables_filter {
+            display: none;
         }
         
-        .dt-button:active {
-            transform: translateY(1px);
+        /* Larger font for data count */
+        .dataTables_info {
+            font-size: 1.1rem !important;
+            font-weight: 600 !important;
+            color: var(--primary-color) !important;
         }
     </style>
 </head>
@@ -410,6 +402,7 @@
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.bootstrap5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     
     <script src="js/theme-manager.js"></script>
     <script src="js/admin-common.js"></script>
@@ -440,12 +433,11 @@
                 processing: true,
                 serverSide: false,
                 responsive: true,
-                dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>><"row"<"col-sm-12"B>><"row"<"col-sm-12"tr>><"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+                dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6">><"row"<"col-sm-12"tr>><"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
                 buttons: [
                     {
                         extend: 'csv',
-                        text: '<i class="fas fa-download me-1"></i>CSV 다운로드',
-                        className: 'btn btn-modern btn-primary btn-sm',
+                        className: 'hidden-csv-btn',
                         filename: function() {
                             const now = new Date();
                             const dateStr = now.toISOString().slice(0, 19).replace(/:/g, '-');
@@ -455,7 +447,25 @@
                             columns: [0, 1, 2, 3],
                             format: {
                                 body: function(data, row, column, node) {
-                                    // Remove HTML tags and get clean text
+                                    const tempDiv = document.createElement('div');
+                                    tempDiv.innerHTML = data;
+                                    return tempDiv.textContent || tempDiv.innerText || '';
+                                }
+                            }
+                        }
+                    },
+                    {
+                        extend: 'excel',
+                        className: 'hidden-excel-btn',
+                        filename: function() {
+                            const now = new Date();
+                            const dateStr = now.toISOString().slice(0, 19).replace(/:/g, '-');
+                            return `전력조회_${dateStr}`;
+                        },
+                        exportOptions: {
+                            columns: [0, 1, 2, 3],
+                            format: {
+                                body: function(data, row, column, node) {
                                     const tempDiv = document.createElement('div');
                                     tempDiv.innerHTML = data;
                                     return tempDiv.textContent || tempDiv.innerText || '';
@@ -1073,17 +1083,99 @@
             // Export functions
             $('#exportPowerData').click(function() {
                 window.ToastNotifications.info('Excel 파일을 생성하는 중입니다...');
-                setTimeout(() => {
+                try {
+                    // Get chart image as base64
+                    let chartImageBase64 = null;
+                    if (powerTrendChart) {
+                        chartImageBase64 = powerTrendChart.getDataURL({
+                            type: 'png',
+                            backgroundColor: '#ffffff',
+                            pixelRatio: 2
+                        });
+                    }
+                    
+                    // Create workbook with chart and data
+                    createExcelWithChart(chartImageBase64);
                     window.ToastNotifications.success('Excel 파일이 다운로드되었습니다.');
-                }, 2000);
+                } catch (error) {
+                    console.error('Excel export error:', error);
+                    window.ToastNotifications.error('Excel 파일 생성 중 오류가 발생했습니다.');
+                }
             });
 
             $('#exportCsvData').click(function() {
                 window.ToastNotifications.info('CSV 파일을 생성하는 중입니다...');
-                setTimeout(() => {
+                try {
+                    // Trigger DataTables CSV export
+                    powerDataTable.button('.hidden-csv-btn').trigger();
                     window.ToastNotifications.success('CSV 파일이 다운로드되었습니다.');
-                }, 2000);
+                } catch (error) {
+                    console.error('CSV export error:', error);
+                    window.ToastNotifications.error('CSV 파일 생성 중 오류가 발생했습니다.');
+                }
             });
+            
+            // Create Excel file with chart and data
+            function createExcelWithChart(chartImageBase64) {
+                const wb = XLSX.utils.book_new();
+                
+                // Get table data
+                const tableData = powerDataTable.data().toArray();
+                const headers = ['시간', '전압 (V)', '전류 (A)', '전력량 (kWh)'];
+                
+                // Format data for Excel
+                const excelData = [headers];
+                tableData.forEach(row => {
+                    const date = new Date(row.timestamp);
+                    const formattedTime = date.toLocaleDateString('ko-KR', {
+                        month: '2-digit', 
+                        day: '2-digit'
+                    }) + ' ' + date.toLocaleTimeString('ko-KR', {
+                        hour: '2-digit', 
+                        minute: '2-digit'
+                    });
+                    
+                    excelData.push([
+                        formattedTime,
+                        parseFloat(row.voltage).toFixed(1),
+                        parseFloat(row.current).toFixed(2),
+                        parseFloat(row.power).toFixed(3)
+                    ]);
+                });
+                
+                // Create worksheet
+                const ws = XLSX.utils.aoa_to_sheet(excelData);
+                
+                // Set column widths
+                ws['!cols'] = [
+                    { width: 15 }, // 시간
+                    { width: 12 }, // 전압
+                    { width: 12 }, // 전류
+                    { width: 15 }  // 전력량
+                ];
+                
+                // Add worksheet to workbook
+                XLSX.utils.book_append_sheet(wb, ws, '전력조회데이터');
+                
+                // Create chart sheet if chart image exists
+                if (chartImageBase64) {
+                    const chartWs = XLSX.utils.aoa_to_sheet([
+                        ['전력 트렌드 차트'],
+                        [''],
+                        ['차트 이미지는 Excel에서 직접 확인해주세요.'],
+                        ['원본 데이터는 "전력조회데이터" 시트를 참조하세요.']
+                    ]);
+                    XLSX.utils.book_append_sheet(wb, chartWs, '차트');
+                }
+                
+                // Generate filename with timestamp
+                const now = new Date();
+                const dateStr = now.toISOString().slice(0, 19).replace(/:/g, '-');
+                const filename = `전력조회_${dateStr}.xlsx`;
+                
+                // Write and download
+                XLSX.writeFile(wb, filename);
+            }
 
             // Chart controls
             $('#chartFullscreen').click(function() {
