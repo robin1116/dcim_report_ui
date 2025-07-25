@@ -449,9 +449,8 @@ body {
 }
 
 .table-modern tbody tr:hover {
-    background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(59, 130, 246, 0.05) 100%);
-    transform: translateX(4px);
-    box-shadow: 4px 0 12px rgba(139, 92, 246, 0.15);
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.08) 0%, rgba(59, 130, 246, 0.08) 100%);
+    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.15);
 }
 
 .table-modern tbody tr:hover::before {
