@@ -1198,13 +1198,9 @@
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF('p', 'mm', 'a4');
                 
-                // Set Korean font support (fallback to default)
-                try {
-                    doc.setFont('malgun', 'normal');
-                } catch (e) {
-                    // Use default font if Korean font not available
-                    doc.setFont('helvetica', 'normal');
-                }
+                // Add Korean font support
+                doc.addFont('https://fonts.gstatic.com/ea/notosanskr/v2/NotoSansKR-Regular.woff2', 'NotoSansKR', 'normal');
+                doc.setFont('NotoSansKR', 'normal');
                 
                 let yPosition = 20;
                 
@@ -1293,14 +1289,22 @@
                     body: tableRows.slice(0, 20), // Limit to first 20 rows for PDF
                     startY: yPosition,
                     theme: 'grid',
+                    styles: {
+                        font: 'NotoSansKR',
+                        fontStyle: 'normal'
+                    },
                     headStyles: {
                         fillColor: [139, 92, 246],
                         textColor: 255,
-                        fontSize: 10
+                        fontSize: 10,
+                        font: 'NotoSansKR',
+                        fontStyle: 'normal'
                     },
                     bodyStyles: {
                         fontSize: 9,
-                        textColor: 50
+                        textColor: 50,
+                        font: 'NotoSansKR',
+                        fontStyle: 'normal'
                     },
                     alternateRowStyles: {
                         fillColor: [248, 249, 250]
@@ -1318,9 +1322,10 @@
                 const pageCount = doc.internal.getNumberOfPages();
                 for (let i = 1; i <= pageCount; i++) {
                     doc.setPage(i);
+                    doc.setFont('NotoSansKR', 'normal');
                     doc.setFontSize(8);
                     doc.text(`Page ${i} of ${pageCount}`, 105, 290, { align: 'center' });
-                    doc.text('simpleEye DCIM 시스템', 20, 290);
+                    doc.text('죽전 퍼시픽써니 DC DCIM 시스템', 20, 290);
                 }
                 
                 // Generate filename and save
