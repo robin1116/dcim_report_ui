@@ -402,32 +402,51 @@
                 serverSide: false,
                 responsive: true,
                 language: {
-                    url: "//cdn.datatables.net/plug-ins/1.13.7/i18n/ko.json"
+                    processing: "처리중...",
+                    search: "검색:",
+                    lengthMenu: "_MENU_ 개씩 보기",
+                    info: "_START_ - _END_ / _TOTAL_ 건",
+                    infoEmpty: "0건",
+                    infoFiltered: "(전체 _MAX_ 건 중 검색결과)",
+                    paginate: {
+                        first: "처음",
+                        last: "마지막", 
+                        next: "다음",
+                        previous: "이전"
+                    }
                 },
-                data: generateMockPowerData(),
+                data: [],
                 columns: [
                     { 
                         data: 'timestamp',
+                        title: '시간',
                         render: function(data) {
+                            if (!data) return '';
                             return new Date(data).toLocaleString('ko-KR');
                         }
                     },
                     { 
                         data: 'voltage',
+                        title: '전압 (V)',
                         render: function(data) {
-                            return data.toFixed(1);
+                            if (data === null || data === undefined) return '';
+                            return parseFloat(data).toFixed(1);
                         }
                     },
                     { 
                         data: 'current',
+                        title: '전류 (A)',
                         render: function(data) {
-                            return data.toFixed(2);
+                            if (data === null || data === undefined) return '';
+                            return parseFloat(data).toFixed(2);
                         }
                     },
                     { 
                         data: 'power',
+                        title: '전력량 (kWh)',
                         render: function(data) {
-                            return data.toFixed(3);
+                            if (data === null || data === undefined) return '';
+                            return parseFloat(data).toFixed(3);
                         }
                     }
                 ],
@@ -435,66 +454,103 @@
                 pageLength: 25,
                 lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]]
             });
+            
+            console.log('DataTable initialized');
 
-            // Initialize Chart after DOM is ready
+            // Load initial data immediately
+            loadInitialData();
+            
+            // Initialize chart after short delay
             setTimeout(() => {
                 initializePowerChart();
-                
-                // Load initial data
-                const initialData = generateMockPowerData();
-                powerDataTable.clear();
-                powerDataTable.rows.add(initialData);
-                powerDataTable.draw();
-                updateChart();
-                updateDataCount(initialData.length);
-            }, 500);
+            }, 300);
+            
+            function loadInitialData() {
+                try {
+                    console.log('Loading initial data...');
+                    const initialData = generateMockPowerData();
+                    console.log('Generated data:', initialData.length, 'items');
+                    
+                    if (initialData.length > 0) {
+                        powerDataTable.clear();
+                        powerDataTable.rows.add(initialData);
+                        powerDataTable.draw();
+                        updateDataCount(initialData.length);
+                        console.log('Data loaded to table');
+                        
+                        // Update chart if it exists
+                        setTimeout(() => {
+                            if (powerTrendChart) {
+                                updateChart();
+                            }
+                        }, 500);
+                    }
+                } catch (error) {
+                    console.error('Error loading initial data:', error);
+                }
+            }
 
             // Generate mock power data
             function generateMockPowerData() {
-                const data = [];
-                const startDate = new Date($('#startDate').val() || lastWeek);
-                const endDate = new Date($('#endDate').val() || today);
-                
-                // Generate data points every 30 minutes for better chart visualization
-                const interval = 30 * 60 * 1000; // 30 minutes in milliseconds
-                
-                for (let time = startDate.getTime(); time <= endDate.getTime(); time += interval) {
-                    const timestamp = new Date(time);
+                try {
+                    const data = [];
+                    const startDate = new Date($('#startDate').val() || lastWeek);
+                    const endDate = new Date($('#endDate').val() || today);
                     
-                    // Generate realistic power data with some correlation
-                    const baseVoltage = 220 + Math.sin(time / (24 * 60 * 60 * 1000) * 2 * Math.PI) * 10; // Daily cycle
-                    const voltage = baseVoltage + (Math.random() - 0.5) * 20; // 200-250V range
+                    console.log('Generating data from:', startDate, 'to:', endDate);
                     
-                    const baseCurrent = 15 + Math.sin(time / (12 * 60 * 60 * 1000) * 2 * Math.PI) * 8; // 12-hour cycle
-                    const current = Math.max(5, baseCurrent + (Math.random() - 0.5) * 10); // 5-35A range
+                    // Generate data points every hour for simpler data
+                    const interval = 60 * 60 * 1000; // 1 hour in milliseconds
                     
-                    const power = (voltage * current / 1000) + (Math.random() - 0.5) * 2; // Power = V*I/1000, with noise
+                    for (let time = startDate.getTime(); time <= endDate.getTime(); time += interval) {
+                        const timestamp = new Date(time);
+                        
+                        // Generate simple test data
+                        const voltage = 220 + Math.random() * 20; // 220-240V
+                        const current = 10 + Math.random() * 20;  // 10-30A
+                        const power = voltage * current / 1000;   // Power = V*I/1000
+                        
+                        data.push({
+                            timestamp: timestamp.toISOString(),
+                            voltage: Math.round(voltage * 10) / 10,
+                            current: Math.round(current * 100) / 100,
+                            power: Math.round(power * 1000) / 1000
+                        });
+                    }
                     
-                    data.push({
-                        timestamp: timestamp.toISOString(),
-                        voltage: Math.round(voltage * 10) / 10,    // 1 decimal place
-                        current: Math.round(current * 100) / 100, // 2 decimal places  
-                        power: Math.round(power * 1000) / 1000    // 3 decimal places
-                    });
+                    console.log('Generated', data.length, 'data points');
+                    return data.slice(-50); // Limit to last 50 records for testing
+                } catch (error) {
+                    console.error('Error generating mock data:', error);
+                    return [];
                 }
-                
-                return data.slice(-200); // Limit to last 200 records for performance
             }
 
             // Initialize power trend chart
             function initializePowerChart() {
                 try {
-                    const canvas = document.getElementById('powerTrendChart');
-                    if (!canvas) {
-                        console.error('Chart canvas not found');
+                    if (typeof Chart === 'undefined') {
+                        console.error('Chart.js not available');
                         return;
                     }
                     
+                    const canvas = document.getElementById('powerTrendChart');
+                    if (!canvas) {
+                        console.error('Chart canvas element not found');
+                        return;
+                    }
+                    
+                    console.log('Initializing chart...');
                     const ctx = canvas.getContext('2d');
+                    
+                    // Destroy existing chart if any
+                    if (powerTrendChart) {
+                        powerTrendChart.destroy();
+                    }
+                    
                     powerTrendChart = new Chart(ctx, {
                         type: 'line',
                         data: {
-                            labels: [],
                             datasets: [{
                                 label: '전압 (V)',
                                 data: [],
@@ -502,27 +558,18 @@
                                 backgroundColor: 'rgba(139, 92, 246, 0.1)',
                                 fill: false,
                                 tension: 0.4,
-                                pointRadius: 3,
-                                pointHoverRadius: 6,
-                                borderWidth: 2
+                                pointRadius: 4,
+                                pointHoverRadius: 8,
+                                borderWidth: 3
                             }]
                         },
                         options: {
                             responsive: true,
                             maintainAspectRatio: false,
-                            interaction: {
-                                intersect: false,
-                                mode: 'index'
-                            },
                             scales: {
                                 x: {
-                                    type: 'time',
-                                    time: {
-                                        unit: 'hour',
-                                        displayFormats: {
-                                            hour: 'MM-dd HH:mm'
-                                        }
-                                    },
+                                    type: 'linear',
+                                    position: 'bottom',
                                     grid: {
                                         color: 'rgba(255, 255, 255, 0.1)'
                                     },
@@ -536,10 +583,7 @@
                                         color: 'rgba(255, 255, 255, 0.1)'
                                     },
                                     ticks: {
-                                        color: '#fff',
-                                        callback: function(value) {
-                                            return value.toFixed(1);
-                                        }
+                                        color: '#fff'
                                     }
                                 }
                             },
@@ -547,22 +591,18 @@
                                 legend: {
                                     position: 'top',
                                     labels: {
-                                        usePointStyle: true,
                                         color: '#fff'
                                     }
-                                },
-                                tooltip: {
-                                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                                    titleColor: '#fff',
-                                    bodyColor: '#fff',
-                                    borderColor: 'rgb(139, 92, 246)',
-                                    borderWidth: 1
                                 }
                             }
                         }
                     });
                     
                     console.log('Chart initialized successfully');
+                    
+                    // Update chart with current data
+                    updateChart();
+                    
                 } catch (error) {
                     console.error('Error initializing chart:', error);
                 }
@@ -570,80 +610,57 @@
 
             // Update chart based on selected power types
             function updateChart() {
-                if (!powerTrendChart) {
-                    console.error('Chart not initialized');
-                    return;
-                }
-                
-                const data = powerDataTable.data().toArray();
-                console.log('Updating chart with data:', data.length, 'items');
-                
-                if (data.length === 0) {
-                    powerTrendChart.data.labels = [];
+                try {
+                    if (!powerTrendChart) {
+                        console.log('Chart not ready yet');
+                        return;
+                    }
+                    
+                    const data = powerDataTable.data().toArray();
+                    console.log('Updating chart with', data.length, 'data points');
+                    
+                    if (data.length === 0) {
+                        console.log('No data to display in chart');
+                        powerTrendChart.data.datasets = [{
+                            label: '데이터 없음',
+                            data: [],
+                            borderColor: 'rgb(139, 92, 246)',
+                            backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                            fill: false
+                        }];
+                        powerTrendChart.update();
+                        return;
+                    }
+                    
+                    // Sort data by timestamp
+                    data.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+                    
+                    // Create simple data for testing - just use voltage first
+                    const chartData = data.map((item, index) => ({
+                        x: index,
+                        y: parseFloat(item.voltage)
+                    }));
+                    
+                    console.log('Chart data points:', chartData.length);
+                    
                     powerTrendChart.data.datasets = [{
-                        label: '데이터 없음',
-                        data: [],
+                        label: '전압 (V)',
+                        data: chartData,
                         borderColor: 'rgb(139, 92, 246)',
                         backgroundColor: 'rgba(139, 92, 246, 0.1)',
                         fill: false,
                         tension: 0.4,
-                        pointRadius: 3,
-                        pointHoverRadius: 6,
-                        borderWidth: 2
+                        pointRadius: 4,
+                        pointHoverRadius: 8,
+                        borderWidth: 3
                     }];
-                    powerTrendChart.update('active');
-                    return;
+                    
+                    powerTrendChart.update();
+                    console.log('Chart updated successfully');
+                    
+                } catch (error) {
+                    console.error('Error updating chart:', error);
                 }
-                
-                // Sort by timestamp
-                data.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
-
-                const powerTypeConfig = {
-                    'voltage': {
-                        label: '전압 (V)',
-                        borderColor: 'rgb(139, 92, 246)',
-                        backgroundColor: 'rgba(139, 92, 246, 0.1)',
-                        data: data.map(item => ({
-                            x: new Date(item.timestamp),
-                            y: parseFloat(item.voltage)
-                        }))
-                    },
-                    'current': {
-                        label: '전류 (A)',
-                        borderColor: 'rgb(59, 130, 246)',
-                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                        data: data.map(item => ({
-                            x: new Date(item.timestamp),
-                            y: parseFloat(item.current)
-                        }))
-                    },
-                    'power': {
-                        label: '전력량 (kWh)',
-                        borderColor: 'rgb(16, 185, 129)',
-                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                        data: data.map(item => ({
-                            x: new Date(item.timestamp),
-                            y: parseFloat(item.power)
-                        }))
-                    }
-                };
-
-                // Create datasets based on selected types
-                const datasets = selectedPowerTypes.map(type => ({
-                    label: powerTypeConfig[type].label,
-                    data: powerTypeConfig[type].data,
-                    borderColor: powerTypeConfig[type].borderColor,
-                    backgroundColor: powerTypeConfig[type].backgroundColor,
-                    fill: false,
-                    tension: 0.4,
-                    pointRadius: 3,
-                    pointHoverRadius: 6,
-                    borderWidth: 2
-                }));
-
-                console.log('Chart datasets:', datasets);
-                powerTrendChart.data.datasets = datasets;
-                powerTrendChart.update('active');
             }
 
             // Checkbox change event
@@ -695,21 +712,35 @@
 
                 // Simulate API call
                 setTimeout(() => {
-                    const newData = generateMockPowerData();
-                    
-                    // Update table
-                    powerDataTable.clear();
-                    powerDataTable.rows.add(newData);
-                    powerDataTable.draw();
-                    
-                    // Update chart with same data
-                    updateChart();
-                    updateDataCount(newData.length);
+                    try {
+                        console.log('Generating new data for search...');
+                        const newData = generateMockPowerData();
+                        console.log('Search generated:', newData.length, 'items');
+                        
+                        if (newData.length > 0) {
+                            // Update table
+                            powerDataTable.clear();
+                            powerDataTable.rows.add(newData);
+                            powerDataTable.draw();
+                            console.log('Table updated with new data');
+                            
+                            // Update chart with same data
+                            setTimeout(() => {
+                                updateChart();
+                            }, 100);
+                            
+                            updateDataCount(newData.length);
+                            window.ToastNotifications.success(`${newData.length}건의 데이터를 조회했습니다.`);
+                        } else {
+                            window.ToastNotifications.warning('조회된 데이터가 없습니다.');
+                        }
+                    } catch (error) {
+                        console.error('Error during search:', error);
+                        window.ToastNotifications.error('데이터 조회 중 오류가 발생했습니다.');
+                    }
                     
                     btn.html(originalText);
                     btn.prop('disabled', false);
-                    
-                    window.ToastNotifications.success(`${newData.length}건의 데이터를 조회했습니다.`);
                 }, 1500);
             });
 
