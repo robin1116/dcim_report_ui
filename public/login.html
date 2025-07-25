@@ -34,27 +34,13 @@
             </div>
         </div>
 
-        <div class="container">
-            <div class="row justify-content-center align-items-center min-vh-100">
-                <div class="col-12 col-md-6 col-lg-4">
+        <div class="container-fluid">
+            <div class="row min-vh-100">
+                <!-- Left Side - Login Form -->
+                <div class="col-12 col-lg-6 d-flex align-items-center justify-content-center">
                     <div class="login-card">
-                        <!-- Logo Section -->
-                        <div class="logo-section">
-                            <div class="logo-container">
-                                <svg width="120" height="80" viewBox="0 0 120 80" class="logo-svg">
-                                    <defs>
-                                        <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                            <stop offset="0%" style="stop-color:var(--primary-color)"/>
-                                            <stop offset="100%" style="stop-color:var(--secondary-color)"/>
-                                        </linearGradient>
-                                    </defs>
-                                    <circle cx="30" cy="25" r="8" fill="url(#logoGradient)"/>
-                                    <circle cx="50" cy="25" r="8" fill="url(#logoGradient)" opacity="0.7"/>
-                                    <circle cx="70" cy="25" r="8" fill="url(#logoGradient)" opacity="0.5"/>
-                                    <rect x="15" y="45" width="70" height="4" rx="2" fill="url(#logoGradient)"/>
-                                    <text x="20" y="65" font-family="Arial, sans-serif" font-size="12" fill="url(#logoGradient)" font-weight="bold">simpleEye</text>
-                                </svg>
-                            </div>
+                        <!-- Form Header -->
+                        <div class="form-header">
                             <h2 class="login-title">관리자 로그인</h2>
                             <p class="login-subtitle">DCIM 시스템에 오신 것을 환영합니다</p>
                         </div>
@@ -104,6 +90,31 @@
                                 <i class="fas fa-shield-alt"></i>
                                 보안 연결된 시스템
                             </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Side - Logo Section -->
+                <div class="col-12 col-lg-6 d-flex align-items-center justify-content-center">
+                    <div class="logo-section">
+                        <div class="logo-container">
+                            <svg width="200" height="150" viewBox="0 0 200 150" class="logo-svg">
+                                <defs>
+                                    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:var(--primary-color)"/>
+                                        <stop offset="100%" style="stop-color:var(--secondary-color)"/>
+                                    </linearGradient>
+                                </defs>
+                                <circle cx="60" cy="45" r="15" fill="url(#logoGradient)"/>
+                                <circle cx="100" cy="45" r="15" fill="url(#logoGradient)" opacity="0.7"/>
+                                <circle cx="140" cy="45" r="15" fill="url(#logoGradient)" opacity="0.5"/>
+                                <rect x="30" y="80" width="140" height="8" rx="4" fill="url(#logoGradient)"/>
+                                <text x="50" y="120" font-family="Arial, sans-serif" font-size="24" fill="url(#logoGradient)" font-weight="bold">simpleEye</text>
+                            </svg>
+                        </div>
+                        <div class="logo-description">
+                            <h3>데이터센터 통합 관리</h3>
+                            <p>효율적이고 안전한 DCIM 솔루션</p>
                         </div>
                     </div>
                 </div>

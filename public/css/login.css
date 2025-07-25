@@ -149,7 +149,7 @@ body {
         0 0 30px rgba(139, 92, 246, 0.1),
         inset 0 1px 0 rgba(255, 255, 255, 0.2);
     width: 100%;
-    max-width: 420px;
+    max-width: 450px;
     transition: all var(--transition-slow);
     overflow: hidden;
 }
@@ -178,15 +178,15 @@ body {
 /* Logo Section */
 .logo-section {
     text-align: center;
-    margin-bottom: 2rem;
+    padding: 2rem;
 }
 
 .logo-container {
     display: inline-block;
-    margin-bottom: 1.5rem;
-    padding: 1.5rem;
+    margin-bottom: 2rem;
+    padding: 2rem;
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
+    border-radius: 30px;
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -194,10 +194,36 @@ body {
         0 8px 32px rgba(0, 0, 0, 0.2),
         0 0 15px rgba(139, 92, 246, 0.1),
         inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    animation: logoFloat 3s ease-in-out infinite;
+}
+
+.logo-description {
+    margin-top: 1rem;
+}
+
+.logo-description h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-inverse);
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
+}
+
+.logo-description p {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 0;
+    font-weight: 300;
 }
 
 .logo-svg {
     filter: drop-shadow(0 4px 8px var(--shadow-light));
+}
+
+/* Form Header */
+.form-header {
+    text-align: center;
+    margin-bottom: 2rem;
 }
 
 .login-title {
@@ -491,6 +517,23 @@ body {
 }
 
 /* Responsive Design */
+@media (max-width: 991px) {
+    .logo-section {
+        margin-top: 2rem;
+        order: -1;
+    }
+    
+    .logo-container {
+        margin-bottom: 1rem;
+        padding: 1.5rem;
+    }
+    
+    .logo-svg {
+        width: 150px;
+        height: 120px;
+    }
+}
+
 @media (max-width: 576px) {
     .login-card {
         margin: 1rem;
@@ -517,6 +560,19 @@ body {
     .input-container.active .floating-label,
     .modern-input:focus + .floating-label {
         left: 0.875rem;
+    }
+    
+    .logo-svg {
+        width: 120px;
+        height: 100px;
+    }
+    
+    .logo-description h3 {
+        font-size: 1.25rem;
+    }
+    
+    .logo-description p {
+        font-size: 0.9rem;
     }
 }
 
