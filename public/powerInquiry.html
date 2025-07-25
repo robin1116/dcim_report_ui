@@ -248,24 +248,8 @@
                                 <input type="time" class="form-control form-control-modern form-control-sm" id="endTime" value="23:59">
                             </div>
                             
-                            <!-- 체크박스와 조회 버튼 -->
-                            <div class="col-md-2">
-                                <label class="form-label-modern mb-1">조회 항목</label>
-                                <div class="d-flex gap-3">
-                                    <div class="form-check form-check-sm">
-                                        <input class="form-check-input" type="checkbox" id="voltageCheck" value="voltage" checked>
-                                        <label class="form-check-label" for="voltageCheck">전압</label>
-                                    </div>
-                                    <div class="form-check form-check-sm">
-                                        <input class="form-check-input" type="checkbox" id="currentCheck" value="current">
-                                        <label class="form-check-label" for="currentCheck">전류</label>
-                                    </div>
-                                    <div class="form-check form-check-sm">
-                                        <input class="form-check-input" type="checkbox" id="powerCheck" value="power">
-                                        <label class="form-check-label" for="powerCheck">전력량</label>
-                                    </div>
-                                </div>
-                            </div>
+                            <!-- 조회 버튼 -->
+                            <div class="col-md-2"></div>
                             <div class="col-md-2">
                                 <div class="d-flex gap-1">
                                     <button class="btn btn-primary-modern btn-sm flex-fill" id="searchPowerData">
@@ -302,6 +286,24 @@
                                     <li><a class="dropdown-item" href="#" id="chartSettings"><i class="fas fa-sliders-h me-2"></i>차트 설정</a></li>
                                     <li><a class="dropdown-item" href="#" id="exportChartImage"><i class="fas fa-image me-2"></i>이미지로 저장</a></li>
                                 </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Chart Controls -->
+                    <div class="card-body-modern py-2 border-bottom" style="background: rgba(139, 92, 246, 0.05);">
+                        <div class="d-flex gap-4 align-items-center">
+                            <span class="text-muted-modern" style="font-size: 0.875rem;">표시 항목:</span>
+                            <div class="form-check form-check-sm">
+                                <input class="form-check-input" type="checkbox" id="voltageCheck" value="voltage" checked>
+                                <label class="form-check-label" for="voltageCheck">전압</label>
+                            </div>
+                            <div class="form-check form-check-sm">
+                                <input class="form-check-input" type="checkbox" id="currentCheck" value="current">
+                                <label class="form-check-label" for="currentCheck">전류</label>
+                            </div>
+                            <div class="form-check form-check-sm">
+                                <input class="form-check-input" type="checkbox" id="powerCheck" value="power">
+                                <label class="form-check-label" for="powerCheck">전력량</label>
                             </div>
                         </div>
                     </div>
