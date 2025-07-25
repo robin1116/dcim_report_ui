@@ -371,7 +371,6 @@
     <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <script src="js/theme-manager.js"></script>
     <script src="js/admin-common.js"></script>
@@ -388,6 +387,14 @@
             const lastWeek = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
             $('#startDate').val(lastWeek.toISOString().split('T')[0]);
             $('#endDate').val(today.toISOString().split('T')[0]);
+            
+            // Check if Chart.js is loaded
+            if (typeof Chart === 'undefined') {
+                console.error('Chart.js not loaded');
+                return;
+            } else {
+                console.log('Chart.js loaded successfully');
+            }
 
             // Initialize DataTable
             powerDataTable = $('#powerDataTable').DataTable({
@@ -429,16 +436,18 @@
                 lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]]
             });
 
-            // Initialize Chart
-            initializePowerChart();
-            
-            // Initialize with some default data
-            const initialData = generateMockPowerData();
-            powerDataTable.clear();
-            powerDataTable.rows.add(initialData);
-            powerDataTable.draw();
-            updateChart();
-            updateDataCount(initialData.length);
+            // Initialize Chart after DOM is ready
+            setTimeout(() => {
+                initializePowerChart();
+                
+                // Load initial data
+                const initialData = generateMockPowerData();
+                powerDataTable.clear();
+                powerDataTable.rows.add(initialData);
+                powerDataTable.draw();
+                updateChart();
+                updateDataCount(initialData.length);
+            }, 500);
 
             // Generate mock power data
             function generateMockPowerData() {
@@ -474,83 +483,120 @@
 
             // Initialize power trend chart
             function initializePowerChart() {
-                const ctx = document.getElementById('powerTrendChart').getContext('2d');
-                powerTrendChart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: [],
-                        datasets: []
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        interaction: {
-                            intersect: false,
-                            mode: 'index'
-                        },
-                        scales: {
-                            x: {
-                                type: 'time',
-                                time: {
-                                    unit: 'hour',
-                                    displayFormats: {
-                                        hour: 'MM-dd HH:mm'
-                                    }
-                                },
-                                grid: {
-                                    color: 'rgba(255, 255, 255, 0.1)'
-                                }
-                            },
-                            y: {
-                                beginAtZero: false,
-                                grid: {
-                                    color: 'rgba(255, 255, 255, 0.1)'
-                                },
-                                ticks: {
-                                    callback: function(value) {
-                                        return value.toFixed(1);
-                                    }
-                                }
-                            }
-                        },
-                        plugins: {
-                            legend: {
-                                position: 'top',
-                                labels: {
-                                    usePointStyle: true,
-                                    color: '#fff'
-                                }
-                            },
-                            tooltip: {
-                                backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                                titleColor: '#fff',
-                                bodyColor: '#fff',
+                try {
+                    const canvas = document.getElementById('powerTrendChart');
+                    if (!canvas) {
+                        console.error('Chart canvas not found');
+                        return;
+                    }
+                    
+                    const ctx = canvas.getContext('2d');
+                    powerTrendChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: [],
+                            datasets: [{
+                                label: '전압 (V)',
+                                data: [],
                                 borderColor: 'rgb(139, 92, 246)',
-                                borderWidth: 1
+                                backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                                fill: false,
+                                tension: 0.4,
+                                pointRadius: 3,
+                                pointHoverRadius: 6,
+                                borderWidth: 2
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            interaction: {
+                                intersect: false,
+                                mode: 'index'
+                            },
+                            scales: {
+                                x: {
+                                    type: 'time',
+                                    time: {
+                                        unit: 'hour',
+                                        displayFormats: {
+                                            hour: 'MM-dd HH:mm'
+                                        }
+                                    },
+                                    grid: {
+                                        color: 'rgba(255, 255, 255, 0.1)'
+                                    },
+                                    ticks: {
+                                        color: '#fff'
+                                    }
+                                },
+                                y: {
+                                    beginAtZero: false,
+                                    grid: {
+                                        color: 'rgba(255, 255, 255, 0.1)'
+                                    },
+                                    ticks: {
+                                        color: '#fff',
+                                        callback: function(value) {
+                                            return value.toFixed(1);
+                                        }
+                                    }
+                                }
+                            },
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                    labels: {
+                                        usePointStyle: true,
+                                        color: '#fff'
+                                    }
+                                },
+                                tooltip: {
+                                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                    titleColor: '#fff',
+                                    bodyColor: '#fff',
+                                    borderColor: 'rgb(139, 92, 246)',
+                                    borderWidth: 1
+                                }
                             }
                         }
-                    }
-                });
-                
-                updateChart();
+                    });
+                    
+                    console.log('Chart initialized successfully');
+                } catch (error) {
+                    console.error('Error initializing chart:', error);
+                }
             }
 
             // Update chart based on selected power types
             function updateChart() {
+                if (!powerTrendChart) {
+                    console.error('Chart not initialized');
+                    return;
+                }
+                
                 const data = powerDataTable.data().toArray();
+                console.log('Updating chart with data:', data.length, 'items');
                 
                 if (data.length === 0) {
                     powerTrendChart.data.labels = [];
-                    powerTrendChart.data.datasets = [];
+                    powerTrendChart.data.datasets = [{
+                        label: '데이터 없음',
+                        data: [],
+                        borderColor: 'rgb(139, 92, 246)',
+                        backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                        fill: false,
+                        tension: 0.4,
+                        pointRadius: 3,
+                        pointHoverRadius: 6,
+                        borderWidth: 2
+                    }];
                     powerTrendChart.update('active');
                     return;
                 }
                 
                 // Sort by timestamp
                 data.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
-                
-                // Extract timestamps for x-axis
-                const labels = data.map(item => new Date(item.timestamp));
 
                 const powerTypeConfig = {
                     'voltage': {
@@ -559,7 +605,7 @@
                         backgroundColor: 'rgba(139, 92, 246, 0.1)',
                         data: data.map(item => ({
                             x: new Date(item.timestamp),
-                            y: item.voltage
+                            y: parseFloat(item.voltage)
                         }))
                     },
                     'current': {
@@ -568,7 +614,7 @@
                         backgroundColor: 'rgba(59, 130, 246, 0.1)',
                         data: data.map(item => ({
                             x: new Date(item.timestamp),
-                            y: item.current
+                            y: parseFloat(item.current)
                         }))
                     },
                     'power': {
@@ -577,7 +623,7 @@
                         backgroundColor: 'rgba(16, 185, 129, 0.1)',
                         data: data.map(item => ({
                             x: new Date(item.timestamp),
-                            y: item.power
+                            y: parseFloat(item.power)
                         }))
                     }
                 };
@@ -595,7 +641,7 @@
                     borderWidth: 2
                 }));
 
-                powerTrendChart.data.labels = labels;
+                console.log('Chart datasets:', datasets);
                 powerTrendChart.data.datasets = datasets;
                 powerTrendChart.update('active');
             }
