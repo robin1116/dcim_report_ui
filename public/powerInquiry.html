@@ -321,13 +321,21 @@
                     </div>
                     <div class="card-body-modern">
                         <div class="table-container">
-                            <table id="powerDataTable" class="table table-modern" style="width:100%">
+                            <table id="powerDataTable" class="table table-modern table-compact" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th>시간</th>
-                                        <th>전압 (V)</th>
-                                        <th>전류 (A)</th>
-                                        <th>전력량 (kWh)</th>
+                                        <th style="width: 35%;">
+                                            <i class="fas fa-clock me-2" style="color: var(--primary-color);"></i>시간
+                                        </th>
+                                        <th style="width: 20%; text-align: center;">
+                                            <i class="fas fa-bolt me-2" style="color: #8b5cf6;"></i>전압 (V)
+                                        </th>
+                                        <th style="width: 20%; text-align: center;">
+                                            <i class="fas fa-plug me-2" style="color: #3b82f6;"></i>전류 (A)
+                                        </th>
+                                        <th style="width: 25%; text-align: center;">
+                                            <i class="fas fa-battery-three-quarters me-2" style="color: #10b981;"></i>전력량 (kWh)
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -420,31 +428,42 @@
                         title: '시간',
                         render: function(data) {
                             if (!data) return '';
-                            return new Date(data).toLocaleString('ko-KR');
+                            const date = new Date(data);
+                            const formattedTime = date.toLocaleDateString('ko-KR', {
+                                month: '2-digit', 
+                                day: '2-digit'
+                            }) + ' ' + date.toLocaleTimeString('ko-KR', {
+                                hour: '2-digit', 
+                                minute: '2-digit'
+                            });
+                            return `<span class="time-value">${formattedTime}</span>`;
                         }
                     },
                     { 
                         data: 'voltage',
                         title: '전압 (V)',
+                        className: 'text-center',
                         render: function(data) {
                             if (data === null || data === undefined) return '';
-                            return parseFloat(data).toFixed(1);
+                            return `<span class="data-value voltage">${parseFloat(data).toFixed(1)}</span>`;
                         }
                     },
                     { 
                         data: 'current',
                         title: '전류 (A)',
+                        className: 'text-center',
                         render: function(data) {
                             if (data === null || data === undefined) return '';
-                            return parseFloat(data).toFixed(2);
+                            return `<span class="data-value current">${parseFloat(data).toFixed(2)}</span>`;
                         }
                     },
                     { 
                         data: 'power',
                         title: '전력량 (kWh)',
+                        className: 'text-center',
                         render: function(data) {
                             if (data === null || data === undefined) return '';
-                            return parseFloat(data).toFixed(3);
+                            return `<span class="data-value power">${parseFloat(data).toFixed(3)}</span>`;
                         }
                     }
                 ],
