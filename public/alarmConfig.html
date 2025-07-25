@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>알람 설정 | simpleEye DCIM</title>
+    
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link href="css/themes.css" rel="stylesheet">
+    <link href="css/modern-admin.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Theme Toggle -->
+    <div class="theme-toggle-container">
+        <button id="themeToggle" class="theme-toggle-btn" title="테마 변경">
+            <i class="fas fa-moon"></i>
+        </button>
+    </div>
+
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="#" class="sidebar-logo">
+                    <svg width="40" height="40" viewBox="0 0 40 40" class="logo-icon">
+                        <defs>
+                            <linearGradient id="sidebarLogoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:var(--primary-color)"/>
+                                <stop offset="100%" style="stop-color:var(--secondary-color)"/>
+                            </linearGradient>
+                        </defs>
+                        <circle cx="10" cy="10" r="3" fill="url(#sidebarLogoGradient)"/>
+                        <circle cx="20" cy="10" r="3" fill="url(#sidebarLogoGradient)" opacity="0.7"/>
+                        <circle cx="30" cy="10" r="3" fill="url(#sidebarLogoGradient)" opacity="0.5"/>
+                        <rect x="5" y="20" width="30" height="2" rx="1" fill="url(#sidebarLogoGradient)"/>
+                        <text x="8" y="35" font-family="Arial, sans-serif" font-size="8" fill="url(#sidebarLogoGradient)" font-weight="bold">Eye</text>
+                    </svg>
+                    <span class="logo-text">simpleEye</span>
+                </a>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">시스템 관리</div>
+                    <div class="nav-item">
+                        <a href="adminsysuser.html" class="nav-link">
+                            <i class="fas fa-users"></i>
+                            <span class="nav-text">시스템관리자</span>
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="alarmConfig.html" class="nav-link active">
+                            <i class="fas fa-bell"></i>
+                            <span class="nav-text">알람 설정</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">모니터링</div>
+                    <div class="nav-item">
+                        <a href="adminPortUsage.html" class="nav-link">
+                            <i class="fas fa-chart-line"></i>
+                            <span class="nav-text">포트 사용량</span>
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-server"></i>
+                            <span class="nav-text">시스템 상태</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">보고서</div>
+                    <div class="nav-item">
+                        <a href="usageReport.html" class="nav-link">
+                            <i class="fas fa-file-alt"></i>
+                            <span class="nav-text">사용량 보고서</span>
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="queryBuilder.html" class="nav-link">
+                            <i class="fas fa-search"></i>
+                            <span class="nav-text">쿼리 빌더</span>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="sidebar-user">
+                <div class="user-profile">
+                    <div class="user-avatar">A</div>
+                    <div class="user-info">
+                        <div class="user-name">관리자</div>
+                        <div class="user-role">시스템 관리자</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="main-header">
+                <div class="header-content">
+                    <div class="header-left">
+                        <button class="sidebar-toggle">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        <div>
+                            <h1 class="page-title">알람 설정</h1>
+                            <nav class="breadcrumb-custom">
+                                <a href="#">simpleEye</a>
+                                <i class="fas fa-chevron-right"></i>
+                                <span>시스템 설정</span>
+                                <i class="fas fa-chevron-right"></i>
+                                <strong>알람 설정</strong>
+                            </nav>
+                        </div>
+                    </div>
+                    <div class="header-actions">
+                        <button class="header-btn" id="testAlarm" title="알람 테스트">
+                            <i class="fas fa-play"></i>
+                        </button>
+                        <button class="header-btn has-notification" title="알림">
+                            <i class="fas fa-bell"></i>
+                        </button>
+                        <button class="header-btn" title="설정">
+                            <i class="fas fa-cog"></i>
+                        </button>
+                        <button class="header-btn" title="로그아웃">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-area">
+                <!-- Alarm Statistics -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="modern-card">
+                            <div class="card-body-modern text-center">
+                                <div class="stat-icon mb-3">
+                                    <i class="fas fa-bell text-gradient" style="font-size: 2.5rem;"></i>
+                                </div>
+                                <h3 class="mb-1" id="totalAlarms">-</h3>
+                                <p class="text-muted mb-0">전체 알람 규칙</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="modern-card">
+                            <div class="card-body-modern text-center">
+                                <div class="stat-icon mb-3">
+                                    <i class="fas fa-check-circle text-gradient" style="font-size: 2.5rem;"></i>
+                                </div>
+                                <h3 class="mb-1" id="activeAlarms">-</h3>
+                                <p class="text-muted mb-0">활성화된 알람</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="modern-card">
+                            <div class="card-body-modern text-center">
+                                <div class="stat-icon mb-3">
+                                    <i class="fas fa-exclamation-triangle text-gradient" style="font-size: 2.5rem;"></i>
+                                </div>
+                                <h3 class="mb-1" id="triggeredToday">-</h3>
+                                <p class="text-muted mb-0">오늘 발생한 알람</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="modern-card">
+                            <div class="card-body-modern text-center">
+                                <div class="stat-icon mb-3">
+                                    <i class="fas fa-envelope text-gradient" style="font-size: 2.5rem;"></i>
+                                </div>
+                                <h3 class="mb-1" id="emailNotifications">-</h3>
+                                <p class="text-muted mb-0">이메일 알림 설정</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alarm Configuration Tabs -->
+                <div class="modern-card">
+                    <div class="card-header-modern">
+                        <h3 class="card-title-modern">알람 관리</h3>
+                        <button class="btn btn-primary-modern" data-bs-toggle="modal" data-bs-target="#alarmModal">
+                            <i class="fas fa-plus"></i>
+                            새 알람 규칙
+                        </button>
+                    </div>
+                    <div class="card-body-modern">
+                        <!-- Tab Navigation -->
+                        <ul class="nav nav-tabs mb-4">
+                            <li class="nav-item">
+                                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#alarmRules">
+                                    <i class="fas fa-list me-2"></i>알람 규칙
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#notificationSettings">
+                                    <i class="fas fa-cog me-2"></i>알림 설정
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#alarmHistory">
+                                    <i class="fas fa-history me-2"></i>알람 이력
+                                </button>
+                            </li>
+                        </ul>
+
+                        <!-- Tab Content -->
+                        <div class="tab-content">
+                            <!-- Alarm Rules Tab -->
+                            <div class="tab-pane fade show active" id="alarmRules">
+                                <div class="table-container">
+                                    <table id="alarmRulesTable" class="table table-modern" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>규칙명</th>
+                                                <th>타입</th>
+                                                <th>조건</th>
+                                                <th>임계값</th>
+                                                <th>심각도</th>
+                                                <th>상태</th>
+                                                <th>마지막 트리거</th>
+                                                <th>작업</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Data will be loaded via JavaScript -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Notification Settings Tab -->
+                            <div class="tab-pane fade" id="notificationSettings">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="modern-card">
+                                            <div class="card-header-modern">
+                                                <h5 class="card-title-modern">이메일 설정</h5>
+                                            </div>
+                                            <div class="card-body-modern">
+                                                <form id="emailSettingsForm">
+                                                    <div class="mb-3">
+                                                        <label class="form-label-modern">SMTP 서버</label>
+                                                        <input type="text" class="form-control form-control-modern" id="smtpServer" value="smtp.gmail.com">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label-modern">포트</label>
+                                                        <input type="number" class="form-control form-control-modern" id="smtpPort" value="587">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label-modern">사용자명</label>
+                                                        <input type="email" class="form-control form-control-modern" id="smtpUsername">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label-modern">비밀번호</label>
+                                                        <input type="password" class="form-control form-control-modern" id="smtpPassword">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" id="enableSSL" checked>
+                                                            <label class="form-check-label" for="enableSSL">
+                                                                SSL/TLS 암호화 사용
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <button type="button" class="btn btn-primary-modern" id="testEmail">
+                                                        <i class="fas fa-paper-plane"></i>
+                                                        테스트 이메일 발송
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="modern-card">
+                                            <div class="card-header-modern">
+                                                <h5 class="card-title-modern">알림 수신자</h5>
+                                            </div>
+                                            <div class="card-body-modern">
+                                                <div class="mb-3">
+                                                    <label class="form-label-modern">수신자 목록</label>
+                                                    <div class="input-group mb-2">
+                                                        <input type="email" class="form-control form-control-modern" id="newRecipient" placeholder="이메일 주소 입력">
+                                                        <button class="btn btn-secondary-modern" type="button" id="addRecipient">
+                                                            <i class="fas fa-plus"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div id="recipientsList" class="border rounded p-3" style="min-height: 200px;">
+                                                    <!-- Recipients will be loaded here -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Alarm History Tab -->
+                            <div class="tab-pane fade" id="alarmHistory">
+                                <div class="mb-3">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <select class="form-control form-control-modern" id="historyFilter">
+                                                <option value="">모든 알람</option>
+                                                <option value="critical">심각</option>
+                                                <option value="warning">경고</option>
+                                                <option value="info">정보</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <input type="date" class="form-control form-control-modern" id="historyDate">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="d-flex gap-2">
+                                                <button class="btn btn-primary-modern" id="applyHistoryFilter">
+                                                    <i class="fas fa-filter"></i>
+                                                    필터 적용
+                                                </button>
+                                                <button class="btn btn-secondary-modern" id="exportHistory">
+                                                    <i class="fas fa-download"></i>
+                                                    내보내기
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="table-container">
+                                    <table id="alarmHistoryTable" class="table table-modern" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>시간</th>
+                                                <th>규칙명</th>
+                                                <th>심각도</th>
+                                                <th>메시지</th>
+                                                <th>상태</th>
+                                                <th>확인자</th>
+                                                <th>작업</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Data will be loaded via JavaScript -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Alarm Rule Modal -->
+    <div class="modal fade modal-modern" id="alarmModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">알람 규칙 설정</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="alarmForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label-modern">규칙명</label>
+                                    <input type="text" class="form-control form-control-modern" id="alarmName" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label-modern">알람 타입</label>
+                                    <select class="form-control form-control-modern" id="alarmType" required>
+                                        <option value="">타입 선택</option>
+                                        <option value="cpu">CPU 사용률</option>
+                                        <option value="memory">메모리 사용률</option>
+                                        <option value="disk">디스크 사용률</option>
+                                        <option value="network">네트워크 트래픽</option>
+                                        <option value="temperature">온도</option>
+                                        <option value="power">전력 사용량</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label class="form-label-modern">조건</label>
+                                    <select class="form-control form-control-modern" id="alarmCondition" required>
+                                        <option value="">조건 선택</option>
+                                        <option value="greater">보다 큼 (>)</option>
+                                        <option value="less">보다 작음 (<)</option>
+                                        <option value="equal">같음 (=)</option>
+                                        <option value="not_equal">같지 않음 (≠)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label class="form-label-modern">임계값</label>
+                                    <input type="number" class="form-control form-control-modern" id="alarmThreshold" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label class="form-label-modern">단위</label>
+                                    <select class="form-control form-control-modern" id="alarmUnit">
+                                        <option value="%">퍼센트 (%)</option>
+                                        <option value="GB">기가바이트 (GB)</option>
+                                        <option value="MB/s">MB/초</option>
+                                        <option value="°C">섭씨 (°C)</option>
+                                        <option value="W">와트 (W)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label-modern">심각도</label>
+                                    <select class="form-control form-control-modern" id="alarmSeverity" required>
+                                        <option value="">심각도 선택</option>
+                                        <option value="info">정보</option>
+                                        <option value="warning">경고</option>
+                                        <option value="critical">심각</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label-modern">확인 간격 (분)</label>
+                                    <input type="number" class="form-control form-control-modern" id="alarmInterval" value="5" min="1">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label-modern">설명</label>
+                            <textarea class="form-control form-control-modern" id="alarmDescription" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="alarmEnabled" checked>
+                                <label class="form-check-label" for="alarmEnabled">
+                                    알람 활성화
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary-modern" data-bs-dismiss="modal">취소</button>
+                    <button type="button" class="btn btn-primary-modern" id="saveAlarmBtn">
+                        <i class="fas fa-save"></i>
+                        저장
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
+    
+    <script src="js/theme-manager.js"></script>
+    <script src="js/admin-common.js"></script>
+    <script src="js/toast-notifications.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            let alarmRulesTable;
+            let alarmHistoryTable;
+            let recipients = ['admin@simpleeye.com', 'monitor@simpleeye.com'];
+
+            // Initialize DataTables
+            initializeDataTables();
+            loadRecipients();
+            updateStatistics();
+
+            function initializeDataTables() {
+                // Alarm Rules Table
+                alarmRulesTable = $('#alarmRulesTable').DataTable({
+                    ...window.DataTableDefaults,
+                    data: generateAlarmRules(),
+                    columns: [
+                        { data: 'name' },
+                        { 
+                            data: 'type',
+                            render: function(data) {
+                                const icons = {
+                                    cpu: 'fas fa-microchip',
+                                    memory: 'fas fa-memory',
+                                    disk: 'fas fa-hdd',
+                                    network: 'fas fa-network-wired',
+                                    temperature: 'fas fa-thermometer-half',
+                                    power: 'fas fa-bolt'
+                                };
+                                const labels = {
+                                    cpu: 'CPU 사용률',
+                                    memory: '메모리 사용률',
+                                    disk: '디스크 사용률',
+                                    network: '네트워크 트래픽',
+                                    temperature: '온도',
+                                    power: '전력'
+                                };
+                                return `<i class="${icons[data]} me-2"></i>${labels[data]}`;
+                            }
+                        },
+                        { 
+                            data: 'condition',
+                            render: function(data, type, row) {
+                                const operators = {
+                                    greater: '>',
+                                    less: '<',
+                                    equal: '=',
+                                    not_equal: '≠'
+                                };
+                                return `${operators[data]} ${row.threshold}${row.unit}`;
+                            }
+                        },
+                        { 
+                            data: 'threshold',
+                            render: function(data, type, row) {
+                                return `${data}${row.unit}`;
+                            }
+                        },
+                        {
+                            data: 'severity',
+                            render: function(data) {
+                                const classes = {
+                                    info: 'status-badge status-active',
+                                    warning: 'status-badge status-pending',
+                                    critical: 'status-badge status-inactive'
+                                };
+                                const labels = {
+                                    info: '정보',
+                                    warning: '경고',
+                                    critical: '심각'
+                                };
+                                return `<span class="${classes[data]}">${labels[data]}</span>`;
+                            }
+                        },
+                        {
+                            data: 'enabled',
+                            render: function(data) {
+                                return data 
+                                    ? '<span class="status-badge status-active">활성</span>'
+                                    : '<span class="status-badge status-inactive">비활성</span>';
+                            }
+                        },
+                        {
+                            data: 'lastTriggered',
+                            render: function(data) {
+                                return data ? window.AdminUtils.formatDateTime(data) : '-';
+                            }
+                        },
+                        {
+                            data: null,
+                            orderable: false,
+                            render: function(data, type, row) {
+                                return `
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-sm-modern btn-secondary-modern edit-alarm-btn" 
+                                                data-alarm='${JSON.stringify(row)}' title="수정">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-sm-modern ${row.enabled ? 'btn-warning' : 'btn-success'} toggle-alarm-btn" 
+                                                data-id="${row.id}" data-enabled="${row.enabled}" title="${row.enabled ? '비활성화' : '활성화'}">
+                                            <i class="fas ${row.enabled ? 'fa-pause' : 'fa-play'}"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-sm-modern btn-danger-modern delete-alarm-btn" 
+                                                data-id="${row.id}" title="삭제">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                `;
+                            }
+                        }
+                    ]
+                });
+
+                // Alarm History Table
+                alarmHistoryTable = $('#alarmHistoryTable').DataTable({
+                    ...window.DataTableDefaults,
+                    data: generateAlarmHistory(),
+                    order: [[0, 'desc']],
+                    columns: [
+                        {
+                            data: 'timestamp',
+                            render: function(data) {
+                                return window.AdminUtils.formatDateTime(data);
+                            }
+                        },
+                        { data: 'ruleName' },
+                        {
+                            data: 'severity',
+                            render: function(data) {
+                                const classes = {
+                                    info: 'status-badge status-active',
+                                    warning: 'status-badge status-pending',
+                                    critical: 'status-badge status-inactive'
+                                };
+                                const labels = {
+                                    info: '정보',
+                                    warning: '경고',
+                                    critical: '심각'
+                                };
+                                return `<span class="${classes[data]}">${labels[data]}</span>`;
+                            }
+                        },
+                        { data: 'message' },
+                        {
+                            data: 'status',
+                            render: function(data) {
+                                const classes = {
+                                    new: 'status-badge status-pending',
+                                    acknowledged: 'status-badge status-active',
+                                    resolved: 'status-badge status-active'
+                                };
+                                const labels = {
+                                    new: '신규',
+                                    acknowledged: '확인됨',
+                                    resolved: '해결됨'
+                                };
+                                return `<span class="${classes[data]}">${labels[data]}</span>`;
+                            }
+                        },
+                        { data: 'acknowledgedBy', defaultContent: '-' },
+                        {
+                            data: null,
+                            orderable: false,
+                            render: function(data, type, row) {
+                                let actions = '';
+                                if (row.status === 'new') {
+                                    actions += `<button type="button" class="btn btn-sm-modern btn-primary-modern acknowledge-btn" 
+                                                        data-id="${row.id}" title="확인">
+                                                    <i class="fas fa-check"></i>
+                                                </button>`;
+                                }
+                                actions += `<button type="button" class="btn btn-sm-modern btn-secondary-modern view-details-btn" 
+                                                    data-alarm='${JSON.stringify(row)}' title="상세보기">
+                                                <i class="fas fa-eye"></i>
+                                            </button>`;
+                                return `<div class="btn-group" role="group">${actions}</div>`;
+                            }
+                        }
+                    ]
+                });
+            }
+
+            // Generate mock alarm rules
+            function generateAlarmRules() {
+                return [
+                    {
+                        id: 1,
+                        name: 'CPU 사용률 경고',
+                        type: 'cpu',
+                        condition: 'greater',
+                        threshold: 80,
+                        unit: '%',
+                        severity: 'warning',
+                        enabled: true,
+                        lastTriggered: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+                        description: 'CPU 사용률이 80%를 초과할 때 경고'
+                    },
+                    {
+                        id: 2,
+                        name: '메모리 부족 심각',
+                        type: 'memory',
+                        condition: 'greater',
+                        threshold: 90,
+                        unit: '%',
+                        severity: 'critical',
+                        enabled: true,
+                        lastTriggered: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
+                        description: '메모리 사용률이 90%를 초과할 때 심각 알람'
+                    },
+                    {
+                        id: 3,
+                        name: '디스크 공간 부족',
+                        type: 'disk',
+                        condition: 'less',
+                        threshold: 10,
+                        unit: 'GB',
+                        severity: 'warning',
+                        enabled: true,
+                        lastTriggered: null,
+                        description: '사용 가능한 디스크 공간이 10GB 미만일 때'
+                    },
+                    {
+                        id: 4,
+                        name: '온도 과열 경고',
+                        type: 'temperature',
+                        condition: 'greater',
+                        threshold: 70,
+                        unit: '°C',
+                        severity: 'critical',
+                        enabled: false,
+                        lastTriggered: null,
+                        description: '서버 온도가 70도를 초과할 때'
+                    }
+                ];
+            }
+
+            // Generate mock alarm history
+            function generateAlarmHistory() {
+                const history = [];
+                const rules = ['CPU 사용률 경고', '메모리 부족 심각', '디스크 공간 부족'];
+                const severities = ['info', 'warning', 'critical'];
+                const statuses = ['new', 'acknowledged', 'resolved'];
+                
+                for (let i = 0; i < 20; i++) {
+                    history.push({
+                        id: i + 1,
+                        timestamp: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000).toISOString(),
+                        ruleName: rules[Math.floor(Math.random() * rules.length)],
+                        severity: severities[Math.floor(Math.random() * severities.length)],
+                        message: '임계값을 초과하여 알람이 발생했습니다.',
+                        status: statuses[Math.floor(Math.random() * statuses.length)],
+                        acknowledgedBy: Math.random() > 0.5 ? '관리자' : null
+                    });
+                }
+                return history.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            }
+
+            // Update statistics
+            function updateStatistics() {
+                const rules = alarmRulesTable.data().toArray();
+                const history = alarmHistoryTable.data().toArray();
+                
+                $('#totalAlarms').text(rules.length);
+                $('#activeAlarms').text(rules.filter(r => r.enabled).length);
+                
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const todayAlarms = history.filter(h => new Date(h.timestamp) >= today).length;
+                $('#triggeredToday').text(todayAlarms);
+                
+                $('#emailNotifications').text(recipients.length);
+            }
+
+            // Load recipients
+            function loadRecipients() {
+                const recipientsList = $('#recipientsList');
+                recipientsList.empty();
+                
+                recipients.forEach((email, index) => {
+                    recipientsList.append(`
+                        <div class="d-flex justify-content-between align-items-center mb-2 p-2 border rounded">
+                            <span>${email}</span>
+                            <button type="button" class="btn btn-sm btn-outline-danger remove-recipient" data-index="${index}">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    `);
+                });
+            }
+
+            // Add recipient
+            $('#addRecipient').click(function() {
+                const email = $('#newRecipient').val().trim();
+                if (email && window.AdminUtils.isValidEmail(email)) {
+                    if (!recipients.includes(email)) {
+                        recipients.push(email);
+                        loadRecipients();
+                        updateStatistics();
+                        $('#newRecipient').val('');
+                        window.ToastNotifications.success('수신자가 추가되었습니다.');
+                    } else {
+                        window.ToastNotifications.warning('이미 등록된 이메일입니다.');
+                    }
+                } else {
+                    window.ToastNotifications.warning('올바른 이메일 주소를 입력해주세요.');
+                }
+            });
+
+            // Remove recipient
+            $(document).on('click', '.remove-recipient', function() {
+                const index = $(this).data('index');
+                recipients.splice(index, 1);
+                loadRecipients();
+                updateStatistics();
+                window.ToastNotifications.success('수신자가 제거되었습니다.');
+            });
+
+            // Save alarm rule
+            $('#saveAlarmBtn').click(function() {
+                const formData = {
+                    name: $('#alarmName').val(),
+                    type: $('#alarmType').val(),
+                    condition: $('#alarmCondition').val(),
+                    threshold: parseInt($('#alarmThreshold').val()),
+                    unit: $('#alarmUnit').val(),
+                    severity: $('#alarmSeverity').val(),
+                    interval: parseInt($('#alarmInterval').val()),
+                    description: $('#alarmDescription').val(),
+                    enabled: $('#alarmEnabled').is(':checked')
+                };
+
+                if (!formData.name || !formData.type || !formData.condition || !formData.threshold || !formData.severity) {
+                    window.ToastNotifications.warning('모든 필수 필드를 입력해주세요.');
+                    return;
+                }
+
+                // Add to table
+                const newRule = {
+                    id: Date.now(),
+                    ...formData,
+                    lastTriggered: null
+                };
+
+                alarmRulesTable.row.add(newRule).draw();
+                updateStatistics();
+                
+                $('#alarmModal').modal('hide');
+                $('#alarmForm')[0].reset();
+                $('#alarmEnabled').prop('checked', true);
+                
+                window.ToastNotifications.success('알람 규칙이 성공적으로 추가되었습니다.');
+            });
+
+            // Toggle alarm
+            $(document).on('click', '.toggle-alarm-btn', function() {
+                const id = $(this).data('id');
+                const enabled = $(this).data('enabled');
+                const action = enabled ? '비활성화' : '활성화';
+                
+                // Update in table (in production, this would be an API call)
+                window.ToastNotifications.success(`알람이 ${action}되었습니다.`);
+                alarmRulesTable.ajax.reload();
+            });
+
+            // Delete alarm
+            $(document).on('click', '.delete-alarm-btn', async function() {
+                const id = $(this).data('id');
+                
+                const confirmed = await window.AdminUtils.confirm(
+                    '정말로 이 알람 규칙을 삭제하시겠습니까?',
+                    '알람 규칙 삭제'
+                );
+
+                if (confirmed) {
+                    // Remove from table (in production, this would be an API call)
+                    const row = $(this).closest('tr');
+                    alarmRulesTable.row(row).remove().draw();
+                    updateStatistics();
+                    window.ToastNotifications.success('알람 규칙이 삭제되었습니다.');
+                }
+            });
+
+            // Acknowledge alarm
+            $(document).on('click', '.acknowledge-btn', function() {
+                const id = $(this).data('id');
+                // Update status (in production, this would be an API call)
+                window.ToastNotifications.success('알람이 확인되었습니다.');
+                alarmHistoryTable.ajax.reload();
+            });
+
+            // Test email
+            $('#testEmail').click(function() {
+                const btn = $(this);
+                btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> 발송 중...');
+                
+                setTimeout(() => {
+                    btn.prop('disabled', false).html('<i class="fas fa-paper-plane"></i> 테스트 이메일 발송');
+                    window.ToastNotifications.success('테스트 이메일이 발송되었습니다.');
+                }, 2000);
+            });
+
+            // Test alarm
+            $('#testAlarm').click(function() {
+                window.ToastNotifications.info('테스트 알람이 발생되었습니다.');
+                
+                // Add test entry to history
+                const testAlarm = {
+                    id: Date.now(),
+                    timestamp: new Date().toISOString(),
+                    ruleName: '테스트 알람',
+                    severity: 'info',
+                    message: '시스템 테스트를 위한 알람입니다.',
+                    status: 'new',
+                    acknowledgedBy: null
+                };
+                
+                alarmHistoryTable.row.add(testAlarm).draw();
+                updateStatistics();
+            });
+
+            // Reset modal when hidden
+            $('#alarmModal').on('hidden.bs.modal', function() {
+                $('#alarmForm')[0].reset();
+                $('#alarmEnabled').prop('checked', true);
+            });
+        });
+    </script>
+</body>
+</html>

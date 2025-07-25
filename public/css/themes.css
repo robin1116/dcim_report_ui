@@ -1,0 +1,188 @@
+/* CSS Custom Properties for Theme System */
+:root {
+    /* Light Theme Colors */
+    --primary-color: #033495;
+    --secondary-color: #aee4ff;
+    --accent-color: #0066cc;
+    --success-color: #198754;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+    --info-color: #0dcaf0;
+    
+    /* Background Colors */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --bg-tertiary: #e9ecef;
+    --bg-glass: rgba(255, 255, 255, 0.25);
+    --bg-modal: rgba(255, 255, 255, 0.95);
+    
+    /* Text Colors */
+    --text-primary: #212529;
+    --text-secondary: #6c757d;
+    --text-muted: #adb5bd;
+    --text-inverse: #ffffff;
+    
+    /* Border Colors */
+    --border-color: #dee2e6;
+    --border-light: rgba(255, 255, 255, 0.3);
+    --border-dark: rgba(0, 0, 0, 0.1);
+    
+    /* Shadow Colors */
+    --shadow-light: rgba(0, 0, 0, 0.1);
+    --shadow-medium: rgba(0, 0, 0, 0.15);
+    --shadow-dark: rgba(0, 0, 0, 0.25);
+    
+    /* Gradient Definitions */
+    --gradient-primary: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 100%);
+    --gradient-neumorphism: linear-gradient(145deg, #ffffff 0%, #f0f0f0 100%);
+    
+    /* Animation Durations */
+    --transition-fast: 0.2s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+}
+
+/* Dark Theme */
+[data-theme="dark"] {
+    /* Primary Colors (keep brand colors) */
+    --primary-color: #4d7bff;
+    --secondary-color: #7dd3fc;
+    --accent-color: #3b82f6;
+    
+    /* Background Colors */
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #2d2d2d;
+    --bg-tertiary: #404040;
+    --bg-glass: rgba(0, 0, 0, 0.4);
+    --bg-modal: rgba(42, 42, 42, 0.95);
+    
+    /* Text Colors */
+    --text-primary: #ffffff;
+    --text-secondary: #b3b3b3;
+    --text-muted: #808080;
+    --text-inverse: #1a1a1a;
+    
+    /* Border Colors */
+    --border-color: #404040;
+    --border-light: rgba(255, 255, 255, 0.1);
+    --border-dark: rgba(255, 255, 255, 0.05);
+    
+    /* Shadow Colors */
+    --shadow-light: rgba(0, 0, 0, 0.3);
+    --shadow-medium: rgba(0, 0, 0, 0.5);
+    --shadow-dark: rgba(0, 0, 0, 0.7);
+    
+    /* Gradient Updates */
+    --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+    --gradient-neumorphism: linear-gradient(145deg, #2d2d2d 0%, #1a1a1a 100%);
+}
+
+/* Theme Transition */
+* {
+    transition: background-color var(--transition-normal),
+                color var(--transition-normal),
+                border-color var(--transition-normal),
+                box-shadow var(--transition-normal);
+}
+
+/* Glass Morphism Effects */
+.glass-effect {
+    background: var(--bg-glass);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-light);
+    box-shadow: 0 8px 32px var(--shadow-light);
+}
+
+/* Neumorphism Effects */
+.neumorphic {
+    background: var(--gradient-neumorphism);
+    box-shadow: 
+        8px 8px 16px var(--shadow-light),
+        -8px -8px 16px rgba(255, 255, 255, 0.1);
+}
+
+.neumorphic-inset {
+    background: var(--bg-secondary);
+    box-shadow: 
+        inset 4px 4px 8px var(--shadow-light),
+        inset -4px -4px 8px rgba(255, 255, 255, 0.1);
+}
+
+/* Animated Gradients */
+@keyframes gradientShift {
+    0%, 100% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+.animated-gradient {
+    background: linear-gradient(
+        270deg,
+        var(--primary-color),
+        var(--secondary-color),
+        var(--accent-color),
+        var(--primary-color)
+    );
+    background-size: 400% 400%;
+    animation: gradientShift 8s ease infinite;
+}
+
+/* Hover Glow Effects */
+.glow-hover {
+    transition: all var(--transition-normal);
+}
+
+.glow-hover:hover {
+    box-shadow: 
+        0 0 20px var(--primary-color),
+        0 4px 20px var(--shadow-medium);
+    transform: translateY(-2px);
+}
+
+/* Theme Toggle Button Positioning */
+.theme-toggle-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1050;
+}
+
+.theme-toggle-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: none;
+    background: var(--gradient-primary);
+    color: var(--text-inverse);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    box-shadow: 0 4px 15px var(--shadow-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.theme-toggle-btn:hover {
+    transform: scale(1.1) rotate(15deg);
+    box-shadow: 0 6px 20px var(--shadow-medium);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .theme-toggle-container {
+        top: 15px;
+        right: 15px;
+    }
+    
+    .theme-toggle-btn {
+        width: 45px;
+        height: 45px;
+        font-size: 1rem;
+    }
+}

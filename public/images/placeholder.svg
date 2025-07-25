@@ -1,0 +1,33 @@
+<svg width="200" height="150" viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#f8f9fa"/>
+            <stop offset="100%" style="stop-color:#e9ecef"/>
+        </linearGradient>
+        <linearGradient id="iconGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#033495"/>
+            <stop offset="100%" style="stop-color:#aee4ff"/>
+        </linearGradient>
+    </defs>
+    
+    <!-- Background -->
+    <rect width="200" height="150" fill="url(#bgGradient)" stroke="#dee2e6" stroke-width="2" rx="8"/>
+    
+    <!-- Icon Background Circle -->
+    <circle cx="100" cy="60" r="25" fill="url(#iconGradient)" opacity="0.1"/>
+    
+    <!-- Image Icon -->
+    <g transform="translate(85, 45)">
+        <path d="M2 4a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V4z" 
+              fill="url(#iconGradient)" opacity="0.7"/>
+        <path d="M4 6l2 2 4-4 4 4v6H4V6z" 
+              fill="url(#iconGradient)"/>
+        <circle cx="8" cy="8" r="1.5" fill="white"/>
+    </g>
+    
+    <!-- Text -->
+    <text x="100" y="105" text-anchor="middle" font-family="Arial, sans-serif" 
+          font-size="12" fill="#6c757d" font-weight="500">이미지 자리표시자</text>
+    <text x="100" y="125" text-anchor="middle" font-family="Arial, sans-serif" 
+          font-size="10" fill="#adb5bd">200 × 150</text>
+</svg>
