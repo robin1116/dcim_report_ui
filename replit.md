@@ -4,7 +4,7 @@
 
 This is a web-based DCIM (Data Center Infrastructure Management) admin system called "simpleEye" that provides a modern, responsive interface for managing data center infrastructure. The application features a dual server setup with Flask/Gunicorn for Replit deployment and Express.js for development, designed to eventually integrate with a Spring Boot backend.
 
-**Recent Update (2025-07-25)**: Redesigned entire theme to match main DCIM dashboard aesthetics with dark background, purple/blue neon effects, glassmorphism, and futuristic styling.
+**Recent Update (2025-07-25)**: Redesigned entire theme to match main DCIM dashboard aesthetics with dark background, purple/blue neon effects, glassmorphism, and futuristic styling. Applied Pretendard font across all project pages for consistent Korean typography.
 
 ## User Preferences
 
@@ -78,7 +78,7 @@ Preferred communication style: Simple, everyday language.
 - **Bootstrap 5.3.2**: UI framework for responsive design and components
 - **DataTables 1.13.7**: Advanced table functionality with sorting, filtering, pagination
 - **Font Awesome 6.5.1**: Icon library for consistent iconography
-- **Google Fonts (Inter, Poppins)**: Typography for modern, readable interface
+- **Pretendard Font**: Korean typography optimized font for consistent, modern interface design
 
 ### Node.js Dependencies
 - **Express 5.1.0**: Web server framework for static file serving and API endpoints
@@ -139,3 +139,5 @@ The architecture prioritizes modularity and separation of concerns, making it ea
 - **Dual Server Setup**: Created Flask application (main.py) for Replit workflow compatibility
 - **Fixed Port Conflicts**: Resolved deployment issues by implementing proper server management
 - **Enhanced CSS Architecture**: Expanded theme system with DCIM-specific design tokens and animations
+- **Font Standardization**: Applied Pretendard font across all project pages replacing Google Fonts (Inter/Poppins) for consistent Korean typography
+- **Table Hover Effects**: Fixed data shifting issue on mouse hover by removing transform effects and optimizing hover animations
