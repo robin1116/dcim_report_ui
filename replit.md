@@ -17,8 +17,9 @@ Preferred communication style: Simple, everyday language.
 - **Theme System**: Dynamic light/dark theme switching with system preference detection
 
 ### Backend Architecture
-- **Current Setup**: Express.js server serving static files and mock API endpoints
-- **Future Integration**: Designed to proxy requests to a Spring Boot backend API
+- **Current Setup**: Dual server setup - Flask (main.py) for Replit deployment and Express.js (server.js) for development
+- **Primary Server**: Flask application serving static files and API endpoints (compatible with Replit workflow)
+- **Development Server**: Node.js Express server with identical functionality for local development
 - **API Structure**: RESTful endpoints following `/api/{resource}` pattern
 - **Development Strategy**: Mock data implementation for frontend development, ready for backend integration
 
