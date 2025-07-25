@@ -431,6 +431,14 @@
 
             // Initialize Chart
             initializePowerChart();
+            
+            // Initialize with some default data
+            const initialData = generateMockPowerData();
+            powerDataTable.clear();
+            powerDataTable.rows.add(initialData);
+            powerDataTable.draw();
+            updateChart();
+            updateDataCount(initialData.length);
 
             // Generate mock power data
             function generateMockPowerData() {
@@ -438,17 +446,30 @@
                 const startDate = new Date($('#startDate').val() || lastWeek);
                 const endDate = new Date($('#endDate').val() || today);
                 
-                // Generate hourly data points
-                for (let d = new Date(startDate); d <= endDate; d.setHours(d.getHours() + 1)) {
+                // Generate data points every 30 minutes for better chart visualization
+                const interval = 30 * 60 * 1000; // 30 minutes in milliseconds
+                
+                for (let time = startDate.getTime(); time <= endDate.getTime(); time += interval) {
+                    const timestamp = new Date(time);
+                    
+                    // Generate realistic power data with some correlation
+                    const baseVoltage = 220 + Math.sin(time / (24 * 60 * 60 * 1000) * 2 * Math.PI) * 10; // Daily cycle
+                    const voltage = baseVoltage + (Math.random() - 0.5) * 20; // 200-250V range
+                    
+                    const baseCurrent = 15 + Math.sin(time / (12 * 60 * 60 * 1000) * 2 * Math.PI) * 8; // 12-hour cycle
+                    const current = Math.max(5, baseCurrent + (Math.random() - 0.5) * 10); // 5-35A range
+                    
+                    const power = (voltage * current / 1000) + (Math.random() - 0.5) * 2; // Power = V*I/1000, with noise
+                    
                     data.push({
-                        timestamp: new Date(d).toISOString(),
-                        voltage: Math.random() * 50 + 200, // 200-250V
-                        current: Math.random() * 30 + 10,  // 10-40A
-                        power: Math.random() * 10 + 5      // 5-15 kWh
+                        timestamp: timestamp.toISOString(),
+                        voltage: Math.round(voltage * 10) / 10,    // 1 decimal place
+                        current: Math.round(current * 100) / 100, // 2 decimal places  
+                        power: Math.round(power * 1000) / 1000    // 3 decimal places
                     });
                 }
                 
-                return data.slice(-100); // Limit to last 100 records for performance
+                return data.slice(-200); // Limit to last 200 records for performance
             }
 
             // Initialize power trend chart
@@ -517,34 +538,47 @@
             // Update chart based on selected power types
             function updateChart() {
                 const data = powerDataTable.data().toArray();
-                const labels = [];
+                
+                if (data.length === 0) {
+                    powerTrendChart.data.labels = [];
+                    powerTrendChart.data.datasets = [];
+                    powerTrendChart.update('active');
+                    return;
+                }
                 
                 // Sort by timestamp
                 data.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
                 
-                // Extract unique timestamps
-                data.forEach(item => {
-                    labels.push(new Date(item.timestamp));
-                });
+                // Extract timestamps for x-axis
+                const labels = data.map(item => new Date(item.timestamp));
 
                 const powerTypeConfig = {
                     'voltage': {
                         label: '전압 (V)',
                         borderColor: 'rgb(139, 92, 246)',
                         backgroundColor: 'rgba(139, 92, 246, 0.1)',
-                        data: data.map(item => item.voltage)
+                        data: data.map(item => ({
+                            x: new Date(item.timestamp),
+                            y: item.voltage
+                        }))
                     },
                     'current': {
                         label: '전류 (A)',
                         borderColor: 'rgb(59, 130, 246)',
                         backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                        data: data.map(item => item.current)
+                        data: data.map(item => ({
+                            x: new Date(item.timestamp),
+                            y: item.current
+                        }))
                     },
                     'power': {
                         label: '전력량 (kWh)',
                         borderColor: 'rgb(16, 185, 129)',
                         backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                        data: data.map(item => item.power)
+                        data: data.map(item => ({
+                            x: new Date(item.timestamp),
+                            y: item.power
+                        }))
                     }
                 };
 
@@ -556,8 +590,9 @@
                     backgroundColor: powerTypeConfig[type].backgroundColor,
                     fill: false,
                     tension: 0.4,
-                    pointRadius: 2,
-                    pointHoverRadius: 5
+                    pointRadius: 3,
+                    pointHoverRadius: 6,
+                    borderWidth: 2
                 }));
 
                 powerTrendChart.data.labels = labels;
@@ -615,10 +650,13 @@
                 // Simulate API call
                 setTimeout(() => {
                     const newData = generateMockPowerData();
+                    
+                    // Update table
                     powerDataTable.clear();
                     powerDataTable.rows.add(newData);
                     powerDataTable.draw();
                     
+                    // Update chart with same data
                     updateChart();
                     updateDataCount(newData.length);
                     
