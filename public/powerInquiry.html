@@ -11,6 +11,7 @@
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css">
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -52,6 +53,34 @@
         /* Compact card body */
         .card-body-modern.py-3 {
             padding: 1rem 1.5rem;
+        }
+        
+        /* DataTables Buttons Styling */
+        .dt-buttons {
+            margin-bottom: 1rem;
+        }
+        
+        .dt-button {
+            border-radius: 8px !important;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+            background: var(--bg-card);
+            color: var(--text-primary);
+            backdrop-filter: blur(10px);
+        }
+        
+        .dt-button:hover {
+            background: var(--primary-color);
+            color: white;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+            border-color: var(--primary-color);
+        }
+        
+        .dt-button:active {
+            transform: translateY(1px);
         }
     </style>
 </head>
@@ -377,6 +406,10 @@
     <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.bootstrap5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
     
     <script src="js/theme-manager.js"></script>
     <script src="js/admin-common.js"></script>
@@ -407,6 +440,30 @@
                 processing: true,
                 serverSide: false,
                 responsive: true,
+                dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>><"row"<"col-sm-12"B>><"row"<"col-sm-12"tr>><"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+                buttons: [
+                    {
+                        extend: 'csv',
+                        text: '<i class="fas fa-download me-1"></i>CSV 다운로드',
+                        className: 'btn btn-modern btn-primary btn-sm',
+                        filename: function() {
+                            const now = new Date();
+                            const dateStr = now.toISOString().slice(0, 19).replace(/:/g, '-');
+                            return `전력조회_${dateStr}`;
+                        },
+                        exportOptions: {
+                            columns: [0, 1, 2, 3],
+                            format: {
+                                body: function(data, row, column, node) {
+                                    // Remove HTML tags and get clean text
+                                    const tempDiv = document.createElement('div');
+                                    tempDiv.innerHTML = data;
+                                    return tempDiv.textContent || tempDiv.innerText || '';
+                                }
+                            }
+                        }
+                    }
+                ],
                 language: {
                     processing: "처리중...",
                     search: "검색:",
@@ -419,6 +476,9 @@
                         last: "마지막", 
                         next: "다음",
                         previous: "이전"
+                    },
+                    buttons: {
+                        csv: 'CSV 다운로드'
                     }
                 },
                 data: [],
