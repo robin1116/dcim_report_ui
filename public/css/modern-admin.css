@@ -453,16 +453,7 @@ body {
     box-shadow: 0 2px 8px rgba(139, 92, 246, 0.15);
 }
 
-.table-modern tbody tr:hover::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 3px;
-    background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
-    border-radius: 0 2px 2px 0;
-}
+
 
 /* Alternating row colors for better readability */
 .table-modern tbody tr:nth-child(even) {
