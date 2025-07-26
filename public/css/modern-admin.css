@@ -981,13 +981,37 @@ body {
 .fault-icon-modern {
     width: 60px;
     height: 60px;
-    background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
     border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
     box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+/* Different icon colors for each fault type */
+.modern-fault-card:nth-child(1) .fault-icon-modern {
+    background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+}
+
+.modern-fault-card:nth-child(2) .fault-icon-modern {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+}
+
+.modern-fault-card:nth-child(3) .fault-icon-modern {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+}
+
+.modern-fault-card:nth-child(4) .fault-icon-modern {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.modern-fault-card:nth-child(5) .fault-icon-modern {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+}
+
+.modern-fault-card:nth-child(6) .fault-icon-modern {
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
 }
 
 .fault-icon-modern i {
@@ -1000,6 +1024,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 4px;
+    text-align: center;
 }
 
 .fault-label {
