@@ -508,18 +508,6 @@
 
                     
                     <div class="card-body-modern">
-                        <!-- Page Size Selection -->
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div class="d-flex align-items-center gap-2">
-                                <select class="form-select form-select-sm" id="pageSize" style="width: 80px;">
-                                    <option value="10">10</option>
-                                    <option value="25" selected>25</option>
-                                    <option value="50">50</option>
-                                    <option value="100">100</option>
-                                </select>
-                                <label class="form-label-modern mb-0">개씩 보기</label>
-                            </div>
-                        </div>
                         
                         <div class="table-container">
                             <table id="faultDataTable" class="table table-modern table-compact" style="width:100%">
@@ -527,7 +515,7 @@
                                     <!-- Column Search Filters -->
                                     <tr class="column-filters">
                                         <th style="width: 15%;">
-                                            <input type="text" class="form-control form-control-sm column-search" data-column="0" placeholder="시간 검색" style="font-size: 12px;">
+                                            <!-- 시간 검색 박스 제거 -->
                                         </th>
                                         <th style="width: 10%;">
                                             <input type="text" class="form-control form-control-sm column-search" data-column="1" placeholder="DCU 검색" style="font-size: 12px;">
