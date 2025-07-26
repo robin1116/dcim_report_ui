@@ -334,19 +334,23 @@
                             </select>
                         </div>
                         <div class="col-3">
-                            <select class="form-select form-select-light" id="buswayFilter" style="border-radius: 25px; background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(139, 92, 246, 0.3); color: #666;">
-                                <option value="all">전체 BUSWAY</option>
-                                <option value="busway1">BUSWAY-A</option>
-                                <option value="busway2">BUSWAY-B</option>
-                                <option value="busway3">BUSWAY-C</option>
+                            <select class="form-select form-select-light" id="faultTypeFilter" style="border-radius: 25px; background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(139, 92, 246, 0.3); color: #666;">
+                                <option value="all">장애타입</option>
+                                <option value="trip">TRIP 에러</option>
+                                <option value="comm">통신 에러</option>
+                                <option value="i_r">전압 장애</option>
+                                <option value="di1">전류 장애</option>
+                                <option value="power">전력량 장애</option>
+                                <option value="breaker">차단기 에러</option>
                             </select>
                         </div>
                         <div class="col-3">
-                            <select class="form-select form-select-light" id="lineFilter" style="border-radius: 25px; background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(139, 92, 246, 0.3); color: #666;">
-                                <option value="all">전체 라인</option>
-                                <option value="line1">Line-1</option>
-                                <option value="line2">Line-2</option>
-                                <option value="line3">Line-3</option>
+                            <select class="form-select form-select-light" id="faultLevelFilter" style="border-radius: 25px; background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(139, 92, 246, 0.3); color: #666;">
+                                <option value="all">장애등급</option>
+                                <option value="H">High (H)</option>
+                                <option value="HH">Very High (HH)</option>
+                                <option value="L">Low (L)</option>
+                                <option value="normal">정상</option>
                             </select>
                         </div>
                     </div>
@@ -1275,13 +1279,17 @@
 
             // Reset filter
             $('#resetFilter').click(function() {
-                $('#floorSelect, #dcuSelect, #buswaySelect, #lineSelect').val('');
-                $('#startDate').val(lastWeek.toISOString().split('T')[0]);
-                $('#endDate').val(today.toISOString().split('T')[0]);
-                $('#startTime').val('00:00');
-                $('#endTime').val('23:59');
+                $('#totalFilter').val('all');
+                $('#dcuFilter').val('all');
+                $('#faultTypeFilter').val('all');
+                $('#faultLevelFilter').val('all');
+                $('#searchDate').val('2025-07-18');
+                $('#startTime').val('12:00');
+                $('#endTime').val('12:00');
                 
-                // Reset checkboxes - no need since fault inquiry doesn't have power type checkboxes
+                // Clear table filter
+                faultDataTable.search('').draw();
+                updateFaultCountCards();
                 
                 updateChart();
                 window.ToastNotifications.info('필터가 초기화되었습니다.');
@@ -1600,6 +1608,89 @@
 
             // Initialize global table search after DataTable is ready
             initializeTableSearch();
+
+            // Filter change events for new fault type and level filters
+            $('#faultTypeFilter, #faultLevelFilter, #totalFilter, #dcuFilter').on('change', function() {
+                applyAdvancedFilters();
+            });
+
+            // Apply advanced filters function
+            function applyAdvancedFilters() {
+                // Get filter values
+                const faultType = $('#faultTypeFilter').val();
+                const faultLevel = $('#faultLevelFilter').val();
+                
+                // Create custom search function
+                $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+                    // Check fault type filter
+                    if (faultType !== 'all') {
+                        const type = data[4] || '';
+                        const message = data[6] || '';
+                        
+                        let typeMatch = false;
+                        switch(faultType) {
+                            case 'trip': 
+                                typeMatch = type === 'trip' || message.toLowerCase().includes('trip');
+                                break;
+                            case 'comm': 
+                                typeMatch = type === 'comm' || message.toLowerCase().includes('통신') || message.toLowerCase().includes('comm');
+                                break;
+                            case 'i_r': 
+                                typeMatch = type === 'i_r' || message.toLowerCase().includes('전압') || message.toLowerCase().includes('voltage');
+                                break;
+                            case 'di1': 
+                                typeMatch = type === 'di1' || message.toLowerCase().includes('전류') || message.toLowerCase().includes('current');
+                                break;
+                            case 'power': 
+                                typeMatch = message.toLowerCase().includes('전력') || message.toLowerCase().includes('power') || message.toLowerCase().includes('kw');
+                                break;
+                            case 'breaker': 
+                                typeMatch = message.toLowerCase().includes('차단기') || message.toLowerCase().includes('breaker');
+                                break;
+                            default:
+                                typeMatch = true;
+                        }
+                        
+                        if (!typeMatch) return false;
+                    }
+                    
+                    // Check fault level filter
+                    if (faultLevel !== 'all') {
+                        const levelBadge = data[5] || '';
+                        let levelMatch = false;
+                        
+                        switch(faultLevel) {
+                            case 'H': 
+                                levelMatch = levelBadge.includes('bg-danger');
+                                break;
+                            case 'HH': 
+                                levelMatch = levelBadge.includes('bg-warning');
+                                break;
+                            case 'L': 
+                                levelMatch = levelBadge.includes('Low') || levelBadge.includes('bg-info');
+                                break;
+                            case 'normal': 
+                                levelMatch = levelBadge.includes('bg-success');
+                                break;
+                            default:
+                                levelMatch = true;
+                        }
+                        
+                        if (!levelMatch) return false;
+                    }
+                    
+                    return true;
+                });
+                
+                // Redraw table with filters applied
+                faultDataTable.draw();
+                
+                // Update fault count cards with filtered data
+                updateFaultCountCards();
+                
+                // Remove the custom search function to avoid accumulation
+                $.fn.dataTable.ext.search.pop();
+            }
 
             // Auto refresh every 5 minutes
             setInterval(() => {
