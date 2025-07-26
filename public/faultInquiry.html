@@ -489,53 +489,11 @@
 
                     
                     <div class="card-body-modern">
-                        <!-- Category Filters -->
-                        <div class="category-filters mb-3">
-                            <div class="row g-2">
-                                <div class="col-md-3">
-                                    <label class="form-label-modern">층</label>
-                                    <select class="form-select form-select-modern" id="floorFilter">
-                                        <option value="">전체 층</option>
-                                        <option value="B1F">B1F</option>
-                                        <option value="1F">1F</option>
-                                        <option value="2F">2F</option>
-                                        <option value="3F">3F</option>
-                                        <option value="4F">4F</option>
-                                        <option value="5F">5F</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="form-label-modern">전체 DCU</label>
-                                    <select class="form-select form-select-modern" id="dcuFilter">
-                                        <option value="">전체 DCU</option>
-                                        <option value="DCU-001">DCU-001</option>
-                                        <option value="DCU-002">DCU-002</option>
-                                        <option value="DCU-003">DCU-003</option>
-                                        <option value="DCU-004">DCU-004</option>
-                                        <option value="DCU-005">DCU-005</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="form-label-modern">전체 BUSWAY</label>
-                                    <select class="form-select form-select-modern" id="buswayFilter">
-                                        <option value="">전체 BUSWAY</option>
-                                        <option value="BW-A">BW-A</option>
-                                        <option value="BW-B">BW-B</option>
-                                        <option value="BW-C">BW-C</option>
-                                        <option value="BW-D">BW-D</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="form-label-modern">전체 라인</label>
-                                    <select class="form-select form-select-modern" id="lineFilter">
-                                        <option value="">전체 라인</option>
-                                        <option value="L1">L1</option>
-                                        <option value="L2">L2</option>
-                                        <option value="L3">L3</option>
-                                        <option value="R1">R1</option>
-                                        <option value="R2">R2</option>
-                                        <option value="R3">R3</option>
-                                    </select>
+                        <!-- Table Search Filter -->
+                        <div class="table-search-filter mb-3">
+                            <div class="row">
+                                <div class="col-12">
+                                    <input type="text" class="form-control table-search-input" id="globalTableFilter" placeholder="검색어를 입력하세요 (시간, DCU, Busway, Line, Type, 등급, 알람메시지)">
                                 </div>
                             </div>
                         </div>
@@ -1315,28 +1273,18 @@
                 }, 1500);
             });
 
-            // Reset filters
+            // Reset filter
             $('#resetFilter').click(function() {
-                // Reset date filters
+                $('#floorSelect, #dcuSelect, #buswaySelect, #lineSelect').val('');
                 $('#startDate').val(lastWeek.toISOString().split('T')[0]);
                 $('#endDate').val(today.toISOString().split('T')[0]);
                 $('#startTime').val('00:00');
                 $('#endTime').val('23:59');
                 
-                // Reset category filters
-                $('#floorFilter').val('');
-                $('#dcuFilter').val('');
-                $('#buswayFilter').val('');
-                $('#lineFilter').val('');
+                // Reset checkboxes - no need since fault inquiry doesn't have power type checkboxes
                 
-                // Clear all DataTable column filters
-                faultDataTable.search('').columns().search('').draw();
-                
-                // Update counts
-                updateFaultCountCards();
-                updateDataCount();
-                
-                window.ToastNotifications.success('필터가 초기화되었습니다.');
+                updateChart();
+                window.ToastNotifications.info('필터가 초기화되었습니다.');
             });
 
             // Export functions
@@ -1631,47 +1579,17 @@
                 console.log('Fault counts updated:', counts);
             }
 
-            // Category filter functions
-            function initializeCategoryFilters() {
-                // Floor filter
-                $('#floorFilter').on('change', function() {
+            // Global table search function
+            function initializeTableSearch() {
+                // Global search filter
+                $('#globalTableFilter').on('keyup', function() {
                     const value = this.value;
-                    // For floor, we'll simulate by filtering DCU names that might contain floor info
-                    // In real implementation, this would filter by actual floor column
-                    if (value) {
-                        faultDataTable.column(1).search(value, false, false).draw(); // DCU column
-                    } else {
-                        faultDataTable.column(1).search('').draw();
-                    }
-                    updateFaultCountCards();
-                    updateDataCount();
-                });
-
-                // DCU filter
-                $('#dcuFilter').on('change', function() {
-                    const value = this.value;
-                    faultDataTable.column(1).search(value ? '^' + value + '$' : '', true, false).draw();
-                    updateFaultCountCards();
-                    updateDataCount();
-                });
-
-                // Busway filter
-                $('#buswayFilter').on('change', function() {
-                    const value = this.value;
-                    faultDataTable.column(2).search(value ? '^' + value + '$' : '', true, false).draw();
-                    updateFaultCountCards();
-                    updateDataCount();
-                });
-
-                // Line filter
-                $('#lineFilter').on('change', function() {
-                    const value = this.value;
-                    faultDataTable.column(3).search(value ? '^' + value + '$' : '', true, false).draw();
+                    faultDataTable.search(value).draw();
                     updateFaultCountCards();
                     updateDataCount();
                 });
                 
-                console.log('Category filters initialized');
+                console.log('Global table search initialized');
             }
 
             // Update data count after filtering
@@ -1680,8 +1598,8 @@
                 document.getElementById('dataCount').textContent = `총 ${info.recordsDisplay}건`;
             }
 
-            // Initialize category filters after DataTable is ready
-            initializeCategoryFilters();
+            // Initialize global table search after DataTable is ready
+            initializeTableSearch();
 
             // Auto refresh every 5 minutes
             setInterval(() => {
