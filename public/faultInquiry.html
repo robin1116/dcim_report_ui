@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>장애조회 | 죽전 퍼시픽써니 DC DCIM</title>
+    <title>장애조회 | simpleEye DCIM</title>
     
     <!-- Bootstrap 5.3 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -11,13 +11,70 @@
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css">
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
+    <!-- ECharts -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    
     <!-- Custom CSS -->
     <link href="css/themes.css" rel="stylesheet">
     <link href="css/modern-admin.css" rel="stylesheet">
+    
+    <style>
+        /* Custom column widths for compact layout */
+        .col-md-1-5 {
+            flex: 0 0 auto;
+            width: 12%;
+        }
+        
+        @media (max-width: 768px) {
+            .col-md-1-5 {
+                width: 50%;
+            }
+        }
+        
+        /* Compact form controls */
+        .form-control-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+        }
+        
+        .form-check-sm .form-check-input {
+            margin-top: 0.125em;
+        }
+        
+        .form-check-sm .form-check-label {
+            font-size: 0.875rem;
+        }
+        
+        /* Compact card body */
+        .card-body-modern.py-3 {
+            padding: 1rem 1.5rem;
+        }
+        
+        /* Hide DataTables default buttons and search */
+        .dt-buttons {
+            display: none;
+        }
+        
+        .hidden-csv-btn, .hidden-excel-btn {
+            display: none !important;
+        }
+        
+        .dataTables_filter {
+            display: none;
+        }
+        
+        /* Larger font for data count */
+        .dataTables_info {
+            font-size: 1.1rem !important;
+            font-weight: 600 !important;
+            color: var(--primary-color) !important;
+        }
+    </style>
 </head>
 <body>
     <!-- Theme Toggle -->
@@ -124,8 +181,11 @@
                         </div>
                     </div>
                     <div class="header-actions">
-                        <button class="header-btn" id="testAlarm" title="알람 테스트">
-                            <i class="fas fa-play"></i>
+                        <button class="header-btn" id="refreshData" title="데이터 새로고침">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                        <button class="header-btn" id="exportData" title="데이터 내보내기">
+                            <i class="fas fa-download"></i>
                         </button>
                         <button class="header-btn has-notification" title="알림">
                             <i class="fas fa-bell"></i>
@@ -141,335 +201,200 @@
             </header>
 
             <div class="content-area">
-                <!-- Alarm Statistics -->
-                <div class="row mb-4">
-                    <div class="col-md-3">
-                        <div class="modern-card">
-                            <div class="card-body-modern text-center">
-                                <div class="stat-icon mb-3">
-                                    <i class="fas fa-bell text-gradient" style="font-size: 2.5rem;"></i>
-                                </div>
-                                <h3 class="mb-1" id="totalAlarms">-</h3>
-                                <p class="text-muted mb-0">전체 알람 규칙</p>
-                            </div>
+                <!-- Filter Controls -->
+                <div class="filter-container mb-4">
+                    <!-- 첫 번째 행: 드롭다운 선택 -->
+                    <div class="row g-2 mb-3">
+                        <div class="col-3">
+                            <select class="form-select form-select-light" id="totalFilter" style="border-radius: 25px; background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(139, 92, 246, 0.3); color: #666;">
+                                <option value="all">전체 중</option>
+                                <option value="zone1">Zone 1</option>
+                                <option value="zone2">Zone 2</option>
+                                <option value="zone3">Zone 3</option>
+                            </select>
+                        </div>
+                        <div class="col-3">
+                            <select class="form-select form-select-light" id="dcuFilter" style="border-radius: 25px; background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(139, 92, 246, 0.3); color: #666;">
+                                <option value="all">전체 DCU</option>
+                                <option value="dcu1">DCU-001</option>
+                                <option value="dcu2">DCU-002</option>
+                                <option value="dcu3">DCU-003</option>
+                            </select>
+                        </div>
+                        <div class="col-3">
+                            <select class="form-select form-select-light" id="buswayFilter" style="border-radius: 25px; background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(139, 92, 246, 0.3); color: #666;">
+                                <option value="all">전체 BUSWAY</option>
+                                <option value="busway1">BUSWAY-A</option>
+                                <option value="busway2">BUSWAY-B</option>
+                                <option value="busway3">BUSWAY-C</option>
+                            </select>
+                        </div>
+                        <div class="col-3">
+                            <select class="form-select form-select-light" id="lineFilter" style="border-radius: 25px; background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(139, 92, 246, 0.3); color: #666;">
+                                <option value="all">전체 라인</option>
+                                <option value="line1">Line-1</option>
+                                <option value="line2">Line-2</option>
+                                <option value="line3">Line-3</option>
+                            </select>
                         </div>
                     </div>
-                    <div class="col-md-3">
-                        <div class="modern-card">
-                            <div class="card-body-modern text-center">
-                                <div class="stat-icon mb-3">
-                                    <i class="fas fa-check-circle text-gradient" style="font-size: 2.5rem;"></i>
-                                </div>
-                                <h3 class="mb-1" id="activeAlarms">-</h3>
-                                <p class="text-muted mb-0">활성화된 알람</p>
+                    
+                    <!-- 두 번째 행: 날짜/시간/조회 버튼 -->
+                    <div class="light-filter-row" style="background: rgba(255, 255, 255, 0.9); padding: 15px; border-radius: 12px; backdrop-filter: blur(10px);">
+                        <div class="row g-2 align-items-center">
+                            <!-- 날짜 선택 -->
+                            <div class="col-2">
+                                <input type="date" class="form-control" id="searchDate" value="2025-07-18" style="background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(139, 92, 246, 0.3); color: #333; border-radius: 8px;">
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="modern-card">
-                            <div class="card-body-modern text-center">
-                                <div class="stat-icon mb-3">
-                                    <i class="fas fa-exclamation-triangle text-gradient" style="font-size: 2.5rem;"></i>
+                            
+                            <!-- 시작 시간 -->
+                            <div class="col-2">
+                                <div class="input-group">
+                                    <span class="input-group-text" style="background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.3); color: #8b5cf6; border-radius: 8px 0 0 8px;">오전</span>
+                                    <input type="time" class="form-control" id="startTime" value="12:00" style="background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(139, 92, 246, 0.3); color: #333; border-radius: 0 8px 8px 0;">
                                 </div>
-                                <h3 class="mb-1" id="triggeredToday">-</h3>
-                                <p class="text-muted mb-0">오늘 발생한 알람</p>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="modern-card">
-                            <div class="card-body-modern text-center">
-                                <div class="stat-icon mb-3">
-                                    <i class="fas fa-envelope text-gradient" style="font-size: 2.5rem;"></i>
+                            
+                            <!-- 종료 시간 -->
+                            <div class="col-2">
+                                <div class="input-group">
+                                    <span class="input-group-text" style="background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.3); color: #8b5cf6; border-radius: 8px 0 0 8px;">오전</span>
+                                    <input type="time" class="form-control" id="endTime" value="12:00" style="background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(139, 92, 246, 0.3); color: #333; border-radius: 0 8px 8px 0;">
                                 </div>
-                                <h3 class="mb-1" id="emailNotifications">-</h3>
-                                <p class="text-muted mb-0">이메일 알림 설정</p>
+                            </div>
+                            
+                            <!-- 조회 버튼 -->
+                            <div class="col-2">
+                                <button class="btn btn-primary w-100" id="searchPowerData" style="background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%); border: none; font-weight: 600; border-radius: 8px; color: white; padding: 8px 16px;">
+                                    <i class="fas fa-search me-1"></i> 조회
+                                </button>
+                            </div>
+                            
+                            <!-- Export buttons -->
+                            <div class="col-4">
+                                <div class="d-flex justify-content-end gap-2">
+                                    <button class="btn btn-secondary btn-sm" id="resetFilter" title="조건 초기화" style="background: rgba(108, 117, 125, 0.8); border: 1px solid rgba(108, 117, 125, 0.3); color: #fff;">
+                                        <i class="fas fa-undo"></i>
+                                    </button>
+                                    <button class="btn btn-success btn-sm" id="exportPowerData" title="Excel 다운로드" style="background: rgba(16, 185, 129, 0.8); border: none; color: #fff;">
+                                        <i class="fas fa-file-excel"></i>
+                                    </button>
+                                    <button class="btn btn-danger btn-sm" id="exportPdfData" title="PDF 보고서 다운로드" style="background: rgba(239, 68, 68, 0.8); border: none; color: #fff;">
+                                        <i class="fas fa-file-pdf"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Alarm Configuration Tabs -->
-                <div class="modern-card">
+                <!-- Chart Section -->
+                <div class="modern-card mb-4">
                     <div class="card-header-modern">
-                        <h3 class="card-title-modern">알람 관리</h3>
-                        <button class="btn btn-primary-modern" data-bs-toggle="modal" data-bs-target="#alarmModal">
-                            <i class="fas fa-plus"></i>
-                            새 알람 규칙
-                        </button>
+                        <h3 class="card-title-modern">장애 트렌드 차트</h3>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-sm btn-secondary-modern" id="chartFullscreen">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-secondary-modern dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                    <i class="fas fa-cog"></i>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#" id="chartSettings"><i class="fas fa-sliders-h me-2"></i>차트 설정</a></li>
+                                    <li><a class="dropdown-item" href="#" id="exportChartImage"><i class="fas fa-image me-2"></i>이미지로 저장</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Chart Controls -->
+                    <div class="card-body-modern py-2 border-bottom" style="background: rgba(139, 92, 246, 0.05);">
+                        <div class="d-flex gap-4 align-items-center">
+                            <span class="text-muted-modern" style="font-size: 0.875rem;">표시 항목:</span>
+                            <div class="form-check form-check-sm">
+                                <input class="form-check-input" type="checkbox" id="highCheck" value="H" checked>
+                                <label class="form-check-label" for="highCheck">H (높음)</label>
+                            </div>
+                            <div class="form-check form-check-sm">
+                                <input class="form-check-input" type="checkbox" id="normalCheck" value="정상">
+                                <label class="form-check-label" for="normalCheck">정상</label>
+                            </div>
+                            <div class="form-check form-check-sm">
+                                <input class="form-check-input" type="checkbox" id="abnormalCheck" value="비정상">
+                                <label class="form-check-label" for="abnormalCheck">비정상</label>
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body-modern">
-                        <!-- Tab Navigation -->
-                        <ul class="nav nav-tabs mb-4">
-                            <li class="nav-item">
-                                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#alarmRules">
-                                    <i class="fas fa-list me-2"></i>알람 규칙
-                                </button>
-                            </li>
-                            <li class="nav-item">
-                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#notificationSettings">
-                                    <i class="fas fa-cog me-2"></i>알림 설정
-                                </button>
-                            </li>
-                            <li class="nav-item">
-                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#alarmHistory">
-                                    <i class="fas fa-history me-2"></i>알람 이력
-                                </button>
-                            </li>
-                        </ul>
+                        <div class="chart-container" style="height: 400px;">
+                            <div id="faultTrendChart" style="width: 100%; height: 100%;"></div>
+                        </div>
+                    </div>
+                </div>
 
-                        <!-- Tab Content -->
-                        <div class="tab-content">
-                            <!-- Alarm Rules Tab -->
-                            <div class="tab-pane fade show active" id="alarmRules">
-                                <div class="table-container">
-                                    <table id="alarmRulesTable" class="table table-modern" style="width:100%">
-                                        <thead>
-                                            <tr>
-                                                <th>규칙명</th>
-                                                <th>타입</th>
-                                                <th>조건</th>
-                                                <th>임계값</th>
-                                                <th>심각도</th>
-                                                <th>상태</th>
-                                                <th>마지막 트리거</th>
-                                                <th>작업</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <!-- Data will be loaded via JavaScript -->
-                                        </tbody>
-                                    </table>
-                                </div>
+                <!-- Data Table -->
+                <div class="modern-card">
+                    <div class="card-header-modern">
+                        <h3 class="card-title-modern">장애 데이터 상세</h3>
+                        <div class="d-flex gap-2">
+                            <span class="badge bg-info" id="dataCount">총 0건</span>
+                        </div>
+                    </div>
+                    <div class="card-body-modern">
+                        <div class="table-container">
+                            <table id="faultDataTable" class="table table-modern table-compact" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 15%;">
+                                            <i class="fas fa-clock me-2" style="color: var(--primary-color);"></i>시간
+                                        </th>
+                                        <th style="width: 10%; text-align: center;">
+                                            <i class="fas fa-server me-2" style="color: #8b5cf6;"></i>DCU
+                                        </th>
+                                        <th style="width: 10%; text-align: center;">
+                                            <i class="fas fa-plug me-2" style="color: #3b82f6;"></i>Busway
+                                        </th>
+                                        <th style="width: 10%; text-align: center;">
+                                            <i class="fas fa-minus me-2" style="color: #10b981;"></i>Line
+                                        </th>
+                                        <th style="width: 10%; text-align: center;">
+                                            <i class="fas fa-tag me-2" style="color: #f59e0b;"></i>Type
+                                        </th>
+                                        <th style="width: 10%; text-align: center;">
+                                            <i class="fas fa-layer-group me-2" style="color: #ef4444;"></i>등급
+                                        </th>
+                                        <th style="width: 35%;">
+                                            <i class="fas fa-info-circle me-2" style="color: #6b7280;"></i>알람메시지(예시)
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Data will be loaded via JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Pagination -->
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <div class="d-flex align-items-center gap-2">
+                                <label class="form-label-modern mb-0">페이지당 항목:</label>
+                                <select class="form-select form-select-sm" id="pageSize" style="width: auto;">
+                                    <option value="10">10</option>
+                                    <option value="25" selected>25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
                             </div>
-
-                            <!-- Notification Settings Tab -->
-                            <div class="tab-pane fade" id="notificationSettings">
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="modern-card">
-                                            <div class="card-header-modern">
-                                                <h5 class="card-title-modern">이메일 설정</h5>
-                                            </div>
-                                            <div class="card-body-modern">
-                                                <form id="emailSettingsForm">
-                                                    <div class="mb-3">
-                                                        <label class="form-label-modern">SMTP 서버</label>
-                                                        <input type="text" class="form-control form-control-modern" id="smtpServer" value="smtp.gmail.com">
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label class="form-label-modern">포트</label>
-                                                        <input type="number" class="form-control form-control-modern" id="smtpPort" value="587">
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label class="form-label-modern">사용자명</label>
-                                                        <input type="email" class="form-control form-control-modern" id="smtpUsername">
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label class="form-label-modern">비밀번호</label>
-                                                        <input type="password" class="form-control form-control-modern" id="smtpPassword">
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" id="enableSSL" checked>
-                                                            <label class="form-check-label" for="enableSSL">
-                                                                SSL/TLS 암호화 사용
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                    <button type="button" class="btn btn-primary-modern" id="testEmail">
-                                                        <i class="fas fa-paper-plane"></i>
-                                                        테스트 이메일 발송
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="modern-card">
-                                            <div class="card-header-modern">
-                                                <h5 class="card-title-modern">알림 수신자</h5>
-                                            </div>
-                                            <div class="card-body-modern">
-                                                <div class="mb-3">
-                                                    <label class="form-label-modern">수신자 목록</label>
-                                                    <div class="input-group mb-2">
-                                                        <input type="email" class="form-control form-control-modern" id="newRecipient" placeholder="이메일 주소 입력">
-                                                        <button class="btn btn-secondary-modern" type="button" id="addRecipient">
-                                                            <i class="fas fa-plus"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                                <div id="recipientsList" class="border rounded p-3" style="min-height: 200px;">
-                                                    <!-- Recipients will be loaded here -->
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Alarm History Tab -->
-                            <div class="tab-pane fade" id="alarmHistory">
-                                <div class="mb-3">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <select class="form-control form-control-modern" id="historyFilter">
-                                                <option value="">모든 알람</option>
-                                                <option value="critical">심각</option>
-                                                <option value="warning">경고</option>
-                                                <option value="info">정보</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <input type="date" class="form-control form-control-modern" id="historyDate">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="d-flex gap-2">
-                                                <button class="btn btn-primary-modern" id="applyHistoryFilter">
-                                                    <i class="fas fa-filter"></i>
-                                                    필터 적용
-                                                </button>
-                                                <button class="btn btn-secondary-modern" id="exportHistory">
-                                                    <i class="fas fa-download"></i>
-                                                    내보내기
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="table-container">
-                                    <table id="alarmHistoryTable" class="table table-modern" style="width:100%">
-                                        <thead>
-                                            <tr>
-                                                <th>시간</th>
-                                                <th>규칙명</th>
-                                                <th>심각도</th>
-                                                <th>메시지</th>
-                                                <th>상태</th>
-                                                <th>확인자</th>
-                                                <th>작업</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <!-- Data will be loaded via JavaScript -->
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                            <nav aria-label="Table pagination">
+                                <ul class="pagination pagination-sm mb-0" id="tablePagination">
+                                    <!-- Pagination will be generated by JavaScript -->
+                                </ul>
+                            </nav>
                         </div>
                     </div>
                 </div>
             </div>
         </main>
-    </div>
-
-    <!-- Alarm Rule Modal -->
-    <div class="modal fade modal-modern" id="alarmModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">알람 규칙 설정</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="alarmForm">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label-modern">규칙명</label>
-                                    <input type="text" class="form-control form-control-modern" id="alarmName" required>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label-modern">알람 타입</label>
-                                    <select class="form-control form-control-modern" id="alarmType" required>
-                                        <option value="">타입 선택</option>
-                                        <option value="cpu">CPU 사용률</option>
-                                        <option value="memory">메모리 사용률</option>
-                                        <option value="disk">디스크 사용률</option>
-                                        <option value="network">네트워크 트래픽</option>
-                                        <option value="temperature">온도</option>
-                                        <option value="power">전력 사용량</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="mb-3">
-                                    <label class="form-label-modern">조건</label>
-                                    <select class="form-control form-control-modern" id="alarmCondition" required>
-                                        <option value="">조건 선택</option>
-                                        <option value="greater">보다 큼 (>)</option>
-                                        <option value="less">보다 작음 (<)</option>
-                                        <option value="equal">같음 (=)</option>
-                                        <option value="not_equal">같지 않음 (≠)</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="mb-3">
-                                    <label class="form-label-modern">임계값</label>
-                                    <input type="number" class="form-control form-control-modern" id="alarmThreshold" required>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="mb-3">
-                                    <label class="form-label-modern">단위</label>
-                                    <select class="form-control form-control-modern" id="alarmUnit">
-                                        <option value="%">퍼센트 (%)</option>
-                                        <option value="GB">기가바이트 (GB)</option>
-                                        <option value="MB/s">MB/초</option>
-                                        <option value="°C">섭씨 (°C)</option>
-                                        <option value="W">와트 (W)</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label-modern">심각도</label>
-                                    <select class="form-control form-control-modern" id="alarmSeverity" required>
-                                        <option value="">심각도 선택</option>
-                                        <option value="info">정보</option>
-                                        <option value="warning">경고</option>
-                                        <option value="critical">심각</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label-modern">확인 간격 (분)</label>
-                                    <input type="number" class="form-control form-control-modern" id="alarmInterval" value="5" min="1">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label-modern">설명</label>
-                            <textarea class="form-control form-control-modern" id="alarmDescription" rows="3"></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="alarmEnabled" checked>
-                                <label class="form-check-label" for="alarmEnabled">
-                                    알람 활성화
-                                </label>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary-modern" data-bs-dismiss="modal">취소</button>
-                    <button type="button" class="btn btn-primary-modern" id="saveAlarmBtn">
-                        <i class="fas fa-save"></i>
-                        저장
-                    </button>
-                </div>
-            </div>
-        </div>
     </div>
 
     <!-- Toast Container -->
@@ -482,6 +407,14 @@
     <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.bootstrap5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+
     
     <script src="js/theme-manager.js"></script>
     <script src="js/admin-common.js"></script>
@@ -489,429 +422,957 @@
 
     <script>
         $(document).ready(function() {
-            let alarmRulesTable;
-            let alarmHistoryTable;
-            let recipients = ['admin@simpleeye.com', 'monitor@simpleeye.com'];
+            let faultDataTable;
+            let faultTrendChart;
+            let selectedFaultTypes = ['H'];
 
-            // Initialize DataTables
-            initializeDataTables();
-            loadRecipients();
-            updateStatistics();
+            // Set default dates (last 7 days)
+            const today = new Date();
+            const lastWeek = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+            $('#startDate').val(lastWeek.toISOString().split('T')[0]);
+            $('#endDate').val(today.toISOString().split('T')[0]);
+            
+            // Check if ECharts is loaded
+            if (typeof echarts === 'undefined') {
+                console.error('ECharts not loaded');
+                return;
+            } else {
+                console.log('ECharts loaded successfully');
+            }
 
-            function initializeDataTables() {
-                // Alarm Rules Table
-                alarmRulesTable = $('#alarmRulesTable').DataTable({
-                    ...window.DataTableDefaults,
-                    data: generateAlarmRules(),
-                    columns: [
-                        { data: 'name' },
-                        { 
-                            data: 'type',
-                            render: function(data) {
-                                const icons = {
-                                    cpu: 'fas fa-microchip',
-                                    memory: 'fas fa-memory',
-                                    disk: 'fas fa-hdd',
-                                    network: 'fas fa-network-wired',
-                                    temperature: 'fas fa-thermometer-half',
-                                    power: 'fas fa-bolt'
-                                };
-                                const labels = {
-                                    cpu: 'CPU 사용률',
-                                    memory: '메모리 사용률',
-                                    disk: '디스크 사용률',
-                                    network: '네트워크 트래픽',
-                                    temperature: '온도',
-                                    power: '전력'
-                                };
-                                return `<i class="${icons[data]} me-2"></i>${labels[data]}`;
-                            }
+            // Initialize DataTable
+            faultDataTable = $('#faultDataTable').DataTable({
+                processing: true,
+                serverSide: false,
+                responsive: true,
+                dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6">><"row"<"col-sm-12"tr>><"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+                buttons: [
+                    {
+                        extend: 'csv',
+                        className: 'hidden-csv-btn',
+                        filename: function() {
+                            const now = new Date();
+                            const dateStr = now.toISOString().slice(0, 19).replace(/:/g, '-');
+                            return `전력조회_${dateStr}`;
                         },
-                        { 
-                            data: 'condition',
-                            render: function(data, type, row) {
-                                const operators = {
-                                    greater: '>',
-                                    less: '<',
-                                    equal: '=',
-                                    not_equal: '≠'
-                                };
-                                return `${operators[data]} ${row.threshold}${row.unit}`;
-                            }
-                        },
-                        { 
-                            data: 'threshold',
-                            render: function(data, type, row) {
-                                return `${data}${row.unit}`;
-                            }
-                        },
-                        {
-                            data: 'severity',
-                            render: function(data) {
-                                const classes = {
-                                    info: 'status-badge status-active',
-                                    warning: 'status-badge status-pending',
-                                    critical: 'status-badge status-inactive'
-                                };
-                                const labels = {
-                                    info: '정보',
-                                    warning: '경고',
-                                    critical: '심각'
-                                };
-                                return `<span class="${classes[data]}">${labels[data]}</span>`;
-                            }
-                        },
-                        {
-                            data: 'enabled',
-                            render: function(data) {
-                                return data 
-                                    ? '<span class="status-badge status-active">활성</span>'
-                                    : '<span class="status-badge status-inactive">비활성</span>';
-                            }
-                        },
-                        {
-                            data: 'lastTriggered',
-                            render: function(data) {
-                                return data ? window.AdminUtils.formatDateTime(data) : '-';
-                            }
-                        },
-                        {
-                            data: null,
-                            orderable: false,
-                            render: function(data, type, row) {
-                                return `
-                                    <div class="btn-group" role="group">
-                                        <button type="button" class="btn btn-sm-modern btn-secondary-modern edit-alarm-btn" 
-                                                data-alarm='${JSON.stringify(row)}' title="수정">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-sm-modern ${row.enabled ? 'btn-warning' : 'btn-success'} toggle-alarm-btn" 
-                                                data-id="${row.id}" data-enabled="${row.enabled}" title="${row.enabled ? '비활성화' : '활성화'}">
-                                            <i class="fas ${row.enabled ? 'fa-pause' : 'fa-play'}"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-sm-modern btn-danger-modern delete-alarm-btn" 
-                                                data-id="${row.id}" title="삭제">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                `;
-                            }
-                        }
-                    ]
-                });
-
-                // Alarm History Table
-                alarmHistoryTable = $('#alarmHistoryTable').DataTable({
-                    ...window.DataTableDefaults,
-                    data: generateAlarmHistory(),
-                    order: [[0, 'desc']],
-                    columns: [
-                        {
-                            data: 'timestamp',
-                            render: function(data) {
-                                return window.AdminUtils.formatDateTime(data);
-                            }
-                        },
-                        { data: 'ruleName' },
-                        {
-                            data: 'severity',
-                            render: function(data) {
-                                const classes = {
-                                    info: 'status-badge status-active',
-                                    warning: 'status-badge status-pending',
-                                    critical: 'status-badge status-inactive'
-                                };
-                                const labels = {
-                                    info: '정보',
-                                    warning: '경고',
-                                    critical: '심각'
-                                };
-                                return `<span class="${classes[data]}">${labels[data]}</span>`;
-                            }
-                        },
-                        { data: 'message' },
-                        {
-                            data: 'status',
-                            render: function(data) {
-                                const classes = {
-                                    new: 'status-badge status-pending',
-                                    acknowledged: 'status-badge status-active',
-                                    resolved: 'status-badge status-active'
-                                };
-                                const labels = {
-                                    new: '신규',
-                                    acknowledged: '확인됨',
-                                    resolved: '해결됨'
-                                };
-                                return `<span class="${classes[data]}">${labels[data]}</span>`;
-                            }
-                        },
-                        { data: 'acknowledgedBy', defaultContent: '-' },
-                        {
-                            data: null,
-                            orderable: false,
-                            render: function(data, type, row) {
-                                let actions = '';
-                                if (row.status === 'new') {
-                                    actions += `<button type="button" class="btn btn-sm-modern btn-primary-modern acknowledge-btn" 
-                                                        data-id="${row.id}" title="확인">
-                                                    <i class="fas fa-check"></i>
-                                                </button>`;
+                        exportOptions: {
+                            columns: [0, 1, 2, 3],
+                            format: {
+                                body: function(data, row, column, node) {
+                                    const tempDiv = document.createElement('div');
+                                    tempDiv.innerHTML = data;
+                                    return tempDiv.textContent || tempDiv.innerText || '';
                                 }
-                                actions += `<button type="button" class="btn btn-sm-modern btn-secondary-modern view-details-btn" 
-                                                    data-alarm='${JSON.stringify(row)}' title="상세보기">
-                                                <i class="fas fa-eye"></i>
-                                            </button>`;
-                                return `<div class="btn-group" role="group">${actions}</div>`;
                             }
                         }
-                    ]
-                });
-            }
-
-            // Generate mock alarm rules
-            function generateAlarmRules() {
-                return [
-                    {
-                        id: 1,
-                        name: 'CPU 사용률 경고',
-                        type: 'cpu',
-                        condition: 'greater',
-                        threshold: 80,
-                        unit: '%',
-                        severity: 'warning',
-                        enabled: true,
-                        lastTriggered: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-                        description: 'CPU 사용률이 80%를 초과할 때 경고'
                     },
                     {
-                        id: 2,
-                        name: '메모리 부족 심각',
-                        type: 'memory',
-                        condition: 'greater',
-                        threshold: 90,
-                        unit: '%',
-                        severity: 'critical',
-                        enabled: true,
-                        lastTriggered: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
-                        description: '메모리 사용률이 90%를 초과할 때 심각 알람'
-                    },
-                    {
-                        id: 3,
-                        name: '디스크 공간 부족',
-                        type: 'disk',
-                        condition: 'less',
-                        threshold: 10,
-                        unit: 'GB',
-                        severity: 'warning',
-                        enabled: true,
-                        lastTriggered: null,
-                        description: '사용 가능한 디스크 공간이 10GB 미만일 때'
-                    },
-                    {
-                        id: 4,
-                        name: '온도 과열 경고',
-                        type: 'temperature',
-                        condition: 'greater',
-                        threshold: 70,
-                        unit: '°C',
-                        severity: 'critical',
-                        enabled: false,
-                        lastTriggered: null,
-                        description: '서버 온도가 70도를 초과할 때'
+                        extend: 'excel',
+                        className: 'hidden-excel-btn',
+                        filename: function() {
+                            const now = new Date();
+                            const dateStr = now.toISOString().slice(0, 19).replace(/:/g, '-');
+                            return `장애조회_${dateStr}`;
+                        },
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6],
+                            format: {
+                                body: function(data, row, column, node) {
+                                    const tempDiv = document.createElement('div');
+                                    tempDiv.innerHTML = data;
+                                    return tempDiv.textContent || tempDiv.innerText || '';
+                                }
+                            }
+                        }
                     }
-                ];
-            }
+                ],
+                language: {
+                    processing: "처리중...",
+                    search: "검색:",
+                    lengthMenu: "_MENU_ 개씩 보기",
+                    info: "_START_ - _END_ / _TOTAL_ 건",
+                    infoEmpty: "0건",
+                    infoFiltered: "(전체 _MAX_ 건 중 검색결과)",
+                    paginate: {
+                        first: "처음",
+                        last: "마지막", 
+                        next: "다음",
+                        previous: "이전"
+                    },
+                    buttons: {
+                        csv: 'CSV 다운로드'
+                    }
+                },
+                data: [],
+                columns: [
+                    { 
+                        data: 'timestamp',
+                        title: '시간',
+                        render: function(data) {
+                            if (!data) return '';
+                            return `<span class="time-value">${data}</span>`;
+                        }
+                    },
+                    { 
+                        data: 'dcu',
+                        title: 'DCU',
+                        className: 'text-center',
+                        render: function(data) {
+                            if (data === null || data === undefined) return '';
+                            return `<span class="data-value dcu">${data}</span>`;
+                        }
+                    },
+                    { 
+                        data: 'busway',
+                        title: 'Busway',
+                        className: 'text-center',
+                        render: function(data) {
+                            if (data === null || data === undefined) return '';
+                            return `<span class="data-value busway">${data}</span>`;
+                        }
+                    },
+                    { 
+                        data: 'line',
+                        title: 'Line',
+                        className: 'text-center',
+                        render: function(data) {
+                            if (data === null || data === undefined) return '';
+                            return `<span class="data-value line">${data}</span>`;
+                        }
+                    },
+                    { 
+                        data: 'type',
+                        title: 'Type',
+                        className: 'text-center',
+                        render: function(data) {
+                            if (data === null || data === undefined) return '';
+                            return `<span class="data-value type">${data}</span>`;
+                        }
+                    },
+                    { 
+                        data: 'level',
+                        title: '등급',
+                        className: 'text-center',
+                        render: function(data) {
+                            if (data === null || data === undefined) return '';
+                            let badgeClass = 'bg-secondary';
+                            if (data === 'HH') badgeClass = 'bg-danger';
+                            else if (data === 'H') badgeClass = 'bg-warning';
+                            else if (data === '정상') badgeClass = 'bg-success';
+                            else if (data === '비정상') badgeClass = 'bg-danger';
+                            return `<span class="badge ${badgeClass}">${data}</span>`;
+                        }
+                    },
+                    { 
+                        data: 'message',
+                        title: '알람메시지(예시)',
+                        render: function(data) {
+                            if (data === null || data === undefined) return '';
+                            return `<span class="message-value">${data}</span>`;
+                        }
+                    }
+                ],
+                order: [[0, 'desc']],
+                pageLength: 25,
+                lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]]
+            });
+            
+            console.log('DataTable initialized');
 
-            // Generate mock alarm history
-            function generateAlarmHistory() {
-                const history = [];
-                const rules = ['CPU 사용률 경고', '메모리 부족 심각', '디스크 공간 부족'];
-                const severities = ['info', 'warning', 'critical'];
-                const statuses = ['new', 'acknowledged', 'resolved'];
-                
-                for (let i = 0; i < 20; i++) {
-                    history.push({
-                        id: i + 1,
-                        timestamp: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000).toISOString(),
-                        ruleName: rules[Math.floor(Math.random() * rules.length)],
-                        severity: severities[Math.floor(Math.random() * severities.length)],
-                        message: '임계값을 초과하여 알람이 발생했습니다.',
-                        status: statuses[Math.floor(Math.random() * statuses.length)],
-                        acknowledgedBy: Math.random() > 0.5 ? '관리자' : null
-                    });
+            // Load initial data immediately
+            loadInitialData();
+            
+            // Initialize chart after short delay
+            setTimeout(() => {
+                initializeFaultChart();
+            }, 300);
+            
+            function loadInitialData() {
+                try {
+                    console.log('Loading initial data...');
+                    const initialData = generateMockFaultData();
+                    console.log('Generated data:', initialData.length, 'items');
+                    
+                    if (initialData.length > 0) {
+                        faultDataTable.clear();
+                        faultDataTable.rows.add(initialData);
+                        faultDataTable.draw();
+                        updateDataCount(initialData.length);
+                        console.log('Data loaded to table');
+                        
+                        // Update chart if it exists
+                        setTimeout(() => {
+                            if (faultTrendChart) {
+                                updateChart();
+                            }
+                        }, 500);
+                    }
+                } catch (error) {
+                    console.error('Error loading initial data:', error);
                 }
-                return history.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
             }
 
-            // Update statistics
-            function updateStatistics() {
-                const rules = alarmRulesTable.data().toArray();
-                const history = alarmHistoryTable.data().toArray();
-                
-                $('#totalAlarms').text(rules.length);
-                $('#activeAlarms').text(rules.filter(r => r.enabled).length);
-                
-                const today = new Date();
-                today.setHours(0, 0, 0, 0);
-                const todayAlarms = history.filter(h => new Date(h.timestamp) >= today).length;
-                $('#triggeredToday').text(todayAlarms);
-                
-                $('#emailNotifications').text(recipients.length);
+            // Generate mock fault data based on attached image structure
+            function generateMockFaultData() {
+                try {
+                    const data = [];
+                    const faultTypes = ['i_r', 'di1'];
+                    const levels = ['HH', 'H', '정상', '비정상'];
+                    const messages = [
+                        '임계값 HH : i_r, 현재값 95, 설정값 90',
+                        '임계값 H : i_r, 현재값 85, 설정값 80',
+                        '임계값 정상 : i_r, 현재값 95',
+                        '차단기 비정상',
+                        '차단기 정상'
+                    ];
+                    
+                    // Generate sample data based on the image
+                    const sampleData = [
+                        { timestamp: '1751517297', dcu: 1, busway: 1, line: 'a', type: 'i_r', level: 'HH', message: '임계값 HH : i_r, 현재값 95, 설정값 90' },
+                        { timestamp: '1751517297', dcu: 1, busway: 1, line: 'a', type: 'i_r', level: 'H', message: '임계값 H : i_r, 현재값 85, 설정값 80' },
+                        { timestamp: '1751517297', dcu: 1, busway: 1, line: 'a', type: 'i_r', level: '정상', message: '임계값 정상 : i_r, 현재값 95' },
+                        { timestamp: '1751517297', dcu: 3, busway: 3, line: 'a', type: 'di1', level: '비정상', message: '차단기 비정상' },
+                        { timestamp: '1751517297', dcu: 3, busway: 3, line: 'a', type: 'di1', level: '정상', message: '차단기 정상' }
+                    ];
+                    
+                    // Convert timestamps to readable format and add more records
+                    for (let i = 0; i < 20; i++) {
+                        const baseRecord = sampleData[i % sampleData.length];
+                        const date = new Date();
+                        date.setHours(date.getHours() - i);
+                        
+                        data.push({
+                            timestamp: date.toLocaleDateString('ko-KR', {
+                                month: '2-digit', 
+                                day: '2-digit',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                            }),
+                            dcu: baseRecord.dcu,
+                            busway: baseRecord.busway,
+                            line: baseRecord.line,
+                            type: baseRecord.type,
+                            level: baseRecord.level,
+                            message: baseRecord.message
+                        });
+                    }
+                    
+                    console.log('Generated', data.length, 'fault data points');
+                    return data;
+                } catch (error) {
+                    console.error('Error generating mock fault data:', error);
+                    return [];
+                }
             }
 
-            // Load recipients
-            function loadRecipients() {
-                const recipientsList = $('#recipientsList');
-                recipientsList.empty();
-                
-                recipients.forEach((email, index) => {
-                    recipientsList.append(`
-                        <div class="d-flex justify-content-between align-items-center mb-2 p-2 border rounded">
-                            <span>${email}</span>
-                            <button type="button" class="btn btn-sm btn-outline-danger remove-recipient" data-index="${index}">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                    `);
-                });
+            // Initialize fault trend chart with ECharts
+            function initializeFaultChart() {
+                try {
+                    if (typeof echarts === 'undefined') {
+                        console.error('ECharts not available');
+                        return;
+                    }
+                    
+                    const chartContainer = document.getElementById('faultTrendChart');
+                    if (!chartContainer) {
+                        console.error('Chart container element not found');
+                        return;
+                    }
+                    
+                    console.log('Initializing ECharts...');
+                    
+                    // Dispose existing chart if any
+                    if (faultTrendChart) {
+                        faultTrendChart.dispose();
+                    }
+                    
+                    // Initialize ECharts instance
+                    faultTrendChart = echarts.init(chartContainer, 'dark');
+                    
+                    // Basic chart configuration
+                    const option = {
+                        title: {
+                            text: '장애 트렌드 차트',
+                            textStyle: {
+                                color: '#fff',
+                                fontSize: 16
+                            }
+                        },
+                        tooltip: {
+                            trigger: 'axis',
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            borderColor: 'rgb(139, 92, 246)',
+                            textStyle: {
+                                color: '#fff'
+                            }
+                        },
+                        legend: {
+                            data: ['HH', 'H', '정상', '비정상'],
+                            textStyle: {
+                                color: '#fff'
+                            },
+                            top: '8%'
+                        },
+                        grid: {
+                            left: '3%',
+                            right: '4%',
+                            bottom: '3%',
+                            top: '20%',
+                            containLabel: true
+                        },
+                        xAxis: {
+                            type: 'category',
+                            boundaryGap: false,
+                            data: [],
+                            axisLine: {
+                                lineStyle: {
+                                    color: 'rgba(255, 255, 255, 0.3)'
+                                }
+                            },
+                            axisLabel: {
+                                color: '#fff'
+                            }
+                        },
+                        yAxis: [
+                            {
+                                type: 'value',
+                                name: '전압 (V)',
+                                position: 'left',
+                                axisLine: {
+                                    show: true,
+                                    lineStyle: {
+                                        color: 'rgb(139, 92, 246)'
+                                    }
+                                },
+                                axisLabel: {
+                                    color: 'rgb(139, 92, 246)',
+                                    formatter: '{value} V'
+                                },
+                                splitLine: {
+                                    show: false
+                                },
+                                nameTextStyle: {
+                                    color: 'rgb(139, 92, 246)'
+                                }
+                            },
+                            {
+                                type: 'value',
+                                name: '전류 (A)',
+                                position: 'right',
+                                axisLine: {
+                                    show: true,
+                                    lineStyle: {
+                                        color: 'rgb(59, 130, 246)'
+                                    }
+                                },
+                                axisLabel: {
+                                    color: 'rgb(59, 130, 246)',
+                                    formatter: '{value} A'
+                                },
+                                splitLine: {
+                                    show: false
+                                },
+                                nameTextStyle: {
+                                    color: 'rgb(59, 130, 246)'
+                                }
+                            },
+                            {
+                                type: 'value',
+                                name: '전력량 (kWh)',
+                                position: 'right',
+                                offset: 80,
+                                axisLine: {
+                                    show: true,
+                                    lineStyle: {
+                                        color: 'rgb(16, 185, 129)'
+                                    }
+                                },
+                                axisLabel: {
+                                    color: 'rgb(16, 185, 129)',
+                                    formatter: '{value} kWh'
+                                },
+                                splitLine: {
+                                    show: true,
+                                    lineStyle: {
+                                        color: 'rgba(255, 255, 255, 0.1)'
+                                    }
+                                },
+                                nameTextStyle: {
+                                    color: 'rgb(16, 185, 129)'
+                                }
+                            }
+                        ],
+                        series: [{
+                            name: '전압 (V)',
+                            type: 'line',
+                            smooth: true,
+                            lineStyle: {
+                                color: 'rgb(139, 92, 246)',
+                                width: 3
+                            },
+                            itemStyle: {
+                                color: 'rgb(139, 92, 246)'
+                            },
+                            areaStyle: {
+                                color: {
+                                    type: 'linear',
+                                    x: 0,
+                                    y: 0,
+                                    x2: 0,
+                                    y2: 1,
+                                    colorStops: [{
+                                        offset: 0, color: 'rgba(139, 92, 246, 0.3)'
+                                    }, {
+                                        offset: 1, color: 'rgba(139, 92, 246, 0.1)'
+                                    }]
+                                }
+                            },
+                            data: []
+                        }]
+                    };
+                    
+                    // Set the configuration option to chart
+                    faultTrendChart.setOption(option);
+                    
+                    // Make chart responsive
+                    window.addEventListener('resize', () => {
+                        if (faultTrendChart) {
+                            faultTrendChart.resize();
+                        }
+                    });
+                    
+                    console.log('ECharts initialized successfully');
+                    
+                    // Update chart with current data
+                    updateChart();
+                    
+                } catch (error) {
+                    console.error('Error initializing ECharts:', error);
+                }
             }
 
-            // Add recipient
-            $('#addRecipient').click(function() {
-                const email = $('#newRecipient').val().trim();
-                if (email && window.AdminUtils.isValidEmail(email)) {
-                    if (!recipients.includes(email)) {
-                        recipients.push(email);
-                        loadRecipients();
-                        updateStatistics();
-                        $('#newRecipient').val('');
-                        window.ToastNotifications.success('수신자가 추가되었습니다.');
-                    } else {
-                        window.ToastNotifications.warning('이미 등록된 이메일입니다.');
+            // Update chart based on selected fault types
+            function updateChart() {
+                try {
+                    if (!faultTrendChart) {
+                        console.log('Chart not ready yet');
+                        return;
+                    }
+                    
+                    const data = faultDataTable.data().toArray();
+                    console.log('Updating chart with', data.length, 'data points');
+                    
+                    if (data.length === 0) {
+                        console.log('No data to display in chart');
+                        faultTrendChart.setOption({
+                            xAxis: {
+                                data: []
+                            },
+                            series: [{
+                                name: 'HH',
+                                data: []
+                            }]
+                        });
+                        return;
+                    }
+                    
+                    // Sort data by timestamp
+                    data.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+                    
+                    // Prepare chart data
+                    const xAxisData = data.map(item => {
+                        const date = new Date(item.timestamp);
+                        return date.toLocaleDateString('ko-KR') + ' ' + date.toLocaleTimeString('ko-KR', {hour: '2-digit', minute: '2-digit'});
+                    });
+                    
+                    const powerTypeConfig = {
+                        'voltage': {
+                            name: '전압 (V)',
+                            color: 'rgb(139, 92, 246)',
+                            data: data.map(item => parseFloat(item.voltage).toFixed(1)),
+                            yAxisIndex: 0
+                        },
+                        'current': {
+                            name: '전류 (A)',
+                            color: 'rgb(59, 130, 246)',
+                            data: data.map(item => parseFloat(item.current).toFixed(2)),
+                            yAxisIndex: 1
+                        },
+                        'power': {
+                            name: '전력량 (kWh)',
+                            color: 'rgb(16, 185, 129)',
+                            data: data.map(item => parseFloat(item.power).toFixed(3)),
+                            yAxisIndex: 2
+                        }
+                    };
+                    
+                    // Create series based on selected types
+                    const series = selectedPowerTypes.map(type => ({
+                        name: powerTypeConfig[type].name,
+                        type: 'line',
+                        smooth: true,
+                        yAxisIndex: powerTypeConfig[type].yAxisIndex,
+                        lineStyle: {
+                            color: powerTypeConfig[type].color,
+                            width: 3
+                        },
+                        itemStyle: {
+                            color: powerTypeConfig[type].color
+                        },
+                        areaStyle: {
+                            color: {
+                                type: 'linear',
+                                x: 0,
+                                y: 0,
+                                x2: 0,
+                                y2: 1,
+                                colorStops: [{
+                                    offset: 0, color: powerTypeConfig[type].color.replace('rgb', 'rgba').replace(')', ', 0.2)')
+                                }, {
+                                    offset: 1, color: powerTypeConfig[type].color.replace('rgb', 'rgba').replace(')', ', 0.05)')
+                                }]
+                            }
+                        },
+                        data: powerTypeConfig[type].data
+                    }));
+                    
+                    console.log('Chart series:', series.length);
+                    
+                    // Show/hide Y axes based on selected types
+                    const yAxisOptions = [
+                        { // 전압
+                            show: selectedPowerTypes.includes('voltage'),
+                            type: 'value',
+                            name: selectedPowerTypes.includes('voltage') ? '전압 (V)' : '',
+                            position: 'left',
+                            axisLine: {
+                                show: selectedPowerTypes.includes('voltage'),
+                                lineStyle: {
+                                    color: 'rgb(139, 92, 246)'
+                                }
+                            },
+                            axisLabel: {
+                                show: selectedPowerTypes.includes('voltage'),
+                                color: 'rgb(139, 92, 246)',
+                                formatter: '{value} V'
+                            },
+                            splitLine: {
+                                show: false
+                            },
+                            nameTextStyle: {
+                                color: 'rgb(139, 92, 246)'
+                            }
+                        },
+                        { // 전류
+                            show: selectedPowerTypes.includes('current'),
+                            type: 'value',
+                            name: selectedPowerTypes.includes('current') ? '전류 (A)' : '',
+                            position: 'right',
+                            axisLine: {
+                                show: selectedPowerTypes.includes('current'),
+                                lineStyle: {
+                                    color: 'rgb(59, 130, 246)'
+                                }
+                            },
+                            axisLabel: {
+                                show: selectedPowerTypes.includes('current'),
+                                color: 'rgb(59, 130, 246)',
+                                formatter: '{value} A'
+                            },
+                            splitLine: {
+                                show: false
+                            },
+                            nameTextStyle: {
+                                color: 'rgb(59, 130, 246)'
+                            }
+                        },
+                        { // 전력량
+                            show: selectedPowerTypes.includes('power'),
+                            type: 'value',
+                            name: selectedPowerTypes.includes('power') ? '전력량 (kWh)' : '',
+                            position: 'right',
+                            offset: selectedPowerTypes.includes('current') ? 80 : 0,
+                            axisLine: {
+                                show: selectedPowerTypes.includes('power'),
+                                lineStyle: {
+                                    color: 'rgb(16, 185, 129)'
+                                }
+                            },
+                            axisLabel: {
+                                show: selectedPowerTypes.includes('power'),
+                                color: 'rgb(16, 185, 129)',
+                                formatter: '{value} kWh'
+                            },
+                            splitLine: {
+                                show: selectedPowerTypes.includes('power') && selectedPowerTypes.length === 1,
+                                lineStyle: {
+                                    color: 'rgba(255, 255, 255, 0.1)'
+                                }
+                            },
+                            nameTextStyle: {
+                                color: 'rgb(16, 185, 129)'
+                            }
+                        }
+                    ];
+
+                    // Update chart
+                    faultTrendChart.setOption({
+                        legend: {
+                            data: selectedPowerTypes.map(type => powerTypeConfig[type].name)
+                        },
+                        xAxis: {
+                            data: xAxisData
+                        },
+                        yAxis: yAxisOptions,
+                        series: series
+                    });
+                    
+                    console.log('ECharts updated successfully');
+                    
+                } catch (error) {
+                    console.error('Error updating ECharts:', error);
+                }
+            }
+
+            // Checkbox change event
+            $('input[type="checkbox"][id$="Check"]').change(function() {
+                const value = $(this).val();
+                if ($(this).is(':checked')) {
+                    if (!selectedPowerTypes.includes(value)) {
+                        selectedPowerTypes.push(value);
                     }
                 } else {
-                    window.ToastNotifications.warning('올바른 이메일 주소를 입력해주세요.');
+                    selectedPowerTypes = selectedPowerTypes.filter(type => type !== value);
                 }
+                
+                // Ensure at least one type is selected
+                if (selectedPowerTypes.length === 0) {
+                    $(this).prop('checked', true);
+                    selectedPowerTypes.push(value);
+                    window.ToastNotifications.warning('최소 하나의 항목은 선택되어야 합니다.');
+                    return;
+                }
+                
+                updateChart();
             });
 
-            // Remove recipient
-            $(document).on('click', '.remove-recipient', function() {
-                const index = $(this).data('index');
-                recipients.splice(index, 1);
-                loadRecipients();
-                updateStatistics();
-                window.ToastNotifications.success('수신자가 제거되었습니다.');
-            });
-
-            // Save alarm rule
-            $('#saveAlarmBtn').click(function() {
-                const formData = {
-                    name: $('#alarmName').val(),
-                    type: $('#alarmType').val(),
-                    condition: $('#alarmCondition').val(),
-                    threshold: parseInt($('#alarmThreshold').val()),
-                    unit: $('#alarmUnit').val(),
-                    severity: $('#alarmSeverity').val(),
-                    interval: parseInt($('#alarmInterval').val()),
-                    description: $('#alarmDescription').val(),
-                    enabled: $('#alarmEnabled').is(':checked')
-                };
-
-                if (!formData.name || !formData.type || !formData.condition || !formData.threshold || !formData.severity) {
-                    window.ToastNotifications.warning('모든 필수 필드를 입력해주세요.');
+            // Search button
+            $('#searchFaultData').click(function() {
+                const startDate = $('#startDate').val();
+                const endDate = $('#endDate').val();
+                const floor = $('#floorSelect').val();
+                const dcu = $('#dcuSelect').val();
+                const busway = $('#buswaySelect').val();
+                const line = $('#lineSelect').val();
+                
+                if (!startDate || !endDate) {
+                    window.ToastNotifications.warning('시작 날짜와 종료 날짜를 선택해주세요.');
+                    return;
+                }
+                
+                if (new Date(startDate) > new Date(endDate)) {
+                    window.ToastNotifications.error('시작 날짜는 종료 날짜보다 이전이어야 합니다.');
                     return;
                 }
 
-                // Add to table
-                const newRule = {
-                    id: Date.now(),
-                    ...formData,
-                    lastTriggered: null
-                };
+                // Show loading
+                const btn = $(this);
+                const originalText = btn.html();
+                btn.html('<i class="fas fa-spinner fa-spin"></i> 조회 중...');
+                btn.prop('disabled', true);
 
-                alarmRulesTable.row.add(newRule).draw();
-                updateStatistics();
-                
-                $('#alarmModal').modal('hide');
-                $('#alarmForm')[0].reset();
-                $('#alarmEnabled').prop('checked', true);
-                
-                window.ToastNotifications.success('알람 규칙이 성공적으로 추가되었습니다.');
+                // Simulate API call
+                setTimeout(() => {
+                    try {
+                        console.log('Generating new data for search...');
+                        const newData = generateMockFaultData();
+                        console.log('Search generated:', newData.length, 'items');
+                        
+                        if (newData.length > 0) {
+                            // Update table
+                            faultDataTable.clear();
+                            faultDataTable.rows.add(newData);
+                            faultDataTable.draw();
+                            console.log('Table updated with new data');
+                            
+                            // Update chart with same data
+                            setTimeout(() => {
+                                updateChart();
+                            }, 100);
+                            
+                            updateDataCount(newData.length);
+                            window.ToastNotifications.success(`${newData.length}건의 데이터를 조회했습니다.`);
+                        } else {
+                            window.ToastNotifications.warning('조회된 데이터가 없습니다.');
+                        }
+                    } catch (error) {
+                        console.error('Error during search:', error);
+                        window.ToastNotifications.error('데이터 조회 중 오류가 발생했습니다.');
+                    }
+                    
+                    btn.html(originalText);
+                    btn.prop('disabled', false);
+                }, 1500);
             });
 
-            // Toggle alarm
-            $(document).on('click', '.toggle-alarm-btn', function() {
-                const id = $(this).data('id');
-                const enabled = $(this).data('enabled');
-                const action = enabled ? '비활성화' : '활성화';
+            // Reset filter
+            $('#resetFilter').click(function() {
+                $('#floorSelect, #dcuSelect, #buswaySelect, #lineSelect').val('');
+                $('#startDate').val(lastWeek.toISOString().split('T')[0]);
+                $('#endDate').val(today.toISOString().split('T')[0]);
+                $('#startTime').val('00:00');
+                $('#endTime').val('23:59');
                 
-                // Update in table (in production, this would be an API call)
-                window.ToastNotifications.success(`알람이 ${action}되었습니다.`);
-                alarmRulesTable.ajax.reload();
+                // Reset checkboxes - no need since fault inquiry doesn't have power type checkboxes
+                
+                updateChart();
+                window.ToastNotifications.info('필터가 초기화되었습니다.');
             });
 
-            // Delete alarm
-            $(document).on('click', '.delete-alarm-btn', async function() {
-                const id = $(this).data('id');
-                
-                const confirmed = await window.AdminUtils.confirm(
-                    '정말로 이 알람 규칙을 삭제하시겠습니까?',
-                    '알람 규칙 삭제'
-                );
-
-                if (confirmed) {
-                    // Remove from table (in production, this would be an API call)
-                    const row = $(this).closest('tr');
-                    alarmRulesTable.row(row).remove().draw();
-                    updateStatistics();
-                    window.ToastNotifications.success('알람 규칙이 삭제되었습니다.');
+            // Export functions
+            $('#exportFaultData').click(function() {
+                window.ToastNotifications.info('Excel 파일을 생성하는 중입니다...');
+                try {
+                    // Create workbook with data only (no chart)
+                    createExcelWithData();
+                    window.ToastNotifications.success('Excel 파일이 다운로드되었습니다.');
+                } catch (error) {
+                    console.error('Excel export error:', error);
+                    window.ToastNotifications.error('Excel 파일 생성 중 오류가 발생했습니다.');
                 }
             });
 
-            // Acknowledge alarm
-            $(document).on('click', '.acknowledge-btn', function() {
-                const id = $(this).data('id');
-                // Update status (in production, this would be an API call)
-                window.ToastNotifications.success('알람이 확인되었습니다.');
-                alarmHistoryTable.ajax.reload();
+
+            
+            $('#exportPdfData').click(function() {
+                window.ToastNotifications.info('PDF 보고서를 생성하는 중입니다...');
+                try {
+                    createPdfReport();
+                    window.ToastNotifications.success('PDF 보고서가 다운로드되었습니다.');
+                } catch (error) {
+                    console.error('PDF export error:', error);
+                    window.ToastNotifications.error('PDF 보고서 생성 중 오류가 발생했습니다.');
+                }
+            });
+            
+            // Create Excel file with data only
+            function createExcelWithData() {
+                const wb = XLSX.utils.book_new();
+                
+                // Get table data
+                const tableData = faultDataTable.data().toArray();
+                const headers = ['시간', 'DCU', 'Busway', 'Line', 'Type', '등급', '알람메시지(예시)'];
+                
+                // Format data for Excel
+                const excelData = [headers];
+                tableData.forEach(row => {
+                    excelData.push([
+                        row.timestamp,
+                        row.dcu,
+                        row.busway,
+                        row.line,
+                        row.type,
+                        row.level,
+                        row.message
+                    ]);
+                });
+                
+                // Create worksheet
+                const ws = XLSX.utils.aoa_to_sheet(excelData);
+                
+                // Set column widths
+                ws['!cols'] = [
+                    { width: 15 }, // 시간
+                    { width: 10 }, // DCU
+                    { width: 12 }, // Busway
+                    { width: 10 }, // Line
+                    { width: 10 }, // Type
+                    { width: 12 }, // 등급
+                    { width: 40 }  // 알람메시지
+                ];
+                
+                // Add worksheet to workbook
+                XLSX.utils.book_append_sheet(wb, ws, '장애조회데이터');
+                
+                // Generate filename with timestamp
+                const now = new Date();
+                const dateStr = now.toISOString().slice(0, 19).replace(/:/g, '-');
+                const filename = `장애조회_${dateStr}.xlsx`;
+                
+                // Write and download
+                XLSX.writeFile(wb, filename);
+            }
+            
+            // Create PDF report with chart and data (Korean/English hybrid)
+            function createPdfReport() {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF('p', 'mm', 'a4');
+                
+                let yPosition = 20;
+                
+                // Header - mix of Korean and English for better readability
+                doc.setFontSize(18);
+                doc.text('Fault Inquiry Report', 105, yPosition, { align: 'center' });
+                yPosition += 8;
+                
+                doc.setFontSize(14);
+                doc.text('(장애조회 보고서)', 105, yPosition, { align: 'center' });
+                yPosition += 8;
+                
+                doc.setFontSize(12);
+                doc.text('simpleEye DCIM System', 105, yPosition, { align: 'center' });
+                yPosition += 15;
+                
+                // Report generation time
+                doc.setFontSize(11);
+                const now = new Date();
+                const reportTime = now.toLocaleDateString('ko-KR') + ' ' + now.toLocaleTimeString('ko-KR');
+                doc.text(`Report Generated: ${reportTime}`, 20, yPosition);
+                yPosition += 12;
+                
+                // Filter information
+                doc.setFontSize(12);
+                doc.text('Search Conditions (조회 조건)', 20, yPosition);
+                yPosition += 8;
+                
+                doc.setFontSize(10);
+                const searchDate = $('#searchDate').val() || '2025-07-18';
+                const startTime = $('#startTime').val() || '12:00';
+                const endTime = $('#endTime').val() || '12:00';
+                
+                doc.text(`Date (조회일자): ${searchDate}`, 25, yPosition);
+                yPosition += 6;
+                doc.text(`Time Range (시간범위): ${startTime} ~ ${endTime}`, 25, yPosition);
+                yPosition += 12;
+                
+                // Add chart image if available
+                if (faultTrendChart) {
+                    try {
+                        const chartImage = faultTrendChart.getDataURL({
+                            type: 'png',
+                            backgroundColor: '#ffffff',
+                            pixelRatio: 2
+                        });
+                        
+                        doc.setFontSize(12);
+                        doc.text('Fault Trend Chart (장애 트렌드 차트)', 20, yPosition);
+                        yPosition += 10;
+                        
+                        // Add chart image (scaled to fit page)
+                        const imgWidth = 170;
+                        const imgHeight = 80;
+                        doc.addImage(chartImage, 'PNG', 20, yPosition, imgWidth, imgHeight);
+                        yPosition += imgHeight + 15;
+                    } catch (e) {
+                        console.warn('Chart image could not be added to PDF:', e);
+                        doc.text('Chart image could not be loaded (차트 이미지를 불러올 수 없습니다)', 20, yPosition);
+                        yPosition += 10;
+                    }
+                }
+                
+                // Data table
+                doc.setFontSize(12);
+                doc.text('Fault Data (장애 데이터)', 20, yPosition);
+                yPosition += 10;
+                
+                // Get table data
+                const tableData = faultDataTable.data().toArray();
+                const tableRows = [];
+                
+                tableData.forEach(row => {
+                    tableRows.push([
+                        row.timestamp,
+                        row.dcu,
+                        row.busway,
+                        row.line,
+                        row.type,
+                        row.level,
+                        row.message.substring(0, 30) + '...' // Truncate long messages
+                    ]);
+                });
+                
+                // Add table using autoTable plugin
+                doc.autoTable({
+                    head: [['Time', 'DCU', 'Busway', 'Line', 'Type', 'Level', 'Message']],
+                    body: tableRows.slice(0, 20), // Limit to first 20 rows for PDF
+                    startY: yPosition,
+                    theme: 'grid',
+                    headStyles: {
+                        fillColor: [139, 92, 246],
+                        textColor: 255,
+                        fontSize: 9
+                    },
+                    bodyStyles: {
+                        fontSize: 8,
+                        textColor: 50
+                    },
+                    alternateRowStyles: {
+                        fillColor: [248, 249, 250]
+                    },
+                    margin: { left: 20, right: 20 },
+                    columnStyles: {
+                        0: { cellWidth: 40 },
+                        1: { cellWidth: 30, halign: 'center' },
+                        2: { cellWidth: 30, halign: 'center' },
+                        3: { cellWidth: 35, halign: 'center' }
+                    }
+                });
+                
+                // Add footer
+                const pageCount = doc.internal.getNumberOfPages();
+                for (let i = 1; i <= pageCount; i++) {
+                    doc.setPage(i);
+                    doc.setFontSize(8);
+                    doc.text(`Page ${i} of ${pageCount}`, 105, 290, { align: 'center' });
+                    doc.text('simpleEye DCIM System', 20, 290);
+                }
+                
+                // Generate filename and save
+                const filename = `FaultReport_${now.toISOString().slice(0, 19).replace(/:/g, '-')}.pdf`;
+                doc.save(filename);
+            }
+
+            // Chart controls
+            $('#chartFullscreen').click(function() {
+                const chartContainer = document.getElementById('faultTrendChart');
+                if (chartContainer.requestFullscreen) {
+                    chartContainer.requestFullscreen();
+                }
             });
 
-            // Test email
-            $('#testEmail').click(function() {
-                const btn = $(this);
-                btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> 발송 중...');
-                
-                setTimeout(() => {
-                    btn.prop('disabled', false).html('<i class="fas fa-paper-plane"></i> 테스트 이메일 발송');
-                    window.ToastNotifications.success('테스트 이메일이 발송되었습니다.');
-                }, 2000);
+            $('#exportChartImage').click(function() {
+                if (faultTrendChart) {
+                    const url = faultTrendChart.getDataURL({
+                        type: 'png',
+                        backgroundColor: '#1a1a1a'
+                    });
+                    const link = document.createElement('a');
+                    link.download = `fault-trend-${new Date().toISOString().split('T')[0]}.png`;
+                    link.href = url;
+                    link.click();
+                    window.ToastNotifications.success('차트 이미지가 저장되었습니다.');
+                }
             });
 
-            // Test alarm
-            $('#testAlarm').click(function() {
-                window.ToastNotifications.info('테스트 알람이 발생되었습니다.');
-                
-                // Add test entry to history
-                const testAlarm = {
-                    id: Date.now(),
-                    timestamp: new Date().toISOString(),
-                    ruleName: '테스트 알람',
-                    severity: 'info',
-                    message: '시스템 테스트를 위한 알람입니다.',
-                    status: 'new',
-                    acknowledgedBy: null
-                };
-                
-                alarmHistoryTable.row.add(testAlarm).draw();
-                updateStatistics();
+            // Update data count
+            function updateDataCount(count) {
+                $('#dataCount').text(`총 ${count}건`);
+            }
+
+            // Initialize data count
+            updateDataCount(faultDataTable.data().length);
+
+            // Page size change
+            $('#pageSize').change(function() {
+                faultDataTable.page.len(parseInt($(this).val())).draw();
             });
 
-            // Reset modal when hidden
-            $('#alarmModal').on('hidden.bs.modal', function() {
-                $('#alarmForm')[0].reset();
-                $('#alarmEnabled').prop('checked', true);
-            });
+            // Auto refresh every 5 minutes
+            setInterval(() => {
+                if ($('#autoRefresh').is(':checked')) {
+                    $('#searchFaultData').click();
+                }
+            }, 300000);
         });
     </script>
 </body>
