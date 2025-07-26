@@ -361,7 +361,7 @@
                             <!-- 기간설정 드롭다운 -->
                             <div class="col-2">
                                 <div class="d-flex align-items-center gap-2">
-                                    <label class="text-muted" style="font-size: 14px; white-space: nowrap;">기간설정</label>
+                                    <label class="text-muted" style="font-size: 16px; font-weight: 500; white-space: nowrap;">기간설정</label>
                                     <select class="form-select" id="periodSelect" style="background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(139, 92, 246, 0.3); color: #333; border-radius: 8px;">
                                         <option value="1hour" selected>1시간전</option>
                                         <option value="1day">1일전</option>
@@ -508,18 +508,47 @@
 
                     
                     <div class="card-body-modern">
-                        <!-- Table Search Filter -->
-                        <div class="table-search-filter mb-3">
-                            <div class="row">
-                                <div class="col-12">
-                                    <input type="text" class="form-control table-search-input" id="globalTableFilter" placeholder="검색어를 입력하세요 (시간, DCU, Busway, Line, Type, 등급, 알람메시지)">
-                                </div>
+                        <!-- Page Size Selection -->
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div class="d-flex align-items-center gap-2">
+                                <select class="form-select form-select-sm" id="pageSize" style="width: 80px;">
+                                    <option value="10">10</option>
+                                    <option value="25" selected>25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                                <label class="form-label-modern mb-0">개씩 보기</label>
                             </div>
                         </div>
                         
                         <div class="table-container">
                             <table id="faultDataTable" class="table table-modern table-compact" style="width:100%">
                                 <thead>
+                                    <!-- Column Search Filters -->
+                                    <tr class="column-filters">
+                                        <th style="width: 15%;">
+                                            <input type="text" class="form-control form-control-sm column-search" data-column="0" placeholder="시간 검색" style="font-size: 12px;">
+                                        </th>
+                                        <th style="width: 10%;">
+                                            <input type="text" class="form-control form-control-sm column-search" data-column="1" placeholder="DCU 검색" style="font-size: 12px;">
+                                        </th>
+                                        <th style="width: 10%;">
+                                            <input type="text" class="form-control form-control-sm column-search" data-column="2" placeholder="Busway 검색" style="font-size: 12px;">
+                                        </th>
+                                        <th style="width: 10%;">
+                                            <input type="text" class="form-control form-control-sm column-search" data-column="3" placeholder="Line 검색" style="font-size: 12px;">
+                                        </th>
+                                        <th style="width: 10%;">
+                                            <input type="text" class="form-control form-control-sm column-search" data-column="4" placeholder="Type 검색" style="font-size: 12px;">
+                                        </th>
+                                        <th style="width: 10%;">
+                                            <input type="text" class="form-control form-control-sm column-search" data-column="5" placeholder="등급 검색" style="font-size: 12px;">
+                                        </th>
+                                        <th style="width: 35%;">
+                                            <input type="text" class="form-control form-control-sm column-search" data-column="6" placeholder="알람메시지 검색" style="font-size: 12px;">
+                                        </th>
+                                    </tr>
+                                    <!-- Column Headers -->
                                     <tr>
                                         <th style="width: 15%;">
                                             <i class="fas fa-clock me-2" style="color: var(--primary-color);"></i>시간
@@ -550,23 +579,7 @@
                             </table>
                         </div>
                         
-                        <!-- Pagination -->
-                        <div class="d-flex justify-content-between align-items-center mt-3">
-                            <div class="d-flex align-items-center gap-2">
-                                <label class="form-label-modern mb-0">페이지당 항목:</label>
-                                <select class="form-select form-select-sm" id="pageSize" style="width: auto;">
-                                    <option value="10">10</option>
-                                    <option value="25" selected>25</option>
-                                    <option value="50">50</option>
-                                    <option value="100">100</option>
-                                </select>
-                            </div>
-                            <nav aria-label="Table pagination">
-                                <ul class="pagination pagination-sm mb-0" id="tablePagination">
-                                    <!-- Pagination will be generated by JavaScript -->
-                                </ul>
-                            </nav>
-                        </div>
+                        <!-- Pagination will be handled by DataTables -->
                     </div>
                 </div>
             </div>
@@ -1650,17 +1663,23 @@
                 console.log('Fault counts updated:', counts);
             }
 
-            // Global table search function
-            function initializeTableSearch() {
-                // Global search filter
-                $('#globalTableFilter').on('keyup', function() {
+            // Column-specific search function
+            function initializeColumnSearch() {
+                // Individual column search
+                $('.column-search').on('keyup', function() {
+                    const column = $(this).data('column');
                     const value = this.value;
-                    faultDataTable.search(value).draw();
+                    
+                    faultDataTable
+                        .column(column)
+                        .search(value)
+                        .draw();
+                    
                     updateFaultCountCards();
                     updateDataCount();
                 });
                 
-                console.log('Global table search initialized');
+                console.log('Column search initialized');
             }
 
             // Update data count after filtering
@@ -1669,8 +1688,8 @@
                 document.getElementById('dataCount').textContent = `총 ${info.recordsDisplay}건`;
             }
 
-            // Initialize global table search after DataTable is ready
-            initializeTableSearch();
+            // Initialize column search after DataTable is ready
+            initializeColumnSearch();
 
             // Filter change events for new fault type and level filters
             $('#faultTypeFilter, #faultLevelFilter, #totalFilter, #dcuFilter').on('change', function() {

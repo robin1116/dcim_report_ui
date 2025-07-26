@@ -1066,3 +1066,24 @@ body {
         font-size: 14px;
     }
 }
+
+/* Column Search Filters */
+.column-filters th {
+    padding: 8px 4px;
+    background: rgba(248, 250, 252, 0.8);
+    border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+}
+
+.column-search {
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 12px;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.column-search:focus {
+    border-color: #8b5cf6;
+    box-shadow: 0 0 0 0.2rem rgba(139, 92, 246, 0.25);
+    outline: none;
+}
