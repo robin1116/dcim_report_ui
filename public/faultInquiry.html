@@ -360,14 +360,16 @@
                         <div class="row g-2 align-items-center">
                             <!-- 기간설정 드롭다운 -->
                             <div class="col-2">
-                                <select class="form-select" id="periodSelect" style="background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(139, 92, 246, 0.3); color: #333; border-radius: 8px;">
-                                    <option value="1hour">1시간전</option>
-                                    <option value="1day">1일전</option>
-                                    <option value="7days">7일전</option>
-                                    <option value="1month">1개월전</option>
-                                    <option value="custom" selected>사용자정의</option>
-                                </select>
-                                <label class="form-label mt-1 text-muted" style="font-size: 12px;">기간설정</label>
+                                <div class="d-flex align-items-center gap-2">
+                                    <label class="text-muted" style="font-size: 14px; white-space: nowrap;">기간설정</label>
+                                    <select class="form-select" id="periodSelect" style="background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(139, 92, 246, 0.3); color: #333; border-radius: 8px;">
+                                        <option value="1hour" selected>1시간전</option>
+                                        <option value="1day">1일전</option>
+                                        <option value="7days">7일전</option>
+                                        <option value="1month">1개월전</option>
+                                        <option value="custom">사용자정의</option>
+                                    </select>
+                                </div>
                             </div>
                             
                             <!-- 시작 날짜 -->
@@ -1296,7 +1298,7 @@
                 $('#dcuFilter').val('all');
                 $('#faultTypeFilter').val('all');
                 $('#faultLevelFilter').val('all');
-                $('#periodSelect').val('custom');
+                $('#periodSelect').val('1hour');
                 $('#startDate').val('2025-07-18');
                 $('#endDate').val('2025-07-18');
                 
