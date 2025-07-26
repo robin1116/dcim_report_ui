@@ -939,3 +939,105 @@ body {
     background: radial-gradient(circle at 50% 50%, transparent 0%, var(--bg-primary) 100%);
     pointer-events: none;
 }
+
+/* Modern Fault Cards */
+.modern-fault-card {
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.95) 0%, 
+        rgba(248, 250, 252, 0.95) 100%);
+    border: 2px solid rgba(139, 92, 246, 0.2);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(139, 92, 246, 0.1);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.modern-fault-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #8b5cf6 0%, #3b82f6 100%);
+    border-radius: 16px 16px 0 0;
+}
+
+.modern-fault-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(139, 92, 246, 0.2);
+    border-color: rgba(139, 92, 246, 0.4);
+}
+
+.fault-card-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.fault-icon-modern {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.fault-icon-modern i {
+    font-size: 24px;
+    color: white;
+}
+
+.fault-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.fault-label {
+    font-size: 16px;
+    font-weight: 500;
+    color: #374151;
+    margin: 0;
+    font-family: 'Pretendard', sans-serif;
+}
+
+.fault-number {
+    font-size: 36px;
+    font-weight: 700;
+    color: #111827;
+    line-height: 1;
+    font-family: 'Pretendard', sans-serif;
+}
+
+/* Responsive adjustments for fault cards */
+@media (max-width: 768px) {
+    .modern-fault-card {
+        padding: 16px;
+    }
+    
+    .fault-icon-modern {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .fault-icon-modern i {
+        font-size: 20px;
+    }
+    
+    .fault-number {
+        font-size: 28px;
+    }
+    
+    .fault-label {
+        font-size: 14px;
+    }
+}
