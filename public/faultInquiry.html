@@ -355,33 +355,34 @@
                         </div>
                     </div>
                     
-                    <!-- 두 번째 행: 날짜/시간/조회 버튼 -->
+                    <!-- 두 번째 행: 기간설정/날짜/조회 버튼 -->
                     <div class="light-filter-row" style="background: rgba(255, 255, 255, 0.9); padding: 15px; border-radius: 12px; backdrop-filter: blur(10px);">
                         <div class="row g-2 align-items-center">
-                            <!-- 날짜 선택 -->
+                            <!-- 기간설정 드롭다운 -->
                             <div class="col-2">
-                                <input type="date" class="form-control" id="searchDate" value="2025-07-18" style="background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(139, 92, 246, 0.3); color: #333; border-radius: 8px;">
+                                <select class="form-select" id="periodSelect" style="background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(139, 92, 246, 0.3); color: #333; border-radius: 8px;">
+                                    <option value="1hour">1시간전</option>
+                                    <option value="1day">1일전</option>
+                                    <option value="7days">7일전</option>
+                                    <option value="1month">1개월전</option>
+                                    <option value="custom" selected>사용자정의</option>
+                                </select>
+                                <label class="form-label mt-1 text-muted" style="font-size: 12px;">기간설정</label>
                             </div>
                             
-                            <!-- 시작 시간 -->
+                            <!-- 시작 날짜 -->
                             <div class="col-2">
-                                <div class="input-group">
-                                    <span class="input-group-text" style="background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.3); color: #8b5cf6; border-radius: 8px 0 0 8px;">오전</span>
-                                    <input type="time" class="form-control" id="startTime" value="12:00" style="background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(139, 92, 246, 0.3); color: #333; border-radius: 0 8px 8px 0;">
-                                </div>
+                                <input type="date" class="form-control" id="startDate" value="2025-07-18" style="background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(139, 92, 246, 0.3); color: #333; border-radius: 8px;">
                             </div>
                             
-                            <!-- 종료 시간 -->
+                            <!-- 종료 날짜 -->
                             <div class="col-2">
-                                <div class="input-group">
-                                    <span class="input-group-text" style="background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.3); color: #8b5cf6; border-radius: 8px 0 0 8px;">오전</span>
-                                    <input type="time" class="form-control" id="endTime" value="12:00" style="background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(139, 92, 246, 0.3); color: #333; border-radius: 0 8px 8px 0;">
-                                </div>
+                                <input type="date" class="form-control" id="endDate" value="2025-07-18" style="background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(139, 92, 246, 0.3); color: #333; border-radius: 8px;">
                             </div>
                             
                             <!-- 조회 버튼 -->
                             <div class="col-2">
-                                <button class="btn btn-primary w-100" id="searchPowerData" style="background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%); border: none; font-weight: 600; border-radius: 8px; color: white; padding: 8px 16px;">
+                                <button class="btn btn-primary w-100" id="searchFaultData" style="background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%); border: none; font-weight: 600; border-radius: 8px; color: white; padding: 12px 16px;">
                                     <i class="fas fa-search me-1"></i> 조회
                                 </button>
                             </div>
@@ -392,7 +393,7 @@
                                     <button class="btn btn-secondary btn-sm" id="resetFilter" title="조건 초기화" style="background: rgba(108, 117, 125, 0.8); border: 1px solid rgba(108, 117, 125, 0.3); color: #fff;">
                                         <i class="fas fa-undo"></i>
                                     </button>
-                                    <button class="btn btn-success btn-sm" id="exportPowerData" title="Excel 다운로드" style="background: rgba(16, 185, 129, 0.8); border: none; color: #fff;">
+                                    <button class="btn btn-success btn-sm" id="exportFaultData" title="Excel 다운로드" style="background: rgba(16, 185, 129, 0.8); border: none; color: #fff;">
                                         <i class="fas fa-file-excel"></i>
                                     </button>
                                     <button class="btn btn-danger btn-sm" id="exportPdfData" title="PDF 보고서 다운로드" style="background: rgba(239, 68, 68, 0.8); border: none; color: #fff;">
@@ -1295,9 +1296,12 @@
                 $('#dcuFilter').val('all');
                 $('#faultTypeFilter').val('all');
                 $('#faultLevelFilter').val('all');
-                $('#searchDate').val('2025-07-18');
-                $('#startTime').val('12:00');
-                $('#endTime').val('12:00');
+                $('#periodSelect').val('custom');
+                $('#startDate').val('2025-07-18');
+                $('#endDate').val('2025-07-18');
+                
+                // Enable date inputs for custom selection
+                $('#startDate, #endDate').prop('disabled', false);
                 
                 // Clear table filter
                 faultDataTable.search('').draw();
@@ -1306,6 +1310,51 @@
                 updateChart();
                 window.ToastNotifications.info('필터가 초기화되었습니다.');
             });
+
+            // Period select change event
+            $('#periodSelect').change(function() {
+                const selectedPeriod = $(this).val();
+                const now = new Date();
+                let startDate, endDate;
+                
+                if (selectedPeriod === 'custom') {
+                    // Enable date inputs for custom selection
+                    $('#startDate, #endDate').prop('disabled', false);
+                } else {
+                    // Disable date inputs and set predefined dates
+                    $('#startDate, #endDate').prop('disabled', true);
+                    
+                    // Calculate date range based on selection
+                    endDate = new Date(now);
+                    startDate = new Date(now);
+                    
+                    switch(selectedPeriod) {
+                        case '1hour':
+                            startDate.setHours(startDate.getHours() - 1);
+                            break;
+                        case '1day':
+                            startDate.setDate(startDate.getDate() - 1);
+                            break;
+                        case '7days':
+                            startDate.setDate(startDate.getDate() - 7);
+                            break;
+                        case '1month':
+                            startDate.setMonth(startDate.getMonth() - 1);
+                            break;
+                    }
+                    
+                    // Format dates for input fields
+                    const formatDate = (date) => {
+                        return date.toISOString().split('T')[0];
+                    };
+                    
+                    $('#startDate').val(formatDate(startDate));
+                    $('#endDate').val(formatDate(endDate));
+                }
+            });
+
+            // Initialize period select functionality
+            $('#periodSelect').trigger('change');
 
             // Export functions
             $('#exportFaultData').click(function() {
