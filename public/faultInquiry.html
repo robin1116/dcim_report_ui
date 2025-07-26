@@ -832,7 +832,7 @@
                     
                     const chartContainer = document.getElementById('faultTrendChart');
                     if (!chartContainer) {
-                        console.error('Chart container element not found');
+                        console.log('Chart container element not found - chart was replaced with fault count cards');
                         return;
                     }
                     
@@ -1258,6 +1258,7 @@
                             }, 100);
                             
                             updateDataCount(newData.length);
+                            updateFaultCountCards();
                             window.ToastNotifications.success(`${newData.length}건의 데이터를 조회했습니다.`);
                         } else {
                             window.ToastNotifications.warning('조회된 데이터가 없습니다.');
@@ -1516,8 +1517,9 @@
                 $('#dataCount').text(`총 ${count}건`);
             }
 
-            // Initialize data count
+            // Initialize data count and fault cards
             updateDataCount(faultDataTable.data().length);
+            updateFaultCountCards();
 
             // Page size change
             $('#pageSize').change(function() {
@@ -1528,7 +1530,8 @@
             function updateFaultCountCards() {
                 if (!faultDataTable) return;
                 
-                const tableData = faultDataTable.data().toArray();
+                // Get filtered/searched data instead of all data
+                const filteredData = faultDataTable.rows({search: 'applied'}).data().toArray();
                 
                 let counts = {
                     breakerError: 0,
@@ -1539,22 +1542,29 @@
                     powerError: 0
                 };
 
-                tableData.forEach(row => {
-                    const type = row[4]; // Type column
-                    const alarmMessage = row[6].toLowerCase(); // Alarm message column
+                filteredData.forEach(row => {
+                    const type = row[4] || ''; // Type column
+                    const alarmMessage = (row[6] || '').toLowerCase(); // Alarm message column
                     
+                    // Check for different fault types based on Type and alarm message
                     if (type === 'trip' || alarmMessage.includes('trip')) {
                         counts.tripError++;
-                    } else if (type === 'comm' || alarmMessage.includes('통신')) {
+                    } else if (type === 'comm' || alarmMessage.includes('통신') || alarmMessage.includes('comm')) {
                         counts.commError++;
-                    } else if (alarmMessage.includes('전압')) {
+                    } else if (type === 'i_r' || alarmMessage.includes('전압') || alarmMessage.includes('voltage')) {
                         counts.voltageError++;
-                    } else if (alarmMessage.includes('전류')) {
+                    } else if (type === 'di1' || alarmMessage.includes('전류') || alarmMessage.includes('current')) {
                         counts.currentError++;
-                    } else if (alarmMessage.includes('전력')) {
+                    } else if (alarmMessage.includes('전력') || alarmMessage.includes('power') || alarmMessage.includes('kw')) {
                         counts.powerError++;
-                    } else if (alarmMessage.includes('차단기')) {
+                    } else if (alarmMessage.includes('차단기') || alarmMessage.includes('breaker')) {
                         counts.breakerError++;
+                    } else {
+                        // Default categorization based on type
+                        if (type === 'i_r') counts.voltageError++;
+                        else if (type === 'di1') counts.currentError++;
+                        else if (type === 'comm') counts.commError++;
+                        else if (type === 'trip') counts.tripError++;
                     }
                 });
 
@@ -1565,6 +1575,8 @@
                 document.getElementById('voltageErrorCount').textContent = counts.voltageError;
                 document.getElementById('currentErrorCount').textContent = counts.currentError;
                 document.getElementById('powerErrorCount').textContent = counts.powerError;
+                
+                console.log('Fault counts updated:', counts);
             }
 
             // Global table search function
