@@ -465,11 +465,131 @@
         $(document).ready(function() {
             let alarmSettingsTable;
             
-
+            // Sample alarm settings data with new column structure (20 items)
+            const alarmSettingsData = [
+                {"수정": "", "busway": "BW001", "line": "L001", "i_r_en": "checked", "i_r_hh": "150", "i_r_h": "130", "i_r_l": "80", "i_r_ll": "50", "i_s_en": "checked", "i_s_hh": "155", "i_s_h": "135", "i_s_l": "85", "i_s_ll": "55", "i_t_en": "unchecked", "i_t_hh": "160", "i_t_h": "140", "i_t_l": "90", "i_t_ll": "60"},
+                {"수정": "", "busway": "BW002", "line": "L002", "i_r_en": "unchecked", "i_r_hh": "155", "i_r_h": "135", "i_r_l": "85", "i_r_ll": "55", "i_s_en": "checked", "i_s_hh": "160", "i_s_h": "140", "i_s_l": "90", "i_s_ll": "60", "i_t_en": "checked", "i_t_hh": "165", "i_t_h": "145", "i_t_l": "95", "i_t_ll": "65"},
+                {"수정": "", "busway": "BW003", "line": "L003", "i_r_en": "checked", "i_r_hh": "160", "i_r_h": "140", "i_r_l": "90", "i_r_ll": "60", "i_s_en": "unchecked", "i_s_hh": "165", "i_s_h": "145", "i_s_l": "95", "i_s_ll": "65", "i_t_en": "checked", "i_t_hh": "170", "i_t_h": "150", "i_t_l": "100", "i_t_ll": "70"},
+                {"수정": "", "busway": "BW004", "line": "L004", "i_r_en": "unchecked", "i_r_hh": "165", "i_r_h": "145", "i_r_l": "95", "i_r_ll": "65", "i_s_en": "checked", "i_s_hh": "170", "i_s_h": "150", "i_s_l": "100", "i_s_ll": "70", "i_t_en": "unchecked", "i_t_hh": "175", "i_t_h": "155", "i_t_l": "105", "i_t_ll": "75"},
+                {"수정": "", "busway": "BW005", "line": "L005", "i_r_en": "checked", "i_r_hh": "170", "i_r_h": "150", "i_r_l": "100", "i_r_ll": "70", "i_s_en": "unchecked", "i_s_hh": "175", "i_s_h": "155", "i_s_l": "105", "i_s_ll": "75", "i_t_en": "checked", "i_t_hh": "180", "i_t_h": "160", "i_t_l": "110", "i_t_ll": "80"},
+                {"수정": "", "busway": "BW006", "line": "L006", "i_r_en": "checked", "i_r_hh": "175", "i_r_h": "155", "i_r_l": "105", "i_r_ll": "75", "i_s_en": "checked", "i_s_hh": "180", "i_s_h": "160", "i_s_l": "110", "i_s_ll": "80", "i_t_en": "unchecked", "i_t_hh": "185", "i_t_h": "165", "i_t_l": "115", "i_t_ll": "85"},
+                {"수정": "", "busway": "BW007", "line": "L007", "i_r_en": "unchecked", "i_r_hh": "180", "i_r_h": "160", "i_r_l": "110", "i_r_ll": "80", "i_s_en": "unchecked", "i_s_hh": "185", "i_s_h": "165", "i_s_l": "115", "i_s_ll": "85", "i_t_en": "checked", "i_t_hh": "190", "i_t_h": "170", "i_t_l": "120", "i_t_ll": "90"},
+                {"수정": "", "busway": "BW008", "line": "L008", "i_r_en": "checked", "i_r_hh": "185", "i_r_h": "165", "i_r_l": "115", "i_r_ll": "85", "i_s_en": "checked", "i_s_hh": "190", "i_s_h": "170", "i_s_l": "120", "i_s_ll": "90", "i_t_en": "checked", "i_t_hh": "195", "i_t_h": "175", "i_t_l": "125", "i_t_ll": "95"},
+                {"수정": "", "busway": "BW009", "line": "L009", "i_r_en": "unchecked", "i_r_hh": "190", "i_r_h": "170", "i_r_l": "120", "i_r_ll": "90", "i_s_en": "unchecked", "i_s_hh": "195", "i_s_h": "175", "i_s_l": "125", "i_s_ll": "95", "i_t_en": "unchecked", "i_t_hh": "200", "i_t_h": "180", "i_t_l": "130", "i_t_ll": "100"},
+                {"수정": "", "busway": "BW010", "line": "L010", "i_r_en": "checked", "i_r_hh": "195", "i_r_h": "175", "i_r_l": "125", "i_r_ll": "95", "i_s_en": "checked", "i_s_hh": "200", "i_s_h": "180", "i_s_l": "130", "i_s_ll": "100", "i_t_en": "checked", "i_t_hh": "205", "i_t_h": "185", "i_t_l": "135", "i_t_ll": "105"},
+                {"수정": "", "busway": "BW011", "line": "L011", "i_r_en": "unchecked", "i_r_hh": "200", "i_r_h": "180", "i_r_l": "130", "i_r_ll": "100", "i_s_en": "unchecked", "i_s_hh": "205", "i_s_h": "185", "i_s_l": "135", "i_s_ll": "105", "i_t_en": "unchecked", "i_t_hh": "210", "i_t_h": "190", "i_t_l": "140", "i_t_ll": "110"},
+                {"수정": "", "busway": "BW012", "line": "L012", "i_r_en": "checked", "i_r_hh": "205", "i_r_h": "185", "i_r_l": "135", "i_r_ll": "105", "i_s_en": "checked", "i_s_hh": "210", "i_s_h": "190", "i_s_l": "140", "i_s_ll": "110", "i_t_en": "checked", "i_t_hh": "215", "i_t_h": "195", "i_t_l": "145", "i_t_ll": "115"},
+                {"수정": "", "busway": "BW013", "line": "L013", "i_r_en": "checked", "i_r_hh": "210", "i_r_h": "190", "i_r_l": "140", "i_r_ll": "110", "i_s_en": "unchecked", "i_s_hh": "215", "i_s_h": "195", "i_s_l": "145", "i_s_ll": "115", "i_t_en": "unchecked", "i_t_hh": "220", "i_t_h": "200", "i_t_l": "150", "i_t_ll": "120"},
+                {"수정": "", "busway": "BW014", "line": "L014", "i_r_en": "unchecked", "i_r_hh": "215", "i_r_h": "195", "i_r_l": "145", "i_r_ll": "115", "i_s_en": "checked", "i_s_hh": "220", "i_s_h": "200", "i_s_l": "150", "i_s_ll": "120", "i_t_en": "checked", "i_t_hh": "225", "i_t_h": "205", "i_t_l": "155", "i_t_ll": "125"},
+                {"수정": "", "busway": "BW015", "line": "L015", "i_r_en": "checked", "i_r_hh": "220", "i_r_h": "200", "i_r_l": "150", "i_r_ll": "120", "i_s_en": "checked", "i_s_hh": "225", "i_s_h": "205", "i_s_l": "155", "i_s_ll": "125", "i_t_en": "unchecked", "i_t_hh": "230", "i_t_h": "210", "i_t_l": "160", "i_t_ll": "130"},
+                {"수정": "", "busway": "BW016", "line": "L016", "i_r_en": "unchecked", "i_r_hh": "225", "i_r_h": "205", "i_r_l": "155", "i_r_ll": "125", "i_s_en": "unchecked", "i_s_hh": "230", "i_s_h": "210", "i_s_l": "160", "i_s_ll": "130", "i_t_en": "checked", "i_t_hh": "235", "i_t_h": "215", "i_t_l": "165", "i_t_ll": "135"},
+                {"수정": "", "busway": "BW017", "line": "L017", "i_r_en": "checked", "i_r_hh": "230", "i_r_h": "210", "i_r_l": "160", "i_r_ll": "130", "i_s_en": "checked", "i_s_hh": "235", "i_s_h": "215", "i_s_l": "165", "i_s_ll": "135", "i_t_en": "checked", "i_t_hh": "240", "i_t_h": "220", "i_t_l": "170", "i_t_ll": "140"},
+                {"수정": "", "busway": "BW018", "line": "L018", "i_r_en": "unchecked", "i_r_hh": "235", "i_r_h": "215", "i_r_l": "165", "i_r_ll": "135", "i_s_en": "unchecked", "i_s_hh": "240", "i_s_h": "220", "i_s_l": "170", "i_s_ll": "140", "i_t_en": "unchecked", "i_t_hh": "245", "i_t_h": "225", "i_t_l": "175", "i_t_ll": "145"},
+                {"수정": "", "busway": "BW019", "line": "L019", "i_r_en": "checked", "i_r_hh": "240", "i_r_h": "220", "i_r_l": "170", "i_r_ll": "140", "i_s_en": "checked", "i_s_hh": "245", "i_s_h": "225", "i_s_l": "175", "i_s_ll": "145", "i_t_en": "checked", "i_t_hh": "250", "i_t_h": "230", "i_t_l": "180", "i_t_ll": "150"},
+                {"수정": "", "busway": "BW020", "line": "L020", "i_r_en": "unchecked", "i_r_hh": "245", "i_r_h": "225", "i_r_l": "175", "i_r_ll": "145", "i_s_en": "unchecked", "i_s_hh": "250", "i_s_h": "230", "i_s_l": "180", "i_s_ll": "150", "i_t_en": "unchecked", "i_t_hh": "255", "i_t_h": "235", "i_t_l": "185", "i_t_ll": "155"}
+            ];
 
             // Initialize alarm settings table (same structure as fault inquiry)
-            // Initialize with current data first
-            updateTableColumns('current');
+            alarmSettingsTable = $('#alarmSettingsTable').DataTable({
+                processing: true,
+                serverSide: false,
+                responsive: true,
+                dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6">><"row"<"col-sm-12"tr>><"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+                language: {
+                    processing: "처리중...",
+                    search: "검색:",
+                    lengthMenu: "_MENU_ 개씩 보기",
+                    info: "_START_ - _END_ / _TOTAL_ 건",
+                    infoEmpty: "0건",
+                    infoFiltered: "(전체 _MAX_ 건 중 검색결과)",
+                    paginate: {
+                        first: "처음",
+                        last: "마지막", 
+                        next: "다음",
+                        previous: "이전"
+                    }
+                },
+                data: alarmSettingsData,
+                columns: [
+                    { 
+                        data: '수정',
+                        title: '',
+                        className: 'text-center',
+                        render: function(data) {
+                            return '<button class="btn btn-sm btn-outline-primary" title="편집"><i class="fas fa-edit"></i></button>';
+                        }
+                    },
+                    { 
+                        data: 'busway',
+                        title: 'busway',
+                        className: 'text-center',
+                        render: function(data) {
+                            if (data === null || data === undefined) return '';
+                            return `<span class="data-value">${data}</span>`;
+                        }
+                    },
+                    { 
+                        data: 'line',
+                        title: 'line',
+                        className: 'text-center',
+                        render: function(data) {
+                            if (data === null || data === undefined) return '';
+                            return `<span class="data-value">${data}</span>`;
+                        }
+                    },
+                    { 
+                        data: 'i_r_en', 
+                        title: 'i_r_en', 
+                        className: 'text-center',
+                        render: function(data) {
+                            if (data === 'checked') {
+                                return '<i class="fas fa-check-circle text-success"></i>';
+                            } else {
+                                return '<i class="fas fa-times-circle text-danger"></i>';
+                            }
+                        }
+                    },
+                    { data: 'i_r_hh', title: 'i_r_hh', className: 'text-center' },
+                    { data: 'i_r_h', title: 'i_r_h', className: 'text-center' },
+                    { data: 'i_r_l', title: 'i_r_l', className: 'text-center' },
+                    { data: 'i_r_ll', title: 'i_r_ll', className: 'text-center' },
+                    { 
+                        data: 'i_s_en', 
+                        title: 'i_s_en', 
+                        className: 'text-center',
+                        render: function(data) {
+                            if (data === 'checked') {
+                                return '<i class="fas fa-check-circle text-success"></i>';
+                            } else {
+                                return '<i class="fas fa-times-circle text-danger"></i>';
+                            }
+                        }
+                    },
+                    { data: 'i_s_hh', title: 'i_s_hh', className: 'text-center' },
+                    { data: 'i_s_h', title: 'i_s_h', className: 'text-center' },
+                    { data: 'i_s_l', title: 'i_s_l', className: 'text-center' },
+                    { data: 'i_s_ll', title: 'i_s_ll', className: 'text-center' },
+                    { 
+                        data: 'i_t_en', 
+                        title: 'i_t_en', 
+                        className: 'text-center',
+                        render: function(data) {
+                            if (data === 'checked') {
+                                return '<i class="fas fa-check-circle text-success"></i>';
+                            } else {
+                                return '<i class="fas fa-times-circle text-danger"></i>';
+                            }
+                        }
+                    },
+                    { data: 'i_t_hh', title: 'i_t_hh', className: 'text-center' },
+                    { data: 'i_t_h', title: 'i_t_h', className: 'text-center' },
+                    { data: 'i_t_l', title: 'i_t_l', className: 'text-center' },
+                    { data: 'i_t_ll', title: 'i_t_ll', className: 'text-center' }
+                ],
+                order: [[0, 'asc']],
+                pageLength: 25,
+                lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]]
+            });
 
             // Add column search functionality
             $('.column-search').on('keyup change clear', function() {
@@ -487,17 +607,9 @@
                 showToast('알람 설정 조회 완료', 'success');
             });
 
-            $('#floorFilter, #dcuFilter').on('change', function() {
+            $('#floorFilter, #dcuFilter, #measureTypeFilter').on('change', function() {
                 console.log('Filter changed:', $(this).val());
                 // Apply filters here if needed
-            });
-
-            // Handle measure type filter change to update table columns
-            $('#measureTypeFilter').on('change', function() {
-                const measureType = $(this).val();
-                console.log('Measure type changed:', measureType);
-                updateTableColumns(measureType);
-                showToast(`${measureType === 'current' ? '전류' : measureType === 'voltage' ? '전압' : '전력량'} 설정으로 변경되었습니다`, 'info');
             });
 
             // Action button handlers
@@ -505,8 +617,7 @@
                 console.log('Reset filter clicked');
                 $('#floorFilter').val('all');
                 $('#dcuFilter').val('all');
-                $('#measureTypeFilter').val('current');
-                updateTableColumns('current');
+                $('#measureTypeFilter').val('voltage');
                 showToast('필터가 초기화되었습니다', 'info');
             });
 
