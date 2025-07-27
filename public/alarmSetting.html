@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>장애설정 | simpleEye DCIM</title>
+    
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- ECharts -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    
+    <!-- Custom CSS -->
+    <link href="css/themes.css" rel="stylesheet">
+    <link href="css/modern-admin.css" rel="stylesheet">
+    
+    <style>
+        /* Custom column widths for compact layout */
+        .col-md-1-5 {
+            flex: 0 0 auto;
+            width: 12%;
+        }
+        
+        @media (max-width: 768px) {
+            .col-md-1-5 {
+                width: 50%;
+            }
+        }
+        
+        /* Compact form controls */
+        .form-control-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+        }
+        
+        .form-check-sm .form-check-input {
+            margin-top: 0.125em;
+        }
+        
+        .form-check-sm .form-check-label {
+            font-size: 0.875rem;
+        }
+        
+        /* Compact card body */
+        .card-body-modern.py-3 {
+            padding: 1rem 1.5rem;
+        }
+        
+        /* Hide DataTables default buttons and search */
+        .dt-buttons {
+            display: none;
+        }
+        
+        .hidden-csv-btn, .hidden-excel-btn {
+            display: none !important;
+        }
+        
+        .dataTables_filter {
+            display: none;
+        }
+        
+        /* Larger font for data count */
+        .dataTables_info {
+            font-size: 1.1rem !important;
+            font-weight: 600 !important;
+            color: var(--primary-color) !important;
+        }
+        
+        /* Fault Count Cards Styling */
+        .fault-count-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            height: 100px;
+        }
+        
+        .fault-count-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #8b5cf6, #3b82f6);
+        }
+        
+        .fault-count-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.2);
+            border-color: rgba(139, 92, 246, 0.4);
+        }
+        
+        .fault-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            color: white;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        
+        .fault-icon.trip-error {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+        
+        .fault-icon.comm-error {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+        
+        .fault-icon.voltage-error {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+        
+        .fault-icon.current-error {
+            background: linear-gradient(135deg, #06b6d4, #0891b2);
+        }
+        
+        .fault-icon.power-error {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+        }
+        
+        .fault-info {
+            flex: 1;
+        }
+        
+        .fault-title {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            font-weight: 500;
+            margin: 0 0 8px 0;
+        }
+        
+        .fault-count {
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0;
+        }
+        
+        /* Table Search Filter Styling */
+        .table-search-filter {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 12px 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+        }
+        
+        .table-search-input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            color: white;
+            border-radius: 8px;
+            padding: 10px 15px;
+            font-size: 14px;
+        }
+        
+        .table-search-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .table-search-input:focus {
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 0.2rem rgba(139, 92, 246, 0.25);
+            background: rgba(255, 255, 255, 0.15);
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme Toggle -->
+    <div class="theme-toggle-container">
+        <button id="themeToggle" class="theme-toggle-btn" title="테마 변경">
+            <i class="fas fa-moon"></i>
+        </button>
+    </div>
+
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="#" class="sidebar-logo">
+                    <svg width="40" height="40" viewBox="0 0 40 40" class="logo-icon">
+                        <defs>
+                            <linearGradient id="sidebarLogoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:var(--primary-color)"/>
+                                <stop offset="100%" style="stop-color:var(--secondary-color)"/>
+                            </linearGradient>
+                        </defs>
+                        <circle cx="10" cy="10" r="3" fill="url(#sidebarLogoGradient)"/>
+                        <circle cx="20" cy="10" r="3" fill="url(#sidebarLogoGradient)" opacity="0.7"/>
+                        <circle cx="30" cy="10" r="3" fill="url(#sidebarLogoGradient)" opacity="0.5"/>
+                        <rect x="5" y="20" width="30" height="2" rx="1" fill="url(#sidebarLogoGradient)"/>
+                        <text x="8" y="35" font-family="Arial, sans-serif" font-size="8" fill="url(#sidebarLogoGradient)" font-weight="bold">Eye</text>
+                    </svg>
+                    <span class="logo-text">죽전 퍼시픽써니 DC</span>
+                </a>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">조회 보고서</div>
+                    <div class="nav-item">
+                        <a href="powerInquiry.html" class="nav-link">
+                            <i class="fas fa-bolt"></i>
+                            <span class="nav-text">전력조회</span>
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="faultInquiry.html" class="nav-link">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span class="nav-text">장애조회</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">설정</div>
+                    <div class="nav-item">
+                        <a href="alarmSetting.html" class="nav-link active">
+                            <i class="fas fa-bell"></i>
+                            <span class="nav-text">장애 설정</span>
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="alarmLevelConfig.html" class="nav-link">
+                            <i class="fas fa-layer-group"></i>
+                            <span class="nav-text">장애등급 설정</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">사용자관리</div>
+                    <div class="nav-item">
+                        <a href="adminsysuser.html" class="nav-link">
+                            <i class="fas fa-users"></i>
+                            <span class="nav-text">사용자관리</span>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="sidebar-user">
+                <div class="user-profile">
+                    <div class="user-avatar">A</div>
+                    <div class="user-info">
+                        <div class="user-name">관리자</div>
+                        <div class="user-role">시스템 관리자</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="main-header">
+                <div class="header-content">
+                    <div class="header-left">
+                        <button class="sidebar-toggle">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        <div>
+                            <h1 class="page-title">장애설정</h1>
+                            <nav class="breadcrumb-custom">
+                                <a href="#">simpleEye</a>
+                                <i class="fas fa-chevron-right"></i>
+                                <span>설정</span>
+                                <i class="fas fa-chevron-right"></i>
+                                <strong>장애설정</strong>
+                            </nav>
+                        </div>
+                    </div>
+                    <div class="header-actions">
+                        <button class="header-btn" id="refreshData" title="데이터 새로고침">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                        <button class="header-btn" id="exportData" title="데이터 내보내기">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button class="header-btn has-notification" title="알림">
+                            <i class="fas fa-bell"></i>
+                        </button>
+                        <button class="header-btn" title="설정">
+                            <i class="fas fa-cog"></i>
+                        </button>
+                        <button class="header-btn" title="로그아웃">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-area">
+                <!-- Filter Controls -->
+                <div class="filter-container mb-4">
+                    <!-- 첫 번째 행: 드롭다운 선택 -->
+                    <div class="row g-2 mb-3">
+                        <div class="col-3">
+                            <select class="form-select form-select-light" id="totalFilter" style="border-radius: 25px; background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(139, 92, 246, 0.3); color: #666;">
+                                <option value="all">전체층</option>
+                                <option value="zone1">Zone 1</option>
+                                <option value="zone2">Zone 2</option>
+                                <option value="zone3">Zone 3</option>
+                            </select>
+                        </div>
+                        <div class="col-3">
+                            <select class="form-select form-select-light" id="dcuFilter" style="border-radius: 25px; background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(139, 92, 246, 0.3); color: #666;">
+                                <option value="all">전체 DCU</option>
+                                <option value="dcu1">DCU-001</option>
+                                <option value="dcu2">DCU-002</option>
+                                <option value="dcu3">DCU-003</option>
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <div class="d-flex justify-content-end gap-2">
+                                <button class="btn btn-primary" id="searchAlarmData" style="background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%); border: none; font-weight: 600; border-radius: 8px; color: white; padding: 8px 20px;">
+                                    <i class="fas fa-search me-1"></i> 조회
+                                </button>
+                                <button class="btn btn-success" id="saveAlarmSettings" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); border: none; color: #fff;">
+                                    <i class="fas fa-save me-1"></i> 저장
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Alarm Settings Table -->
+                <div class="modern-card">
+                    <div class="card-header-modern">
+                        <h3 class="card-title-modern">장애 설정</h3>
+                        <div class="d-flex gap-2">
+                            <span class="badge bg-success" id="dataCount">설정 가능한 항목들</span>
+                        </div>
+                    </div>
+                    
+
+                    
+                    <div class="card-body-modern">
+                        <div class="table-container" style="overflow-x: auto;">
+                            <table id="alarmSettingsTable" class="table table-modern table-compact nowrap" style="width:100%; min-width: 2000px;">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 80px; min-width: 80px;">설정</th>
+                                        <th style="width: 80px; min-width: 80px;">영역</th>
+                                        <th style="width: 80px; min-width: 80px;">Layer</th>
+                                        <th style="width: 80px; min-width: 80px;">위치</th>
+                                        <th style="width: 80px; min-width: 80px;">L01</th>
+                                        <th style="width: 80px; min-width: 80px;">L02</th>
+                                        <th style="width: 80px; min-width: 80px;">L03</th>
+                                        <th style="width: 80px; min-width: 80px;">L04</th>
+                                        <th style="width: 80px; min-width: 80px;">L05</th>
+                                        <th style="width: 80px; min-width: 80px;">L06</th>
+                                        <th style="width: 80px; min-width: 80px;">L07</th>
+                                        <th style="width: 80px; min-width: 80px;">L08</th>
+                                        <th style="width: 80px; min-width: 80px;">L09</th>
+                                        <th style="width: 80px; min-width: 80px;">L10</th>
+                                        <th style="width: 80px; min-width: 80px;">L11</th>
+                                        <th style="width: 80px; min-width: 80px;">L12</th>
+                                        <th style="width: 80px; min-width: 80px;">L13</th>
+                                        <th style="width: 80px; min-width: 80px;">L14</th>
+                                        <th style="width: 80px; min-width: 80px;">L15</th>
+                                        <th style="width: 80px; min-width: 80px;">L16</th>
+                                        <th style="width: 80px; min-width: 80px;">HIGH</th>
+                                        <th style="width: 80px; min-width: 80px;">LOW</th>
+                                        <th style="width: 80px; min-width: 80px;">HIHI</th>
+                                        <th style="width: 80px; min-width: 80px;">LOLO</th>
+                                        <th style="width: 80px; min-width: 80px;">알람메세지</th>
+                                        <th style="width: 80px; min-width: 80px;">메일</th>
+                                        <th style="width: 80px; min-width: 80px;">SMS</th>
+                                        <th style="width: 80px; min-width: 80px;">비고1</th>
+                                        <th style="width: 80px; min-width: 80px;">비고2</th>
+                                        <th style="width: 80px; min-width: 80px;">비고3</th>
+                                        <th style="width: 80px; min-width: 80px;">비고4</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="alarmSettingsBody">
+                                    <!-- Data will be loaded via JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Pagination will be handled by DataTables -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.bootstrap5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+
+    
+    <script src="js/theme-manager.js"></script>
+    <script src="js/admin-common.js"></script>
+    <script src="js/toast-notifications.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            let alarmSettingsTable;
+            
+            // Sample alarm settings data
+            const alarmSettingsData = [
+                {
+                    "설정": "1",
+                    "영역": "A존",
+                    "Layer": "L1",
+                    "위치": "East",
+                    "L01": "✓",
+                    "L02": "✓",
+                    "L03": "-",
+                    "L04": "✓",
+                    "L05": "-",
+                    "L06": "✓",
+                    "L07": "-",
+                    "L08": "✓",
+                    "L09": "-",
+                    "L10": "✓",
+                    "L11": "-",
+                    "L12": "✓",
+                    "L13": "-",
+                    "L14": "✓",
+                    "L15": "-",
+                    "L16": "✓",
+                    "HIGH": "85",
+                    "LOW": "15",
+                    "HIHI": "95",
+                    "LOLO": "5",
+                    "알람메세지": "Y",
+                    "메일": "Y",
+                    "SMS": "N",
+                    "비고1": "",
+                    "비고2": "",
+                    "비고3": "",
+                    "비고4": ""
+                },
+                {
+                    "설정": "2",
+                    "영역": "B존",
+                    "Layer": "L2",
+                    "위치": "West",
+                    "L01": "-",
+                    "L02": "✓",
+                    "L03": "✓",
+                    "L04": "-",
+                    "L05": "✓",
+                    "L06": "-",
+                    "L07": "✓",
+                    "L08": "-",
+                    "L09": "✓",
+                    "L10": "-",
+                    "L11": "✓",
+                    "L12": "-",
+                    "L13": "✓",
+                    "L14": "-",
+                    "L15": "✓",
+                    "L16": "-",
+                    "HIGH": "80",
+                    "LOW": "20",
+                    "HIHI": "90",
+                    "LOLO": "10",
+                    "알람메세지": "Y",
+                    "메일": "N",
+                    "SMS": "Y",
+                    "비고1": "",
+                    "비고2": "",
+                    "비고3": "",
+                    "비고4": ""
+                },
+                {
+                    "설정": "3",
+                    "영역": "C존",
+                    "Layer": "L3",
+                    "위치": "North",
+                    "L01": "✓",
+                    "L02": "-",
+                    "L03": "✓",
+                    "L04": "-",
+                    "L05": "✓",
+                    "L06": "-",
+                    "L07": "✓",
+                    "L08": "-",
+                    "L09": "✓",
+                    "L10": "-",
+                    "L11": "✓",
+                    "L12": "-",
+                    "L13": "✓",
+                    "L14": "-",
+                    "L15": "✓",
+                    "L16": "-",
+                    "HIGH": "75",
+                    "LOW": "25",
+                    "HIHI": "85",
+                    "LOLO": "15",
+                    "알람메세지": "N",
+                    "메일": "Y",
+                    "SMS": "Y",
+                    "비고1": "테스트",
+                    "비고2": "",
+                    "비고3": "",
+                    "비고4": ""
+                }
+            ];
+
+            // Initialize alarm settings table
+            alarmSettingsTable = $('#alarmSettingsTable').DataTable({
+                data: alarmSettingsData,
+                columns: [
+                    { data: '설정', title: '설정', width: '80px' },
+                    { data: '영역', title: '영역', width: '80px' },
+                    { data: 'Layer', title: 'Layer', width: '80px' },
+                    { data: '위치', title: '위치', width: '80px' },
+                    { data: 'L01', title: 'L01', width: '80px', className: 'text-center' },
+                    { data: 'L02', title: 'L02', width: '80px', className: 'text-center' },
+                    { data: 'L03', title: 'L03', width: '80px', className: 'text-center' },
+                    { data: 'L04', title: 'L04', width: '80px', className: 'text-center' },
+                    { data: 'L05', title: 'L05', width: '80px', className: 'text-center' },
+                    { data: 'L06', title: 'L06', width: '80px', className: 'text-center' },
+                    { data: 'L07', title: 'L07', width: '80px', className: 'text-center' },
+                    { data: 'L08', title: 'L08', width: '80px', className: 'text-center' },
+                    { data: 'L09', title: 'L09', width: '80px', className: 'text-center' },
+                    { data: 'L10', title: 'L10', width: '80px', className: 'text-center' },
+                    { data: 'L11', title: 'L11', width: '80px', className: 'text-center' },
+                    { data: 'L12', title: 'L12', width: '80px', className: 'text-center' },
+                    { data: 'L13', title: 'L13', width: '80px', className: 'text-center' },
+                    { data: 'L14', title: 'L14', width: '80px', className: 'text-center' },
+                    { data: 'L15', title: 'L15', width: '80px', className: 'text-center' },
+                    { data: 'L16', title: 'L16', width: '80px', className: 'text-center' },
+                    { data: 'HIGH', title: 'HIGH', width: '80px', className: 'text-center' },
+                    { data: 'LOW', title: 'LOW', width: '80px', className: 'text-center' },
+                    { data: 'HIHI', title: 'HIHI', width: '80px', className: 'text-center' },
+                    { data: 'LOLO', title: 'LOLO', width: '80px', className: 'text-center' },
+                    { data: '알람메세지', title: '알람메세지', width: '80px', className: 'text-center' },
+                    { data: '메일', title: '메일', width: '80px', className: 'text-center' },
+                    { data: 'SMS', title: 'SMS', width: '80px', className: 'text-center' },
+                    { data: '비고1', title: '비고1', width: '80px' },
+                    { data: '비고2', title: '비고2', width: '80px' },
+                    { data: '비고3', title: '비고3', width: '80px' },
+                    { data: '비고4', title: '비고4', width: '80px' }
+                ],
+                responsive: false,
+                scrollX: true,
+                scrollCollapse: true,
+                paging: true,
+                pageLength: 25,
+                lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+                order: [[0, 'asc']],
+                language: {
+                    lengthMenu: "_MENU_ 개씩 보기",
+                    zeroRecords: "데이터가 없습니다.",
+                    info: "_START_부터 _END_까지 (_TOTAL_ 개 중)",
+                    infoEmpty: "0개",
+                    infoFiltered: "(전체 _MAX_개에서 필터됨)",
+                    search: "검색:",
+                    paginate: {
+                        first: "처음",
+                        last: "마지막",
+                        next: "다음",
+                        previous: "이전"
+                    }
+                },
+                dom: 'frtip',
+                initComplete: function () {
+                    console.log('Alarm Settings Table initialized with', alarmSettingsData.length, 'records');
+                    $('#dataCount').text(`총 ${alarmSettingsData.length}건`);
+                }
+            });
+
+            console.log('Alarm Settings Table loaded successfully');
+
+            // Event handlers for filter controls
+            $('#searchAlarmData').on('click', function() {
+                console.log('Search button clicked');
+                showToast('알람 설정 조회 완료', 'success');
+            });
+
+            $('#saveAlarmSettings').on('click', function() {
+                console.log('Save button clicked');
+                showToast('알람 설정이 저장되었습니다', 'success');
+            });
+
+            $('#totalFilter, #dcuFilter').on('change', function() {
+                console.log('Filter changed:', $(this).val());
+                // Apply filters here if needed
+            });
+
+        });
+    </script>
+</body>
+</html>
