@@ -763,8 +763,9 @@
             try {
                 console.log('Creating unified single-header tables...');
                 
-                // Unified column definition function to ensure consistency
+                // Single-row header column definition (exactly like the image)
                 function createTableColumns(prefix) {
+                    const upperPrefix = prefix.toUpperCase();
                     return [
                         { 
                             title: '수정', 
@@ -772,49 +773,49 @@
                             defaultContent: '<button class="btn btn-sm btn-outline-primary edit-threshold-btn" type="button"><i class="fas fa-edit"></i></button>', 
                             orderable: false,
                             className: 'text-center',
-                            width: '60px'
+                            width: '50px'
                         },
-                        { title: 'BUSWAY', data: 'busway', className: 'text-center', width: '80px' },
-                        { title: 'LINE', data: 'line', className: 'text-center', width: '60px' },
+                        { title: 'BUSWAY', data: 'busway', className: 'text-center', width: '70px' },
+                        { title: 'LINE', data: 'line', className: 'text-center', width: '50px' },
                         { 
-                            title: prefix.toUpperCase() + '_R EN', 
+                            title: upperPrefix + '_R EN', 
                             data: prefix + '_r_en', 
                             className: 'text-center', 
-                            width: '80px',
+                            width: '60px',
                             render: function(data) {
                                 return data === 'checked' ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-times-circle text-danger"></i>';
                             }
                         },
-                        { title: prefix.toUpperCase() + '_R HH', data: prefix + '_r_hh', className: 'text-center', width: '80px' },
-                        { title: prefix.toUpperCase() + '_R H', data: prefix + '_r_h', className: 'text-center', width: '80px' },
-                        { title: prefix.toUpperCase() + '_R L', data: prefix + '_r_l', className: 'text-center', width: '80px' },
-                        { title: prefix.toUpperCase() + '_R LL', data: prefix + '_r_ll', className: 'text-center', width: '80px' },
+                        { title: upperPrefix + '_R HH', data: prefix + '_r_hh', className: 'text-center', width: '60px' },
+                        { title: upperPrefix + '_R H', data: prefix + '_r_h', className: 'text-center', width: '60px' },
+                        { title: upperPrefix + '_R L', data: prefix + '_r_l', className: 'text-center', width: '60px' },
+                        { title: upperPrefix + '_R LL', data: prefix + '_r_ll', className: 'text-center', width: '60px' },
                         { 
-                            title: prefix.toUpperCase() + '_S EN', 
+                            title: upperPrefix + '_S EN', 
                             data: prefix + '_s_en', 
                             className: 'text-center', 
-                            width: '80px',
+                            width: '60px',
                             render: function(data) {
                                 return data === 'checked' ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-times-circle text-danger"></i>';
                             }
                         },
-                        { title: prefix.toUpperCase() + '_S HH', data: prefix + '_s_hh', className: 'text-center', width: '80px' },
-                        { title: prefix.toUpperCase() + '_S H', data: prefix + '_s_h', className: 'text-center', width: '80px' },
-                        { title: prefix.toUpperCase() + '_S L', data: prefix + '_s_l', className: 'text-center', width: '80px' },
-                        { title: prefix.toUpperCase() + '_S LL', data: prefix + '_s_ll', className: 'text-center', width: '80px' },
+                        { title: upperPrefix + '_S HH', data: prefix + '_s_hh', className: 'text-center', width: '60px' },
+                        { title: upperPrefix + '_S H', data: prefix + '_s_h', className: 'text-center', width: '60px' },
+                        { title: upperPrefix + '_S L', data: prefix + '_s_l', className: 'text-center', width: '60px' },
+                        { title: upperPrefix + '_S LL', data: prefix + '_s_ll', className: 'text-center', width: '60px' },
                         { 
-                            title: prefix.toUpperCase() + '_T EN', 
+                            title: upperPrefix + '_T EN', 
                             data: prefix + '_t_en', 
                             className: 'text-center', 
-                            width: '80px',
+                            width: '60px',
                             render: function(data) {
                                 return data === 'checked' ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-times-circle text-danger"></i>';
                             }
                         },
-                        { title: prefix.toUpperCase() + '_T HH', data: prefix + '_t_hh', className: 'text-center', width: '80px' },
-                        { title: prefix.toUpperCase() + '_T H', data: prefix + '_t_h', className: 'text-center', width: '80px' },
-                        { title: prefix.toUpperCase() + '_T L', data: prefix + '_t_l', className: 'text-center', width: '80px' },
-                        { title: prefix.toUpperCase() + '_T LL', data: prefix + '_t_ll', className: 'text-center', width: '80px' }
+                        { title: upperPrefix + '_T HH', data: prefix + '_t_hh', className: 'text-center', width: '60px' },
+                        { title: upperPrefix + '_T H', data: prefix + '_t_h', className: 'text-center', width: '60px' },
+                        { title: upperPrefix + '_T L', data: prefix + '_t_l', className: 'text-center', width: '60px' },
+                        { title: upperPrefix + '_T LL', data: prefix + '_t_ll', className: 'text-center', width: '60px' }
                     ];
                 }
 
