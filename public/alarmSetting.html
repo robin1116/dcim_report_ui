@@ -314,33 +314,48 @@
 
             <div class="content-area" style="padding-right: 16px; margin-right: 0;">
                 <!-- Filter Controls -->
-                <div class="modern-card mb-4">
-                    <div class="card-body-modern">
-                        <div class="row g-3 align-items-end">
-                            <div class="col-auto">
-                                <label for="totalFilter" class="form-label text-muted">전체층</label>
-                                <select class="form-select form-select-light" id="totalFilter" style="border-radius: 25px; background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(139, 92, 246, 0.3); color: #666;">
-                                    <option value="all">전체층</option>
-                                    <option value="1f">1층</option>
-                                    <option value="2f">2층</option>
-                                    <option value="3f">3층</option>
-                                    <option value="4f">4층</option>
-                                    <option value="5f">5층</option>
-                                </select>
-                            </div>
-                            <div class="col-auto">
-                                <label for="dcuFilter" class="form-label text-muted">전체 DCU</label>
-                                <select class="form-select form-select-light" id="dcuFilter" style="border-radius: 25px; background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(139, 92, 246, 0.3); color: #666;">
-                                    <option value="all">전체 DCU</option>
-                                    <option value="dcu1">DCU-001</option>
-                                    <option value="dcu2">DCU-002</option>
-                                    <option value="dcu3">DCU-003</option>
-                                </select>
-                            </div>
-                            <div class="col-auto">
-                                <button class="btn btn-primary" id="searchAlarmData" style="background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%); border: none; border-radius: 25px; padding: 10px 25px; font-weight: 600; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);">
+                <div class="filter-container mb-4">
+                    <!-- 첫 번째 행: 드롭다운 선택 -->
+                    <div class="row g-2 mb-3">
+                        <div class="col-3">
+                            <select class="form-select form-select-light" id="measureTypeFilter" style="border-radius: 25px; background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(139, 92, 246, 0.3); color: #666;">
+                                <option value="voltage">전압</option>
+                                <option value="current">전류</option>
+                                <option value="power">전력량</option>
+                            </select>
+                        </div>
+                        <div class="col-3">
+                            <select class="form-select form-select-light" id="buswayFilter" style="border-radius: 25px; background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(139, 92, 246, 0.3); color: #666;">
+                                <option value="all">전체 BUSWAY</option>
+                                <option value="busway1">BUSWAY-A</option>
+                                <option value="busway2">BUSWAY-B</option>
+                                <option value="busway3">BUSWAY-C</option>
+                            </select>
+                        </div>
+                        <div class="col-3">
+                            <select class="form-select form-select-light" id="lineFilter" style="border-radius: 25px; background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(139, 92, 246, 0.3); color: #666;">
+                                <option value="all">전체 라인</option>
+                                <option value="line1">Line-1</option>
+                                <option value="line2">Line-2</option>
+                                <option value="line3">Line-3</option>
+                            </select>
+                        </div>
+                        <div class="col-3">
+                            <div class="d-flex gap-2 align-items-center">
+                                <button class="btn btn-primary" id="searchAlarmData" style="background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%); border: none; font-weight: 600; border-radius: 8px; color: white; padding: 8px 16px;">
                                     <i class="fas fa-search me-1"></i> 조회
                                 </button>
+                                <div class="d-flex gap-1 ms-auto">
+                                    <button class="btn btn-secondary btn-sm" id="resetFilter" title="조건 초기화" style="background: rgba(108, 117, 125, 0.8); border: 1px solid rgba(108, 117, 125, 0.3); color: #fff;">
+                                        <i class="fas fa-undo"></i>
+                                    </button>
+                                    <button class="btn btn-success btn-sm" id="exportExcel" title="Excel 다운로드" style="background: rgba(16, 185, 129, 0.8); border: none; color: #fff;">
+                                        <i class="fas fa-file-excel"></i>
+                                    </button>
+                                    <button class="btn btn-danger btn-sm" id="exportPDF" title="PDF 다운로드" style="background: rgba(239, 68, 68, 0.8); border: none; color: #fff;">
+                                        <i class="fas fa-file-pdf"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -352,15 +367,6 @@
                         <h3 class="card-title-modern">장애 설정</h3>
                         <div class="d-flex gap-2">
                             <span class="badge bg-success" id="dataCount">설정 가능한 항목들</span>
-                            <button class="btn btn-outline-light btn-sm" id="resetTable" title="초기화">
-                                <i class="fas fa-undo"></i>
-                            </button>
-                            <button class="btn btn-outline-success btn-sm" id="exportExcel" title="엑셀 다운로드">
-                                <i class="fas fa-file-excel"></i>
-                            </button>
-                            <button class="btn btn-outline-danger btn-sm" id="exportPDF" title="PDF 다운로드">
-                                <i class="fas fa-file-pdf"></i>
-                            </button>
                         </div>
                     </div>
                     
@@ -508,7 +514,7 @@
                         title: '수정',
                         className: 'text-center',
                         render: function(data) {
-                            return '<button class="btn btn-sm btn-primary">수정</button>';
+                            return '<button class="btn btn-sm btn-outline-primary" title="편집"><i class="fas fa-edit"></i></button>';
                         }
                     },
                     { 
@@ -599,15 +605,18 @@
                 showToast('알람 설정 조회 완료', 'success');
             });
 
-            $('#totalFilter, #dcuFilter').on('change', function() {
+            $('#measureTypeFilter, #buswayFilter, #lineFilter').on('change', function() {
                 console.log('Filter changed:', $(this).val());
                 // Apply filters here if needed
             });
 
             // Action button handlers
-            $('#resetTable').on('click', function() {
-                console.log('Reset table clicked');
-                showToast('테이블이 초기화되었습니다', 'info');
+            $('#resetFilter').on('click', function() {
+                console.log('Reset filter clicked');
+                $('#measureTypeFilter').val('voltage');
+                $('#buswayFilter').val('all');
+                $('#lineFilter').val('all');
+                showToast('필터가 초기화되었습니다', 'info');
             });
 
             $('#exportExcel').on('click', function() {
