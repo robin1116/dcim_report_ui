@@ -367,47 +367,54 @@
 
                     
                     <div class="card-body-modern">
-                        <div style="width: 100%; overflow-x: auto; max-height: 70vh; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; background: rgba(26, 26, 46, 0.8);">
-                            <table id="alarmSettingsTable" class="table table-modern table-striped table-hover mb-0" style="min-width: 1600px; font-size: 12px; width: 1600px;">
-                                <thead class="table-dark" style="position: sticky; top: 0; z-index: 10;">
-                                    <tr>
-                                        <th style="width: 50px; min-width: 50px; padding: 4px;">설정</th>
-                                        <th style="width: 50px; min-width: 50px; padding: 4px;">영역</th>
-                                        <th style="width: 50px; min-width: 50px; padding: 4px;">Layer</th>
-                                        <th style="width: 50px; min-width: 50px; padding: 4px;">위치</th>
-                                        <th style="width: 50px; min-width: 50px; padding: 2px;">L01</th>
-                                        <th style="width: 50px; min-width: 50px; padding: 2px;">L02</th>
-                                        <th style="width: 50px; min-width: 50px; padding: 2px;">L03</th>
-                                        <th style="width: 50px; min-width: 50px; padding: 2px;">L04</th>
-                                        <th style="width: 50px; min-width: 50px; padding: 2px;">L05</th>
-                                        <th style="width: 50px; min-width: 50px; padding: 2px;">L06</th>
-                                        <th style="width: 50px; min-width: 50px; padding: 2px;">L07</th>
-                                        <th style="width: 50px; min-width: 50px; padding: 2px;">L08</th>
-                                        <th style="width: 50px; min-width: 50px; padding: 2px;">L09</th>
-                                        <th style="width: 50px; min-width: 50px; padding: 2px;">L10</th>
-                                        <th style="width: 50px; min-width: 50px; padding: 2px;">L11</th>
-                                        <th style="width: 50px; min-width: 50px; padding: 2px;">L12</th>
-                                        <th style="width: 50px; min-width: 50px; padding: 2px;">L13</th>
-                                        <th style="width: 50px; min-width: 50px; padding: 2px;">L14</th>
-                                        <th style="width: 50px; min-width: 50px; padding: 2px;">L15</th>
-                                        <th style="width: 50px; min-width: 50px; padding: 2px;">L16</th>
-                                        <th style="width: 50px; min-width: 50px; padding: 2px;">HIGH</th>
-                                        <th style="width: 50px; min-width: 50px; padding: 2px;">LOW</th>
-                                        <th style="width: 50px; min-width: 50px; padding: 2px;">HIHI</th>
-                                        <th style="width: 50px; min-width: 50px; padding: 2px;">LOLO</th>
-                                        <th style="width: 80px; min-width: 80px; padding: 4px;">알람메세지</th>
-                                        <th style="width: 50px; min-width: 50px; padding: 2px;">메일</th>
-                                        <th style="width: 50px; min-width: 50px; padding: 2px;">SMS</th>
-                                        <th style="width: 50px; min-width: 50px; padding: 4px;">비고1</th>
-                                        <th style="width: 50px; min-width: 50px; padding: 4px;">비고2</th>
-                                        <th style="width: 50px; min-width: 50px; padding: 4px;">비고3</th>
-                                        <th style="width: 50px; min-width: 50px; padding: 4px;">비고4</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="alarmSettingsBody">
-                                    <!-- Data will be loaded via JavaScript -->
-                                </tbody>
-                            </table>
+                        <!-- Table Container with Scroll -->
+                        <div class="table-container" style="border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; background: rgba(26, 26, 46, 0.8);">
+                            <div style="width: 100%; overflow-x: auto; max-height: 60vh;">
+                                <table id="alarmSettingsTable" class="table table-modern table-striped table-hover mb-0" style="min-width: 1600px; font-size: 12px; width: 1600px;">
+                                    <thead class="table-dark" style="position: sticky; top: 0; z-index: 10;">
+                                        <tr>
+                                            <th style="width: 50px; min-width: 50px; padding: 4px;">설정</th>
+                                            <th style="width: 50px; min-width: 50px; padding: 4px;">영역</th>
+                                            <th style="width: 50px; min-width: 50px; padding: 4px;">Layer</th>
+                                            <th style="width: 50px; min-width: 50px; padding: 4px;">위치</th>
+                                            <th style="width: 50px; min-width: 50px; padding: 2px;">L01</th>
+                                            <th style="width: 50px; min-width: 50px; padding: 2px;">L02</th>
+                                            <th style="width: 50px; min-width: 50px; padding: 2px;">L03</th>
+                                            <th style="width: 50px; min-width: 50px; padding: 2px;">L04</th>
+                                            <th style="width: 50px; min-width: 50px; padding: 2px;">L05</th>
+                                            <th style="width: 50px; min-width: 50px; padding: 2px;">L06</th>
+                                            <th style="width: 50px; min-width: 50px; padding: 2px;">L07</th>
+                                            <th style="width: 50px; min-width: 50px; padding: 2px;">L08</th>
+                                            <th style="width: 50px; min-width: 50px; padding: 2px;">L09</th>
+                                            <th style="width: 50px; min-width: 50px; padding: 2px;">L10</th>
+                                            <th style="width: 50px; min-width: 50px; padding: 2px;">L11</th>
+                                            <th style="width: 50px; min-width: 50px; padding: 2px;">L12</th>
+                                            <th style="width: 50px; min-width: 50px; padding: 2px;">L13</th>
+                                            <th style="width: 50px; min-width: 50px; padding: 2px;">L14</th>
+                                            <th style="width: 50px; min-width: 50px; padding: 2px;">L15</th>
+                                            <th style="width: 50px; min-width: 50px; padding: 2px;">L16</th>
+                                            <th style="width: 50px; min-width: 50px; padding: 2px;">HIGH</th>
+                                            <th style="width: 50px; min-width: 50px; padding: 2px;">LOW</th>
+                                            <th style="width: 50px; min-width: 50px; padding: 2px;">HIHI</th>
+                                            <th style="width: 50px; min-width: 50px; padding: 2px;">LOLO</th>
+                                            <th style="width: 80px; min-width: 80px; padding: 4px;">알람메세지</th>
+                                            <th style="width: 50px; min-width: 50px; padding: 2px;">메일</th>
+                                            <th style="width: 50px; min-width: 50px; padding: 2px;">SMS</th>
+                                            <th style="width: 50px; min-width: 50px; padding: 4px;">비고1</th>
+                                            <th style="width: 50px; min-width: 50px; padding: 4px;">비고2</th>
+                                            <th style="width: 50px; min-width: 50px; padding: 4px;">비고3</th>
+                                            <th style="width: 50px; min-width: 50px; padding: 4px;">비고4</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="alarmSettingsBody">
+                                        <!-- Data will be loaded via JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- Pagination placed outside the scroll container -->
+                            <div class="table-pagination" style="padding: 10px; background: rgba(26, 26, 46, 0.8); border-top: 1px solid rgba(255, 255, 255, 0.1);">
+                                <div id="alarmTablePagination"></div>
+                            </div>
                         </div>
                         
                         <!-- Pagination will be handled by DataTables -->
@@ -605,11 +612,29 @@
                         previous: "이전"
                     }
                 },
-                dom: 'rt<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+                dom: 'rt',
                 initComplete: function () {
                     console.log('Alarm Settings Table initialized with', alarmSettingsData.length, 'records');
                     $('#dataCount').text(`총 ${alarmSettingsData.length}건`);
                 }
+            });
+
+            // Custom pagination in designated area
+            alarmSettingsTable.on('draw', function() {
+                const info = alarmSettingsTable.page.info();
+                const pagination = `
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="text-light">
+                            ${info.start + 1}부터 ${info.end}까지 (${info.recordsTotal} 개 중)
+                        </div>
+                        <div class="pagination-controls">
+                            <button class="btn btn-sm btn-outline-light me-1" ${info.page === 0 ? 'disabled' : ''} onclick="alarmSettingsTable.page('previous').draw();">이전</button>
+                            <span class="text-light mx-2">페이지 ${info.page + 1} / ${info.pages}</span>
+                            <button class="btn btn-sm btn-outline-light ms-1" ${info.page === info.pages - 1 ? 'disabled' : ''} onclick="alarmSettingsTable.page('next').draw();">다음</button>
+                        </div>
+                    </div>
+                `;
+                document.getElementById('alarmTablePagination').innerHTML = pagination;
             });
 
             console.log('Alarm Settings Table loaded successfully');
