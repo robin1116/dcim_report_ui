@@ -152,3 +152,11 @@ The architecture prioritizes modularity and separation of concerns, making it ea
   - Removed theme-manager.js references from all HTML files
   - Simplified sidebar headers by removing logo SVG elements
 - **Search Button Sizing**: Adjusted alarm threshold setting page search button to match other pages (col-2 width)
+- **Export Functionality**: Added Excel and PDF download features to alarm threshold settings page
+  - Excel export includes all 3 tabs (current, voltage, power) with proper data formatting
+  - PDF export uses English headers to prevent Korean character display issues
+  - Updated all other pages' PDF exports to use English headers for consistency
+- **Responsive Design Fix**: Resolved mobile responsiveness issues in alarm threshold settings page
+  - Added proper CSS media queries for mobile and tablet screens
+  - Enabled DataTables responsive features with autoWidth disabled
+  - Improved table container scrolling and filter control layout on smaller screens
