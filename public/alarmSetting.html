@@ -367,54 +367,102 @@
 
                     
                     <div class="card-body-modern">
-                        <!-- Table Container with Scroll -->
-                        <div class="table-container" style="border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; background: rgba(26, 26, 46, 0.8);">
-                            <div style="width: 100%; overflow-x: auto; max-height: 60vh;">
-                                <table id="alarmSettingsTable" class="table table-modern table-striped table-hover mb-0" style="min-width: 1600px; font-size: 12px; width: 1600px;">
-                                    <thead class="table-dark" style="position: sticky; top: 0; z-index: 10;">
-                                        <tr>
-                                            <th style="width: 50px; min-width: 50px; padding: 4px;">설정</th>
-                                            <th style="width: 50px; min-width: 50px; padding: 4px;">영역</th>
-                                            <th style="width: 50px; min-width: 50px; padding: 4px;">Layer</th>
-                                            <th style="width: 50px; min-width: 50px; padding: 4px;">위치</th>
-                                            <th style="width: 50px; min-width: 50px; padding: 2px;">L01</th>
-                                            <th style="width: 50px; min-width: 50px; padding: 2px;">L02</th>
-                                            <th style="width: 50px; min-width: 50px; padding: 2px;">L03</th>
-                                            <th style="width: 50px; min-width: 50px; padding: 2px;">L04</th>
-                                            <th style="width: 50px; min-width: 50px; padding: 2px;">L05</th>
-                                            <th style="width: 50px; min-width: 50px; padding: 2px;">L06</th>
-                                            <th style="width: 50px; min-width: 50px; padding: 2px;">L07</th>
-                                            <th style="width: 50px; min-width: 50px; padding: 2px;">L08</th>
-                                            <th style="width: 50px; min-width: 50px; padding: 2px;">L09</th>
-                                            <th style="width: 50px; min-width: 50px; padding: 2px;">L10</th>
-                                            <th style="width: 50px; min-width: 50px; padding: 2px;">L11</th>
-                                            <th style="width: 50px; min-width: 50px; padding: 2px;">L12</th>
-                                            <th style="width: 50px; min-width: 50px; padding: 2px;">L13</th>
-                                            <th style="width: 50px; min-width: 50px; padding: 2px;">L14</th>
-                                            <th style="width: 50px; min-width: 50px; padding: 2px;">L15</th>
-                                            <th style="width: 50px; min-width: 50px; padding: 2px;">L16</th>
-                                            <th style="width: 50px; min-width: 50px; padding: 2px;">HIGH</th>
-                                            <th style="width: 50px; min-width: 50px; padding: 2px;">LOW</th>
-                                            <th style="width: 50px; min-width: 50px; padding: 2px;">HIHI</th>
-                                            <th style="width: 50px; min-width: 50px; padding: 2px;">LOLO</th>
-                                            <th style="width: 80px; min-width: 80px; padding: 4px;">알람메세지</th>
-                                            <th style="width: 50px; min-width: 50px; padding: 2px;">메일</th>
-                                            <th style="width: 50px; min-width: 50px; padding: 2px;">SMS</th>
-                                            <th style="width: 50px; min-width: 50px; padding: 4px;">비고1</th>
-                                            <th style="width: 50px; min-width: 50px; padding: 4px;">비고2</th>
-                                            <th style="width: 50px; min-width: 50px; padding: 4px;">비고3</th>
-                                            <th style="width: 50px; min-width: 50px; padding: 4px;">비고4</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="alarmSettingsBody">
-                                        <!-- Data will be loaded via JavaScript -->
-                                    </tbody>
-                                </table>
-                            </div>
-                            <!-- Pagination placed outside the scroll container -->
-                            <div class="table-pagination" style="padding: 10px; background: rgba(26, 26, 46, 0.8); border-top: 1px solid rgba(255, 255, 255, 0.1);">
-                                <div id="alarmTablePagination"></div>
-                            </div>
+                        <div class="table-container">
+                            <table id="alarmSettingsTable" class="table table-modern table-compact" style="width:100%">
+                                <thead>
+                                    <!-- Column Search Filters -->
+                                    <tr class="column-filters">
+                                        <th style="width: 8%;">
+                                            <input type="text" class="form-control form-control-sm column-search" data-column="0" placeholder="설정 검색" style="font-size: 12px;">
+                                        </th>
+                                        <th style="width: 8%;">
+                                            <input type="text" class="form-control form-control-sm column-search" data-column="1" placeholder="영역 검색" style="font-size: 12px;">
+                                        </th>
+                                        <th style="width: 8%;">
+                                            <input type="text" class="form-control form-control-sm column-search" data-column="2" placeholder="Layer 검색" style="font-size: 12px;">
+                                        </th>
+                                        <th style="width: 8%;">
+                                            <input type="text" class="form-control form-control-sm column-search" data-column="3" placeholder="위치 검색" style="font-size: 12px;">
+                                        </th>
+                                        <th style="width: 3%;"></th>
+                                        <th style="width: 3%;"></th>
+                                        <th style="width: 3%;"></th>
+                                        <th style="width: 3%;"></th>
+                                        <th style="width: 3%;"></th>
+                                        <th style="width: 3%;"></th>
+                                        <th style="width: 3%;"></th>
+                                        <th style="width: 3%;"></th>
+                                        <th style="width: 3%;"></th>
+                                        <th style="width: 3%;"></th>
+                                        <th style="width: 3%;"></th>
+                                        <th style="width: 3%;"></th>
+                                        <th style="width: 3%;"></th>
+                                        <th style="width: 3%;"></th>
+                                        <th style="width: 3%;"></th>
+                                        <th style="width: 3%;"></th>
+                                        <th style="width: 4%;"></th>
+                                        <th style="width: 4%;"></th>
+                                        <th style="width: 4%;"></th>
+                                        <th style="width: 4%;"></th>
+                                        <th style="width: 10%;">
+                                            <input type="text" class="form-control form-control-sm column-search" data-column="24" placeholder="알람메세지 검색" style="font-size: 12px;">
+                                        </th>
+                                        <th style="width: 3%;"></th>
+                                        <th style="width: 3%;"></th>
+                                        <th style="width: 5%;"></th>
+                                        <th style="width: 5%;"></th>
+                                        <th style="width: 5%;"></th>
+                                        <th style="width: 5%;"></th>
+                                    </tr>
+                                    <!-- Column Headers -->
+                                    <tr>
+                                        <th style="width: 8%;">
+                                            <i class="fas fa-cog me-2" style="color: var(--primary-color);"></i>설정
+                                        </th>
+                                        <th style="width: 8%; text-align: center;">
+                                            <i class="fas fa-map-marker-alt me-2" style="color: #8b5cf6;"></i>영역
+                                        </th>
+                                        <th style="width: 8%; text-align: center;">
+                                            <i class="fas fa-layer-group me-2" style="color: #3b82f6;"></i>Layer
+                                        </th>
+                                        <th style="width: 8%; text-align: center;">
+                                            <i class="fas fa-location-arrow me-2" style="color: #10b981;"></i>위치
+                                        </th>
+                                        <th style="width: 3%; text-align: center;">L01</th>
+                                        <th style="width: 3%; text-align: center;">L02</th>
+                                        <th style="width: 3%; text-align: center;">L03</th>
+                                        <th style="width: 3%; text-align: center;">L04</th>
+                                        <th style="width: 3%; text-align: center;">L05</th>
+                                        <th style="width: 3%; text-align: center;">L06</th>
+                                        <th style="width: 3%; text-align: center;">L07</th>
+                                        <th style="width: 3%; text-align: center;">L08</th>
+                                        <th style="width: 3%; text-align: center;">L09</th>
+                                        <th style="width: 3%; text-align: center;">L10</th>
+                                        <th style="width: 3%; text-align: center;">L11</th>
+                                        <th style="width: 3%; text-align: center;">L12</th>
+                                        <th style="width: 3%; text-align: center;">L13</th>
+                                        <th style="width: 3%; text-align: center;">L14</th>
+                                        <th style="width: 3%; text-align: center;">L15</th>
+                                        <th style="width: 3%; text-align: center;">L16</th>
+                                        <th style="width: 4%; text-align: center;">HIGH</th>
+                                        <th style="width: 4%; text-align: center;">LOW</th>
+                                        <th style="width: 4%; text-align: center;">HIHI</th>
+                                        <th style="width: 4%; text-align: center;">LOLO</th>
+                                        <th style="width: 10%;">
+                                            <i class="fas fa-info-circle me-2" style="color: #6b7280;"></i>알람메세지
+                                        </th>
+                                        <th style="width: 3%; text-align: center;">메일</th>
+                                        <th style="width: 3%; text-align: center;">SMS</th>
+                                        <th style="width: 5%; text-align: center;">비고1</th>
+                                        <th style="width: 5%; text-align: center;">비고2</th>
+                                        <th style="width: 5%; text-align: center;">비고3</th>
+                                        <th style="width: 5%; text-align: center;">비고4</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Data will be loaded via JavaScript -->
+                                </tbody>
+                            </table>
                         </div>
                         
                         <!-- Pagination will be handled by DataTables -->
@@ -554,90 +602,112 @@
                 }
             ];
 
-            // Initialize alarm settings table
+            // Initialize alarm settings table (same structure as fault inquiry)
             alarmSettingsTable = $('#alarmSettingsTable').DataTable({
-                data: alarmSettingsData,
-                columns: [
-                    { data: '설정', title: '설정', width: '50px' },
-                    { data: '영역', title: '영역', width: '50px' },
-                    { data: 'Layer', title: 'Layer', width: '50px' },
-                    { data: '위치', title: '위치', width: '50px' },
-                    { data: 'L01', title: 'L01', width: '50px', className: 'text-center' },
-                    { data: 'L02', title: 'L02', width: '50px', className: 'text-center' },
-                    { data: 'L03', title: 'L03', width: '50px', className: 'text-center' },
-                    { data: 'L04', title: 'L04', width: '50px', className: 'text-center' },
-                    { data: 'L05', title: 'L05', width: '50px', className: 'text-center' },
-                    { data: 'L06', title: 'L06', width: '50px', className: 'text-center' },
-                    { data: 'L07', title: 'L07', width: '50px', className: 'text-center' },
-                    { data: 'L08', title: 'L08', width: '50px', className: 'text-center' },
-                    { data: 'L09', title: 'L09', width: '50px', className: 'text-center' },
-                    { data: 'L10', title: 'L10', width: '50px', className: 'text-center' },
-                    { data: 'L11', title: 'L11', width: '50px', className: 'text-center' },
-                    { data: 'L12', title: 'L12', width: '50px', className: 'text-center' },
-                    { data: 'L13', title: 'L13', width: '50px', className: 'text-center' },
-                    { data: 'L14', title: 'L14', width: '50px', className: 'text-center' },
-                    { data: 'L15', title: 'L15', width: '50px', className: 'text-center' },
-                    { data: 'L16', title: 'L16', width: '50px', className: 'text-center' },
-                    { data: 'HIGH', title: 'HIGH', width: '50px', className: 'text-center' },
-                    { data: 'LOW', title: 'LOW', width: '50px', className: 'text-center' },
-                    { data: 'HIHI', title: 'HIHI', width: '50px', className: 'text-center' },
-                    { data: 'LOLO', title: 'LOLO', width: '50px', className: 'text-center' },
-                    { data: '알람메세지', title: '알람메세지', width: '80px', className: 'text-center' },
-                    { data: '메일', title: '메일', width: '50px', className: 'text-center' },
-                    { data: 'SMS', title: 'SMS', width: '50px', className: 'text-center' },
-                    { data: '비고1', title: '비고1', width: '50px' },
-                    { data: '비고2', title: '비고2', width: '50px' },
-                    { data: '비고3', title: '비고3', width: '50px' },
-                    { data: '비고4', title: '비고4', width: '50px' }
-                ],
-                responsive: false,
-                scrollX: false,
-                scrollCollapse: false,
-                paging: true,
-                pageLength: 25,
-                lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
-                order: [[0, 'asc']],
-                autoWidth: false,
+                processing: true,
+                serverSide: false,
+                responsive: true,
+                dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6">><"row"<"col-sm-12"tr>><"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
                 language: {
-                    lengthMenu: "_MENU_ 개씩 보기",
-                    zeroRecords: "데이터가 없습니다.",
-                    info: "_START_부터 _END_까지 (_TOTAL_ 개 중)",
-                    infoEmpty: "0개",
-                    infoFiltered: "(전체 _MAX_개에서 필터됨)",
+                    processing: "처리중...",
                     search: "검색:",
+                    lengthMenu: "_MENU_ 개씩 보기",
+                    info: "_START_ - _END_ / _TOTAL_ 건",
+                    infoEmpty: "0건",
+                    infoFiltered: "(전체 _MAX_ 건 중 검색결과)",
                     paginate: {
                         first: "처음",
-                        last: "마지막",
+                        last: "마지막", 
                         next: "다음",
                         previous: "이전"
                     }
                 },
-                dom: 'rt',
-                initComplete: function () {
-                    console.log('Alarm Settings Table initialized with', alarmSettingsData.length, 'records');
-                    $('#dataCount').text(`총 ${alarmSettingsData.length}건`);
-                }
+                data: alarmSettingsData,
+                columns: [
+                    { 
+                        data: '설정',
+                        title: '설정',
+                        render: function(data) {
+                            if (!data) return '';
+                            return `<span class="data-value">${data}</span>`;
+                        }
+                    },
+                    { 
+                        data: '영역',
+                        title: '영역',
+                        className: 'text-center',
+                        render: function(data) {
+                            if (data === null || data === undefined) return '';
+                            return `<span class="data-value">${data}</span>`;
+                        }
+                    },
+                    { 
+                        data: 'Layer',
+                        title: 'Layer',
+                        className: 'text-center',
+                        render: function(data) {
+                            if (data === null || data === undefined) return '';
+                            return `<span class="data-value">${data}</span>`;
+                        }
+                    },
+                    { 
+                        data: '위치',
+                        title: '위치',
+                        className: 'text-center',
+                        render: function(data) {
+                            if (data === null || data === undefined) return '';
+                            return `<span class="data-value">${data}</span>`;
+                        }
+                    },
+                    { data: 'L01', title: 'L01', className: 'text-center' },
+                    { data: 'L02', title: 'L02', className: 'text-center' },
+                    { data: 'L03', title: 'L03', className: 'text-center' },
+                    { data: 'L04', title: 'L04', className: 'text-center' },
+                    { data: 'L05', title: 'L05', className: 'text-center' },
+                    { data: 'L06', title: 'L06', className: 'text-center' },
+                    { data: 'L07', title: 'L07', className: 'text-center' },
+                    { data: 'L08', title: 'L08', className: 'text-center' },
+                    { data: 'L09', title: 'L09', className: 'text-center' },
+                    { data: 'L10', title: 'L10', className: 'text-center' },
+                    { data: 'L11', title: 'L11', className: 'text-center' },
+                    { data: 'L12', title: 'L12', className: 'text-center' },
+                    { data: 'L13', title: 'L13', className: 'text-center' },
+                    { data: 'L14', title: 'L14', className: 'text-center' },
+                    { data: 'L15', title: 'L15', className: 'text-center' },
+                    { data: 'L16', title: 'L16', className: 'text-center' },
+                    { data: 'HIGH', title: 'HIGH', className: 'text-center' },
+                    { data: 'LOW', title: 'LOW', className: 'text-center' },
+                    { data: 'HIHI', title: 'HIHI', className: 'text-center' },
+                    { data: 'LOLO', title: 'LOLO', className: 'text-center' },
+                    { 
+                        data: '알람메세지',
+                        title: '알람메세지',
+                        render: function(data) {
+                            if (data === null || data === undefined) return '';
+                            return `<span class="message-value">${data}</span>`;
+                        }
+                    },
+                    { data: '메일', title: '메일', className: 'text-center' },
+                    { data: 'SMS', title: 'SMS', className: 'text-center' },
+                    { data: '비고1', title: '비고1' },
+                    { data: '비고2', title: '비고2' },
+                    { data: '비고3', title: '비고3' },
+                    { data: '비고4', title: '비고4' }
+                ],
+                order: [[0, 'asc']],
+                pageLength: 25,
+                lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]]
             });
 
-            // Custom pagination in designated area
-            alarmSettingsTable.on('draw', function() {
-                const info = alarmSettingsTable.page.info();
-                const pagination = `
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="text-light">
-                            ${info.start + 1}부터 ${info.end}까지 (${info.recordsTotal} 개 중)
-                        </div>
-                        <div class="pagination-controls">
-                            <button class="btn btn-sm btn-outline-light me-1" ${info.page === 0 ? 'disabled' : ''} onclick="alarmSettingsTable.page('previous').draw();">이전</button>
-                            <span class="text-light mx-2">페이지 ${info.page + 1} / ${info.pages}</span>
-                            <button class="btn btn-sm btn-outline-light ms-1" ${info.page === info.pages - 1 ? 'disabled' : ''} onclick="alarmSettingsTable.page('next').draw();">다음</button>
-                        </div>
-                    </div>
-                `;
-                document.getElementById('alarmTablePagination').innerHTML = pagination;
+            // Add column search functionality
+            $('.column-search').on('keyup change clear', function() {
+                const columnIndex = $(this).data('column');
+                const searchTerm = this.value;
+                alarmSettingsTable.column(columnIndex).search(searchTerm).draw();
             });
 
             console.log('Alarm Settings Table loaded successfully');
+            $('#dataCount').text(`총 ${alarmSettingsData.length}건`);
 
             // Event handlers for filter controls
             $('#searchAlarmData').on('click', function() {
