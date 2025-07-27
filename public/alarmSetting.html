@@ -763,35 +763,33 @@
             try {
                 console.log('Initializing tables with full column sets...');
                 
-                // Current table with full I_R, I_S, I_T columns
+                // Simplified current table columns
                 const currentColumns = [
                     { 
                         title: '수정', 
                         data: null, 
                         defaultContent: '<button class="btn btn-sm btn-outline-primary edit-threshold-btn" type="button"><i class="fas fa-edit"></i></button>', 
                         orderable: false,
-                        className: 'text-center'
+                        className: 'text-center',
+                        width: '60px'
                     },
-                    { title: 'BUSWAY', data: 'busway', className: 'text-center' },
-                    { title: 'LINE', data: 'line', className: 'text-center' },
-                    // I_R columns
-                    { title: 'I_R EN', data: 'i_r_en', className: 'text-center' },
-                    { title: 'I_R HH', data: 'i_r_hh', className: 'text-center' },
-                    { title: 'I_R H', data: 'i_r_h', className: 'text-center' },
-                    { title: 'I_R L', data: 'i_r_l', className: 'text-center' },
-                    { title: 'I_R LL', data: 'i_r_ll', className: 'text-center' },
-                    // I_S columns
-                    { title: 'I_S EN', data: 'i_s_en', className: 'text-center' },
-                    { title: 'I_S HH', data: 'i_s_hh', className: 'text-center' },
-                    { title: 'I_S H', data: 'i_s_h', className: 'text-center' },
-                    { title: 'I_S L', data: 'i_s_l', className: 'text-center' },
-                    { title: 'I_S LL', data: 'i_s_ll', className: 'text-center' },
-                    // I_T columns
-                    { title: 'I_T EN', data: 'i_t_en', className: 'text-center' },
-                    { title: 'I_T HH', data: 'i_t_hh', className: 'text-center' },
-                    { title: 'I_T H', data: 'i_t_h', className: 'text-center' },
-                    { title: 'I_T L', data: 'i_t_l', className: 'text-center' },
-                    { title: 'I_T LL', data: 'i_t_ll', className: 'text-center' }
+                    { title: 'BUSWAY', data: 'busway', className: 'text-center', width: '80px' },
+                    { title: 'LINE', data: 'line', className: 'text-center', width: '60px' },
+                    { title: 'R상 활성화', data: 'i_r_en', className: 'text-center', width: '90px' },
+                    { title: 'R상 HH', data: 'i_r_hh', className: 'text-center', width: '70px' },
+                    { title: 'R상 H', data: 'i_r_h', className: 'text-center', width: '70px' },
+                    { title: 'R상 L', data: 'i_r_l', className: 'text-center', width: '70px' },
+                    { title: 'R상 LL', data: 'i_r_ll', className: 'text-center', width: '70px' },
+                    { title: 'S상 활성화', data: 'i_s_en', className: 'text-center', width: '90px' },
+                    { title: 'S상 HH', data: 'i_s_hh', className: 'text-center', width: '70px' },
+                    { title: 'S상 H', data: 'i_s_h', className: 'text-center', width: '70px' },
+                    { title: 'S상 L', data: 'i_s_l', className: 'text-center', width: '70px' },
+                    { title: 'S상 LL', data: 'i_s_ll', className: 'text-center', width: '70px' },
+                    { title: 'T상 활성화', data: 'i_t_en', className: 'text-center', width: '90px' },
+                    { title: 'T상 HH', data: 'i_t_hh', className: 'text-center', width: '70px' },
+                    { title: 'T상 H', data: 'i_t_h', className: 'text-center', width: '70px' },
+                    { title: 'T상 L', data: 'i_t_l', className: 'text-center', width: '70px' },
+                    { title: 'T상 LL', data: 'i_t_ll', className: 'text-center', width: '70px' }
                 ];
 
                 // Destroy existing table if it exists
@@ -813,35 +811,33 @@
                 });
                 console.log('Current table created with', currentData.length, 'rows');
 
-                // Voltage table with full V_R, V_S, V_T columns
+                // Simplified voltage table columns
                 const voltageColumns = [
                     { 
                         title: '수정', 
                         data: null, 
                         defaultContent: '<button class="btn btn-sm btn-outline-primary edit-threshold-btn" type="button"><i class="fas fa-edit"></i></button>', 
                         orderable: false,
-                        className: 'text-center'
+                        className: 'text-center',
+                        width: '60px'
                     },
-                    { title: 'BUSWAY', data: 'busway', className: 'text-center' },
-                    { title: 'LINE', data: 'line', className: 'text-center' },
-                    // V_R columns
-                    { title: 'V_R EN', data: 'v_r_en', className: 'text-center' },
-                    { title: 'V_R HH', data: 'v_r_hh', className: 'text-center' },
-                    { title: 'V_R H', data: 'v_r_h', className: 'text-center' },
-                    { title: 'V_R L', data: 'v_r_l', className: 'text-center' },
-                    { title: 'V_R LL', data: 'v_r_ll', className: 'text-center' },
-                    // V_S columns
-                    { title: 'V_S EN', data: 'v_s_en', className: 'text-center' },
-                    { title: 'V_S HH', data: 'v_s_hh', className: 'text-center' },
-                    { title: 'V_S H', data: 'v_s_h', className: 'text-center' },
-                    { title: 'V_S L', data: 'v_s_l', className: 'text-center' },
-                    { title: 'V_S LL', data: 'v_s_ll', className: 'text-center' },
-                    // V_T columns
-                    { title: 'V_T EN', data: 'v_t_en', className: 'text-center' },
-                    { title: 'V_T HH', data: 'v_t_hh', className: 'text-center' },
-                    { title: 'V_T H', data: 'v_t_h', className: 'text-center' },
-                    { title: 'V_T L', data: 'v_t_l', className: 'text-center' },
-                    { title: 'V_T LL', data: 'v_t_ll', className: 'text-center' }
+                    { title: 'BUSWAY', data: 'busway', className: 'text-center', width: '80px' },
+                    { title: 'LINE', data: 'line', className: 'text-center', width: '60px' },
+                    { title: 'R상 활성화', data: 'v_r_en', className: 'text-center', width: '90px' },
+                    { title: 'R상 HH', data: 'v_r_hh', className: 'text-center', width: '70px' },
+                    { title: 'R상 H', data: 'v_r_h', className: 'text-center', width: '70px' },
+                    { title: 'R상 L', data: 'v_r_l', className: 'text-center', width: '70px' },
+                    { title: 'R상 LL', data: 'v_r_ll', className: 'text-center', width: '70px' },
+                    { title: 'S상 활성화', data: 'v_s_en', className: 'text-center', width: '90px' },
+                    { title: 'S상 HH', data: 'v_s_hh', className: 'text-center', width: '70px' },
+                    { title: 'S상 H', data: 'v_s_h', className: 'text-center', width: '70px' },
+                    { title: 'S상 L', data: 'v_s_l', className: 'text-center', width: '70px' },
+                    { title: 'S상 LL', data: 'v_s_ll', className: 'text-center', width: '70px' },
+                    { title: 'T상 활성화', data: 'v_t_en', className: 'text-center', width: '90px' },
+                    { title: 'T상 HH', data: 'v_t_hh', className: 'text-center', width: '70px' },
+                    { title: 'T상 H', data: 'v_t_h', className: 'text-center', width: '70px' },
+                    { title: 'T상 L', data: 'v_t_l', className: 'text-center', width: '70px' },
+                    { title: 'T상 LL', data: 'v_t_ll', className: 'text-center', width: '70px' }
                 ];
 
                 // Destroy existing table if it exists
@@ -863,35 +859,33 @@
                 });
                 console.log('Voltage table created with', voltageData.length, 'rows');
 
-                // Power table with full KW_R, KW_S, KW_T columns
+                // Simplified power table columns
                 const powerColumns = [
                     { 
                         title: '수정', 
                         data: null, 
                         defaultContent: '<button class="btn btn-sm btn-outline-primary edit-threshold-btn" type="button"><i class="fas fa-edit"></i></button>', 
                         orderable: false,
-                        className: 'text-center'
+                        className: 'text-center',
+                        width: '60px'
                     },
-                    { title: 'BUSWAY', data: 'busway', className: 'text-center' },
-                    { title: 'LINE', data: 'line', className: 'text-center' },
-                    // KW_R columns
-                    { title: 'KW_R EN', data: 'kw_r_en', className: 'text-center' },
-                    { title: 'KW_R HH', data: 'kw_r_hh', className: 'text-center' },
-                    { title: 'KW_R H', data: 'kw_r_h', className: 'text-center' },
-                    { title: 'KW_R L', data: 'kw_r_l', className: 'text-center' },
-                    { title: 'KW_R LL', data: 'kw_r_ll', className: 'text-center' },
-                    // KW_S columns
-                    { title: 'KW_S EN', data: 'kw_s_en', className: 'text-center' },
-                    { title: 'KW_S HH', data: 'kw_s_hh', className: 'text-center' },
-                    { title: 'KW_S H', data: 'kw_s_h', className: 'text-center' },
-                    { title: 'KW_S L', data: 'kw_s_l', className: 'text-center' },
-                    { title: 'KW_S LL', data: 'kw_s_ll', className: 'text-center' },
-                    // KW_T columns
-                    { title: 'KW_T EN', data: 'kw_t_en', className: 'text-center' },
-                    { title: 'KW_T HH', data: 'kw_t_hh', className: 'text-center' },
-                    { title: 'KW_T H', data: 'kw_t_h', className: 'text-center' },
-                    { title: 'KW_T L', data: 'kw_t_l', className: 'text-center' },
-                    { title: 'KW_T LL', data: 'kw_t_ll', className: 'text-center' }
+                    { title: 'BUSWAY', data: 'busway', className: 'text-center', width: '80px' },
+                    { title: 'LINE', data: 'line', className: 'text-center', width: '60px' },
+                    { title: 'R상 활성화', data: 'kw_r_en', className: 'text-center', width: '90px' },
+                    { title: 'R상 HH', data: 'kw_r_hh', className: 'text-center', width: '70px' },
+                    { title: 'R상 H', data: 'kw_r_h', className: 'text-center', width: '70px' },
+                    { title: 'R상 L', data: 'kw_r_l', className: 'text-center', width: '70px' },
+                    { title: 'R상 LL', data: 'kw_r_ll', className: 'text-center', width: '70px' },
+                    { title: 'S상 활성화', data: 'kw_s_en', className: 'text-center', width: '90px' },
+                    { title: 'S상 HH', data: 'kw_s_hh', className: 'text-center', width: '70px' },
+                    { title: 'S상 H', data: 'kw_s_h', className: 'text-center', width: '70px' },
+                    { title: 'S상 L', data: 'kw_s_l', className: 'text-center', width: '70px' },
+                    { title: 'S상 LL', data: 'kw_s_ll', className: 'text-center', width: '70px' },
+                    { title: 'T상 활성화', data: 'kw_t_en', className: 'text-center', width: '90px' },
+                    { title: 'T상 HH', data: 'kw_t_hh', className: 'text-center', width: '70px' },
+                    { title: 'T상 H', data: 'kw_t_h', className: 'text-center', width: '70px' },
+                    { title: 'T상 L', data: 'kw_t_l', className: 'text-center', width: '70px' },
+                    { title: 'T상 LL', data: 'kw_t_ll', className: 'text-center', width: '70px' }
                 ];
 
                 // Destroy existing table if it exists
