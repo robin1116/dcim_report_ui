@@ -1097,7 +1097,7 @@ body {
     border-bottom: 1px solid rgba(139, 92, 246, 0.2);
 }
 
-.column-search {
+.column-search, .column-search-current, .column-search-voltage, .column-search-power {
     border: 1px solid rgba(139, 92, 246, 0.3);
     border-radius: 4px;
     padding: 4px 8px;
@@ -1105,8 +1105,83 @@ body {
     background: rgba(255, 255, 255, 0.9);
 }
 
-.column-search:focus {
+.column-search:focus, .column-search-current:focus, .column-search-voltage:focus, .column-search-power:focus {
     border-color: #8b5cf6;
     box-shadow: 0 0 0 0.2rem rgba(139, 92, 246, 0.25);
     outline: none;
+}
+
+/* Modern Tab Styling */
+.nav-tabs-modern {
+    border-bottom: 2px solid rgba(139, 92, 246, 0.2);
+    margin-bottom: 1.5rem;
+}
+
+.nav-tabs-modern .nav-link {
+    border: none;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    color: var(--text-secondary);
+    border-radius: 12px 12px 0 0;
+    padding: 12px 24px;
+    margin-right: 8px;
+    font-weight: 600;
+    position: relative;
+    transition: all var(--transition-normal);
+    border-bottom: 3px solid transparent;
+}
+
+.nav-tabs-modern .nav-link:hover {
+    background: rgba(139, 92, 246, 0.1);
+    color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.2);
+}
+
+.nav-tabs-modern .nav-link.active {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: white;
+    border-bottom-color: var(--accent-color);
+    box-shadow: 
+        0 4px 20px rgba(139, 92, 246, 0.4),
+        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+}
+
+.nav-tabs-modern .nav-link.active::before {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-color), var(--primary-color));
+    border-radius: 2px;
+}
+
+.nav-tabs-modern .nav-link i {
+    margin-right: 8px;
+    font-size: 14px;
+}
+
+/* Tab Content Styling */
+.tab-content {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+    padding: 16px;
+}
+
+.tab-pane {
+    animation: fadeInUp 0.3s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
