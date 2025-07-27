@@ -1,46 +1,46 @@
-/* CSS Custom Properties for DCIM Theme System */
+/* CSS Custom Properties for Light Theme System */
 :root {
-    /* DCIM Dashboard Colors - matching main dashboard */
-    --primary-color: #8b5cf6;        /* Purple neon */
-    --secondary-color: #a78bfa;      /* Light purple */
-    --accent-color: #3b82f6;         /* Blue accent */
+    /* DCIM Dashboard Colors */
+    --primary-color: #8b5cf6;        /* Purple */
+    --secondary-color: #3b82f6;      /* Blue */
+    --accent-color: #06b6d4;         /* Cyan accent */
     --success-color: #10b981;        /* Emerald green */
     --warning-color: #f59e0b;        /* Amber warning */
     --danger-color: #ef4444;         /* Red danger */
-    --info-color: #06b6d4;           /* Cyan info */
+    --info-color: #3b82f6;           /* Blue info */
     
-    /* Dark Theme Background Colors (matching dashboard) */
-    --bg-primary: #0f0f0f;           /* Very dark background */
-    --bg-secondary: #1a1a1a;         /* Dark secondary */
-    --bg-tertiary: #262626;          /* Medium dark */
-    --bg-glass: rgba(139, 92, 246, 0.15);   /* Purple glass effect */
-    --bg-modal: rgba(15, 15, 15, 0.95);     /* Dark modal */
-    --bg-card: rgba(26, 26, 26, 0.8);       /* Card background */
+    /* Light Theme Background Colors */
+    --bg-primary: #ffffff;           /* White background */
+    --bg-secondary: #f8fafc;         /* Light gray */
+    --bg-tertiary: #f1f5f9;          /* Lighter gray */
+    --bg-glass: rgba(255, 255, 255, 0.1);   /* Light glass effect */
+    --bg-modal: rgba(248, 250, 252, 0.95);  /* Light modal */
+    --bg-card: rgba(255, 255, 255, 0.95);   /* Card background */
     
     /* Text Colors */
-    --text-primary: #ffffff;         /* White text */
-    --text-secondary: #e5e7eb;       /* Light gray */
-    --text-muted: #9ca3af;           /* Muted gray */
-    --text-inverse: #0f0f0f;         /* Dark text for light backgrounds */
-    --text-neon: #8b5cf6;            /* Neon purple text */
+    --text-primary: #1e293b;         /* Dark text */
+    --text-secondary: #475569;       /* Medium gray */
+    --text-muted: #64748b;           /* Muted gray */
+    --text-inverse: #ffffff;         /* White text for dark backgrounds */
+    --text-neon: #8b5cf6;            /* Purple text */
     
     /* Border Colors */
-    --border-color: #374151;         /* Dark border */
-    --border-light: rgba(139, 92, 246, 0.3);   /* Purple light border */
-    --border-dark: rgba(0, 0, 0, 0.5);         /* Dark border */
-    --border-neon: #8b5cf6;          /* Neon border */
+    --border-color: #e2e8f0;         /* Light border */
+    --border-light: rgba(139, 92, 246, 0.1);   /* Purple light border */
+    --border-dark: rgba(0, 0, 0, 0.1);         /* Light dark border */
+    --border-neon: rgba(139, 92, 246, 0.3);    /* Purple neon border */
     
     /* Shadow Colors */
-    --shadow-light: rgba(0, 0, 0, 0.5);
-    --shadow-medium: rgba(0, 0, 0, 0.7);
-    --shadow-dark: rgba(0, 0, 0, 0.9);
-    --shadow-neon: 0 0 20px rgba(139, 92, 246, 0.5);
+    --shadow-light: rgba(0, 0, 0, 0.1);
+    --shadow-medium: rgba(0, 0, 0, 0.15);
+    --shadow-dark: rgba(0, 0, 0, 0.2);
+    --shadow-neon: 0 0 15px rgba(139, 92, 246, 0.3);
     
     /* Gradient Definitions */
     --gradient-primary: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
-    --gradient-glass: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(59, 130, 246, 0.1) 100%);
-    --gradient-neumorphism: linear-gradient(145deg, #1a1a1a 0%, #0f0f0f 100%);
-    --gradient-neon: linear-gradient(90deg, #8b5cf6 0%, #a78bfa 50%, #3b82f6 100%);
+    --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+    --gradient-neumorphism: linear-gradient(145deg, #f8fafc 0%, #f1f5f9 100%);
+    --gradient-neon: linear-gradient(90deg, #8b5cf6 0%, #3b82f6 100%);
     
     /* Animation Durations */
     --transition-fast: 0.2s ease;
@@ -48,35 +48,7 @@
     --transition-slow: 0.5s ease;
 }
 
-/* Light Theme (optional alternative - keeping DCIM dark aesthetic) */
-[data-theme="light"] {
-    /* Lighter version while maintaining DCIM aesthetics */
-    --bg-primary: #f8fafc;
-    --bg-secondary: #f1f5f9;
-    --bg-tertiary: #e2e8f0;
-    --bg-glass: rgba(139, 92, 246, 0.1);
-    --bg-modal: rgba(248, 250, 252, 0.95);
-    --bg-card: rgba(255, 255, 255, 0.8);
-    
-    --text-primary: #1e293b;
-    --text-secondary: #475569;
-    --text-muted: #64748b;
-    --text-inverse: #ffffff;
-    --text-neon: #7c3aed;
-    
-    --border-color: #e2e8f0;
-    --border-light: rgba(139, 92, 246, 0.2);
-    --border-dark: rgba(0, 0, 0, 0.1);
-    
-    --shadow-light: rgba(0, 0, 0, 0.1);
-    --shadow-medium: rgba(0, 0, 0, 0.15);
-    --shadow-dark: rgba(0, 0, 0, 0.25);
-    --shadow-neon: 0 0 15px rgba(139, 92, 246, 0.3);
-    
-    /* Gradient Updates */
-    --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-    --gradient-neumorphism: linear-gradient(145deg, #2d2d2d 0%, #1a1a1a 100%);
-}
+
 
 /* Theme Transition */
 * {

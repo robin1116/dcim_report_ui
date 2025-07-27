@@ -4,7 +4,7 @@
 
 This is a web-based DCIM (Data Center Infrastructure Management) admin system called "simpleEye" that provides a modern, responsive interface for managing data center infrastructure. The application features a dual server setup with Flask/Gunicorn for Replit deployment and Express.js for development, designed to eventually integrate with a Spring Boot backend.
 
-**Recent Update (2025-07-25)**: Redesigned entire theme to match main DCIM dashboard aesthetics with dark background, purple/blue neon effects, glassmorphism, and futuristic styling. Applied Pretendard font across all project pages for consistent Korean typography.
+**Recent Update (2025-07-27)**: Completely removed dark theme and switched to light theme only. Eliminated page navigation flickering issues by removing theme toggle functionality and fixing all pages to light theme. Removed logo images from sidebar headers to simplify interface.
 
 ## User Preferences
 
@@ -146,3 +146,9 @@ The architecture prioritizes modularity and separation of concerns, making it ea
 ### Recent Bug Fixes (2025-07-27)
 - **Table Initialization**: Implemented lazy loading for voltage and power tables to resolve dual-header display issues
 - **Navigation Consistency**: Updated all sidebar menus to use "장애임계치 설정" instead of "장애 설정" for uniform naming
+- **Theme System Removal**: Completely removed dark theme functionality to eliminate page navigation flickering
+  - Removed theme toggle buttons from all pages
+  - Fixed CSS variables to light theme values in both modern-admin.css and themes.css
+  - Removed theme-manager.js references from all HTML files
+  - Simplified sidebar headers by removing logo SVG elements
+- **Search Button Sizing**: Adjusted alarm threshold setting page search button to match other pages (col-2 width)
