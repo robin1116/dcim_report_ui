@@ -115,10 +115,10 @@ The architecture prioritizes modularity and separation of concerns, making it ea
 ### Menu Structure Reorganization
 - **Updated Navigation**: Restructured sidebar menu to match user requirements:
   - **조회 보고서**: 전력조회 (powerInquiry.html), 장애조회 (faultInquiry.html)
-  - **설정**: 장애 설정 (alarmConfig.html), 장애등급 설정 (alarmLevelConfig.html)  
+  - **설정**: 장애임계치 설정 (alarmSetting.html)
   - **사용자관리**: 사용자관리 (adminsysuser.html)
 - **Page Renaming**: Converted adminPortUsage.html to powerInquiry.html with updated content
-- **New Pages**: Created faultInquiry.html and alarmLevelConfig.html based on existing templates
+- **New Pages**: Created faultInquiry.html based on existing templates
 - **Breadcrumb Updates**: Modified navigation breadcrumbs to reflect new menu structure
 
 ### Login Page Enhancements  
@@ -152,3 +152,4 @@ The architecture prioritizes modularity and separation of concerns, making it ea
   - Removed theme-manager.js references from all HTML files
   - Simplified sidebar headers by removing logo SVG elements
 - **Search Button Sizing**: Adjusted alarm threshold setting page search button to match other pages (col-2 width)
+- **Menu Cleanup**: Removed fault level settings menu and page (alarmLevelConfig.html) from all pages as requested
