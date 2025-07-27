@@ -665,24 +665,24 @@
                 v_t_ll: (parseInt(item.i_t_ll) + 50).toString()
             }));
 
-            // Power threshold data (전력량) - similar structure with P_ prefix
+            // Power threshold data (전력량) - similar structure with KW_ prefix for power
             const powerData = currentData.map(item => ({
                 ...item,
-                p_r_en: item.i_r_en,
-                p_r_hh: (parseInt(item.i_r_hh) * 2).toString(),
-                p_r_h: (parseInt(item.i_r_h) * 2).toString(),
-                p_r_l: (parseInt(item.i_r_l) * 2).toString(),
-                p_r_ll: (parseInt(item.i_r_ll) * 2).toString(),
-                p_s_en: item.i_s_en,
-                p_s_hh: (parseInt(item.i_s_hh) * 2).toString(),
-                p_s_h: (parseInt(item.i_s_h) * 2).toString(),
-                p_s_l: (parseInt(item.i_s_l) * 2).toString(),
-                p_s_ll: (parseInt(item.i_s_ll) * 2).toString(),
-                p_t_en: item.i_t_en,
-                p_t_hh: (parseInt(item.i_t_hh) * 2).toString(),
-                p_t_h: (parseInt(item.i_t_h) * 2).toString(),
-                p_t_l: (parseInt(item.i_t_l) * 2).toString(),
-                p_t_ll: (parseInt(item.i_t_ll) * 2).toString()
+                kw_r_en: item.i_r_en,
+                kw_r_hh: (parseInt(item.i_r_hh) * 2).toString(),
+                kw_r_h: (parseInt(item.i_r_h) * 2).toString(),
+                kw_r_l: (parseInt(item.i_r_l) * 2).toString(),
+                kw_r_ll: (parseInt(item.i_r_ll) * 2).toString(),
+                kw_s_en: item.i_s_en,
+                kw_s_hh: (parseInt(item.i_s_hh) * 2).toString(),
+                kw_s_h: (parseInt(item.i_s_h) * 2).toString(),
+                kw_s_l: (parseInt(item.i_s_l) * 2).toString(),
+                kw_s_ll: (parseInt(item.i_s_ll) * 2).toString(),
+                kw_t_en: item.i_t_en,
+                kw_t_hh: (parseInt(item.i_t_hh) * 2).toString(),
+                kw_t_h: (parseInt(item.i_t_h) * 2).toString(),
+                kw_t_l: (parseInt(item.i_t_l) * 2).toString(),
+                kw_t_ll: (parseInt(item.i_t_ll) * 2).toString()
             }));
 
             // Common table configuration
@@ -808,12 +808,15 @@
             powerTable = $('#powerTable').DataTable({
                 ...tableConfig,
                 data: powerData,
-                columns: createColumns('p')
+                columns: createColumns('kw')
             });
 
 
 
             console.log('All Alarm Settings Tables loaded successfully');
+            console.log('Current data:', currentData.length, 'items');
+            console.log('Voltage data:', voltageData.length, 'items');
+            console.log('Power data:', powerData.length, 'items');
             $('#dataCount').text(`총 ${currentData.length}건`);
 
             // Event handlers for filter controls
@@ -872,7 +875,7 @@
                     $('#modalTTitle').text('V_T');
                 } else if (activeTabId === 'power-tab') {
                     currentTable = $('#powerTable').DataTable();
-                    currentPrefix = 'p';
+                    currentPrefix = 'kw';
                     $('#modalTabType').text('전력량');
                     $('#modalRTitle').text('KW_R');
                     $('#modalSTitle').text('KW_S');
