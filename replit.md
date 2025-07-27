@@ -154,3 +154,20 @@ The architecture prioritizes modularity and separation of concerns, making it ea
 - **Search Button Sizing**: Adjusted alarm threshold setting page search button to match other pages (col-2 width)
 - **Menu Cleanup**: Removed fault level settings menu and page (alarmLevelConfig.html) from all pages as requested
 - **Responsive Design Fix**: Fixed browser zoom issues (150%+) by converting fixed pixel widths to percentage-based responsive columns and adding media queries for optimal scaling
+- **Filter Area Responsive Design**: Implemented comprehensive responsive design for alarm threshold page filter area with proper Bootstrap grid classes
+
+### User Management Page Overhaul (2025-07-27)
+- **Statistics Cards Removal**: Removed top statistics cards section for cleaner interface
+- **Title Update**: Changed "관리자 목록" to "사용자 목록" for consistent terminology
+- **Table Structure Simplification**: 
+  - Removed "상태" (status) and "직업" (job) columns 
+  - Changed "이메일" column to "비고" (notes/remarks) column
+  - Updated table headers to match new structure: 아이디, 이름, 권한, 비고, 가입일, 작업
+- **Modal Form Updates**: Updated registration and edit modals to use "비고" field instead of email
+- **Mock Data Implementation**: Added 5 sample users with realistic Korean names and roles
+- **CRUD Functionality**: Implemented complete Create, Read, Update, Delete operations with mock data
+  - Add new users with validation
+  - Edit existing user information and passwords
+  - Delete users with confirmation dialog
+  - Username duplicate checking
+- **Action Buttons**: Added edit/delete buttons in table for each user with proper styling

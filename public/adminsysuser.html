@@ -113,58 +113,12 @@
             </header>
 
             <div class="content-area">
-                <!-- Statistics Cards -->
-                <div class="row mb-4">
-                    <div class="col-md-3">
-                        <div class="modern-card">
-                            <div class="card-body-modern text-center">
-                                <div class="stat-icon mb-3">
-                                    <i class="fas fa-users text-gradient" style="font-size: 2.5rem;"></i>
-                                </div>
-                                <h3 class="mb-1" id="totalUsers">-</h3>
-                                <p class="text-muted mb-0">전체 사용자</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="modern-card">
-                            <div class="card-body-modern text-center">
-                                <div class="stat-icon mb-3">
-                                    <i class="fas fa-user-shield text-gradient" style="font-size: 2.5rem;"></i>
-                                </div>
-                                <h3 class="mb-1" id="activeAdmins">-</h3>
-                                <p class="text-muted mb-0">활성 관리자</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="modern-card">
-                            <div class="card-body-modern text-center">
-                                <div class="stat-icon mb-3">
-                                    <i class="fas fa-clock text-gradient" style="font-size: 2.5rem;"></i>
-                                </div>
-                                <h3 class="mb-1" id="lastLogin">-</h3>
-                                <p class="text-muted mb-0">최근 로그인</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="modern-card">
-                            <div class="card-body-modern text-center">
-                                <div class="stat-icon mb-3">
-                                    <i class="fas fa-security text-gradient" style="font-size: 2.5rem;"></i>
-                                </div>
-                                <h3 class="mb-1" id="securityLevel">높음</h3>
-                                <p class="text-muted mb-0">보안 수준</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
 
                 <!-- User Management Table -->
                 <div class="modern-card">
                     <div class="card-header-modern">
-                        <h3 class="card-title-modern">관리자 목록</h3>
+                        <h3 class="card-title-modern">사용자 목록</h3>
                         <button class="btn btn-primary-modern" data-bs-toggle="modal" data-bs-target="#registerModal">
                             <i class="fas fa-plus"></i>
                             계정 등록
@@ -178,9 +132,8 @@
                                         <th>아이디</th>
                                         <th>이름</th>
                                         <th>권한</th>
-                                        <th>이메일</th>
+                                        <th>비고</th>
                                         <th>가입일</th>
-                                        <th>상태</th>
                                         <th>작업</th>
                                     </tr>
                                 </thead>
@@ -252,8 +205,8 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label-modern">이메일</label>
-                                    <input type="email" id="newUserEmail" class="form-control form-control-modern" required>
+                                    <label class="form-label-modern">비고</label>
+                                    <input type="text" id="newUserNotes" class="form-control form-control-modern" placeholder="메모사항을 입력하세요">
                                 </div>
                             </div>
                         </div>
@@ -321,8 +274,8 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label-modern">이메일</label>
-                                            <input type="email" id="editUserEmail" class="form-control form-control-modern" required>
+                                            <label class="form-label-modern">비고</label>
+                                            <input type="text" id="editUserNotes" class="form-control form-control-modern" placeholder="메모사항을 입력하세요">
                                         </div>
                                     </div>
                                 </div>
@@ -372,45 +325,90 @@
         $(document).ready(function() {
             let usersTable;
             let currentEditingUser = null;
+            
+            // Mock data for users
+            const mockUsers = [
+                {
+                    id: 1,
+                    username: 'admin01',
+                    name: '김관리',
+                    role: '최고관리자',
+                    notes: '시스템 총괄 관리자',
+                    joinDate: '2024-01-15',
+                    lastLogin: '2025-07-27 14:30'
+                },
+                {
+                    id: 2,
+                    username: 'manager02',
+                    name: '이운영',
+                    role: '관리자',
+                    notes: 'DC 운영 담당',
+                    joinDate: '2024-03-20',
+                    lastLogin: '2025-07-27 13:15'
+                },
+                {
+                    id: 3,
+                    username: 'operator03',
+                    name: '박모니터',
+                    role: '운영자',
+                    notes: '모니터링 전담',
+                    joinDate: '2024-05-10',
+                    lastLogin: '2025-07-27 12:45'
+                },
+                {
+                    id: 4,
+                    username: 'tech04',
+                    name: '최기술',
+                    role: '관리자',
+                    notes: '기술 지원 담당',
+                    joinDate: '2024-07-01',
+                    lastLogin: '2025-07-26 18:20'
+                },
+                {
+                    id: 5,
+                    username: 'support05',
+                    name: '정지원',
+                    role: '운영자',
+                    notes: '고객 지원팀',
+                    joinDate: '2024-09-15',
+                    lastLogin: '2025-07-25 16:10'
+                }
+            ];
 
-            // Initialize DataTable
+            // Initialize DataTable with mock data
             usersTable = $('#usersTable').DataTable({
-                ...window.DataTableDefaults,
-                ajax: {
-                    url: '/api/users',
-                    dataSrc: ''
+                data: mockUsers,
+                pageLength: 10,
+                language: {
+                    lengthMenu: "_MENU_ 개씩 보기",
+                    info: "_START_ - _END_ / _TOTAL_ 건",
+                    search: "검색:",
+                    paginate: { next: "다음", previous: "이전" }
                 },
                 columns: [
-                    { data: 'username' },
-                    { data: 'name' },
-                    { data: 'role' },
-                    { data: 'email' },
+                    { data: 'username', title: '아이디' },
+                    { data: 'name', title: '이름' },
+                    { data: 'role', title: '권한' },
+                    { data: 'notes', title: '비고' },
                     { 
-                        data: 'joinDate',
+                        data: 'joinDate', 
+                        title: '가입일',
                         render: function(data) {
-                            return window.AdminUtils.formatDate(data);
+                            return new Date(data).toLocaleDateString('ko-KR');
                         }
                     },
                     {
                         data: null,
-                        render: function(data, type, row) {
-                            const isActive = Math.random() > 0.3; // Random status for demo
-                            return isActive 
-                                ? '<span class="status-badge status-active">활성</span>'
-                                : '<span class="status-badge status-inactive">비활성</span>';
-                        }
-                    },
-                    {
-                        data: null,
+                        title: '작업',
                         orderable: false,
                         render: function(data, type, row) {
                             return `
                                 <div class="btn-group" role="group">
-                                    <button type="button" class="btn btn-sm-modern btn-secondary-modern edit-user-btn" 
+                                    <button type="button" class="btn btn-sm btn-outline-primary edit-user-btn" 
                                             data-user='${JSON.stringify(row)}' title="수정">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <button type="button" class="btn btn-sm-modern btn-danger-modern delete-user-btn" 
+                                    <button type="button" class="btn btn-sm btn-outline-danger delete-user-btn" 
                                             data-id="${row.id}" title="삭제">
                                         <i class="fas fa-trash"></i>
                                     </button>
@@ -418,54 +416,63 @@
                             `;
                         }
                     }
-                ],
-                drawCallback: function() {
-                    updateStatistics();
-                }
+                ]
             });
 
-            // Update statistics
-            function updateStatistics() {
-                const data = usersTable.data();
-                $('#totalUsers').text(data.length);
-                $('#activeAdmins').text(data.length);
-                $('#lastLogin').text('오늘');
-            }
-
             // Register new user
-            $('#registerUserBtn').click(async function() {
+            $('#registerUserBtn').click(function() {
                 const formData = {
                     username: $('#newUserId').val(),
                     name: $('#newUserName').val(),
                     password: $('#newUserPassword').val(),
                     confirmPassword: $('#confirmPassword').val(),
                     role: $('#newUserRole').val(),
-                    email: $('#newUserEmail').val()
+                    notes: $('#newUserNotes').val()
                 };
 
-                // Validation
-                if (!validateUserForm(formData)) {
+                // Basic validation
+                if (!formData.username || formData.username.length < 4) {
+                    alert('아이디는 4자 이상이어야 합니다.');
                     return;
                 }
 
-                try {
-                    $(this).prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> 등록 중...');
-                    
-                    await window.AdminUtils.apiRequest('/users', {
-                        method: 'POST',
-                        body: JSON.stringify(formData)
-                    });
-
-                    window.ToastNotifications.success('새 사용자가 성공적으로 등록되었습니다.');
-                    $('#registerModal').modal('hide');
-                    $('#registerForm')[0].reset();
-                    usersTable.ajax.reload();
-                    
-                } catch (error) {
-                    window.ToastNotifications.error('사용자 등록에 실패했습니다.');
-                } finally {
-                    $(this).prop('disabled', false).html('<i class="fas fa-save"></i> 등록');
+                if (!formData.name) {
+                    alert('이름을 입력해주세요.');
+                    return;
                 }
+
+                if (formData.password !== formData.confirmPassword) {
+                    alert('비밀번호가 일치하지 않습니다.');
+                    return;
+                }
+
+                if (formData.password.length < 8) {
+                    alert('비밀번호는 8자 이상이어야 합니다.');
+                    return;
+                }
+
+                if (!formData.role) {
+                    alert('권한을 선택해주세요.');
+                    return;
+                }
+
+                // Add new user to mock data
+                const newUser = {
+                    id: mockUsers.length + 1,
+                    username: formData.username,
+                    name: formData.name,
+                    role: formData.role,
+                    notes: formData.notes || '',
+                    joinDate: new Date().toISOString().split('T')[0],
+                    lastLogin: '미접속'
+                };
+
+                mockUsers.push(newUser);
+                usersTable.clear().rows.add(mockUsers).draw();
+                
+                $('#registerModal').modal('hide');
+                $('#registerForm')[0].reset();
+                alert('새 사용자가 성공적으로 등록되었습니다.');
             });
 
             // Edit user
@@ -477,13 +484,13 @@
                 $('#editUserIdDisplay').val(userData.username);
                 $('#editUserName').val(userData.name);
                 $('#editUserRole').val(userData.role);
-                $('#editUserEmail').val(userData.email);
+                $('#editUserNotes').val(userData.notes);
                 
                 $('#editModal').modal('show');
             });
 
             // Save user changes
-            $('#saveChangesBtn').click(async function() {
+            $('#saveChangesBtn').click(function() {
                 if (!currentEditingUser) return;
 
                 const activeTab = $('.tab-pane.active').attr('id');
@@ -492,30 +499,24 @@
                     const formData = {
                         name: $('#editUserName').val(),
                         role: $('#editUserRole').val(),
-                        email: $('#editUserEmail').val()
+                        notes: $('#editUserNotes').val()
                     };
 
-                    if (!window.AdminUtils.isValidEmail(formData.email)) {
-                        window.ToastNotifications.warning('올바른 이메일 형식을 입력해주세요.');
+                    if (!formData.name) {
+                        alert('이름을 입력해주세요.');
                         return;
                     }
 
-                    try {
-                        $(this).prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> 저장 중...');
+                    // Update mock data
+                    const userIndex = mockUsers.findIndex(u => u.id === currentEditingUser.id);
+                    if (userIndex !== -1) {
+                        mockUsers[userIndex].name = formData.name;
+                        mockUsers[userIndex].role = formData.role;
+                        mockUsers[userIndex].notes = formData.notes;
                         
-                        await window.AdminUtils.apiRequest(`/users/${currentEditingUser.id}`, {
-                            method: 'PUT',
-                            body: JSON.stringify(formData)
-                        });
-
-                        window.ToastNotifications.success('사용자 정보가 성공적으로 수정되었습니다.');
+                        usersTable.clear().rows.add(mockUsers).draw();
                         $('#editModal').modal('hide');
-                        usersTable.ajax.reload();
-                        
-                    } catch (error) {
-                        window.ToastNotifications.error('사용자 정보 수정에 실패했습니다.');
-                    } finally {
-                        $(this).prop('disabled', false).html('<i class="fas fa-save"></i> 저장');
+                        alert('사용자 정보가 성공적으로 수정되었습니다.');
                     }
                     
                 } else if (activeTab === 'passwordTab') {
@@ -523,111 +524,53 @@
                     const confirmPassword = $('#confirmNewPassword').val();
 
                     if (newPassword !== confirmPassword) {
-                        window.ToastNotifications.warning('비밀번호가 일치하지 않습니다.');
+                        alert('비밀번호가 일치하지 않습니다.');
                         return;
                     }
 
                     if (newPassword.length < 8) {
-                        window.ToastNotifications.warning('비밀번호는 8자 이상이어야 합니다.');
+                        alert('비밀번호는 8자 이상이어야 합니다.');
                         return;
                     }
 
-                    try {
-                        $(this).prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> 저장 중...');
-                        
-                        await window.AdminUtils.apiRequest(`/users/${currentEditingUser.id}/password`, {
-                            method: 'PUT',
-                            body: JSON.stringify({ password: newPassword })
-                        });
-
-                        window.ToastNotifications.success('비밀번호가 성공적으로 변경되었습니다.');
-                        $('#editModal').modal('hide');
-                        $('#changePasswordForm')[0].reset();
-                        
-                    } catch (error) {
-                        window.ToastNotifications.error('비밀번호 변경에 실패했습니다.');
-                    } finally {
-                        $(this).prop('disabled', false).html('<i class="fas fa-save"></i> 저장');
-                    }
+                    $('#editModal').modal('hide');
+                    $('#changePasswordForm')[0].reset();
+                    alert('비밀번호가 성공적으로 변경되었습니다.');
                 }
             });
 
             // Delete user
-            $(document).on('click', '.delete-user-btn', async function() {
-                const userId = $(this).data('id');
+            $(document).on('click', '.delete-user-btn', function() {
+                const userId = parseInt($(this).data('id'));
                 
-                const confirmed = await window.AdminUtils.confirm(
-                    '정말로 이 사용자를 삭제하시겠습니까?\n삭제된 데이터는 복구할 수 없습니다.',
-                    '사용자 삭제'
-                );
-
-                if (confirmed) {
-                    try {
-                        await window.AdminUtils.apiRequest(`/users/${userId}`, {
-                            method: 'DELETE'
-                        });
-
-                        window.ToastNotifications.success('사용자가 성공적으로 삭제되었습니다.');
-                        usersTable.ajax.reload();
-                        
-                    } catch (error) {
-                        window.ToastNotifications.error('사용자 삭제에 실패했습니다.');
+                if (confirm('정말로 이 사용자를 삭제하시겠습니까?\n삭제된 데이터는 복구할 수 없습니다.')) {
+                    // Remove from mock data
+                    const userIndex = mockUsers.findIndex(u => u.id === userId);
+                    if (userIndex !== -1) {
+                        mockUsers.splice(userIndex, 1);
+                        usersTable.clear().rows.add(mockUsers).draw();
+                        alert('사용자가 성공적으로 삭제되었습니다.');
                     }
                 }
             });
 
             // ID duplicate check
-            $('#checkIdBtn').click(async function() {
+            $('#checkIdBtn').click(function() {
                 const userId = $('#newUserId').val();
                 if (!userId) {
-                    window.ToastNotifications.warning('아이디를 입력해주세요.');
+                    alert('아이디를 입력해주세요.');
                     return;
                 }
 
-                // Simple validation for demo
-                const isAvailable = !['admin', 'root', 'administrator'].includes(userId.toLowerCase());
+                // Check if username already exists in mock data
+                const isExisting = mockUsers.some(user => user.username.toLowerCase() === userId.toLowerCase());
                 
-                if (isAvailable) {
-                    window.ToastNotifications.success('사용 가능한 아이디입니다.');
+                if (isExisting) {
+                    alert('이미 사용 중인 아이디입니다.');
                 } else {
-                    window.ToastNotifications.warning('이미 사용 중인 아이디입니다.');
+                    alert('사용 가능한 아이디입니다.');
                 }
             });
-
-            // Form validation
-            function validateUserForm(data) {
-                if (!data.username || data.username.length < 4) {
-                    window.ToastNotifications.warning('아이디는 4자 이상이어야 합니다.');
-                    return false;
-                }
-
-                if (!data.name) {
-                    window.ToastNotifications.warning('이름을 입력해주세요.');
-                    return false;
-                }
-
-                if (data.password !== data.confirmPassword) {
-                    window.ToastNotifications.warning('비밀번호가 일치하지 않습니다.');
-                    return false;
-                }
-
-                if (data.password.length < 8) {
-                    window.ToastNotifications.warning('비밀번호는 8자 이상이어야 합니다.');
-                    return false;
-                }
-
-                if (!window.AdminUtils.isValidEmail(data.email)) {
-                    window.ToastNotifications.warning('올바른 이메일 형식을 입력해주세요.');
-                    return false;
-                }
-
-                if (!data.role) {
-                    window.ToastNotifications.warning('권한을 선택해주세요.');
-                    return false;
-                }
-
-                return true;
-            }
 
             // Reset forms when modals are hidden
             $('#registerModal').on('hidden.bs.modal', function() {
@@ -639,6 +582,11 @@
                 $('#changePasswordForm')[0].reset();
                 currentEditingUser = null;
                 $('.nav-link[data-bs-target="#userInfoTab"]').tab('show');
+            });
+
+            // Sidebar toggle
+            $('.sidebar-toggle').click(function() {
+                $('.sidebar').toggleClass('active');
             });
         });
     </script>
