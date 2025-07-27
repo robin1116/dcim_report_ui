@@ -824,61 +824,92 @@
                 const voltageColumns = createTableColumns('v');
                 const powerColumns = createTableColumns('kw');
 
-                // Function to completely clear and reinitialize table
-                function forceReinitializeTable(tableId, data, columns, tableType) {
-                    console.log(`Force reinitializing ${tableType} table...`);
-                    
-                    // Destroy existing DataTable if it exists
-                    if ($.fn.DataTable.isDataTable(tableId)) {
-                        $(tableId).DataTable().destroy();
-                        console.log(`Destroyed existing ${tableType} DataTable`);
+                // Initialize only current table on page load
+                tables.current = $('#currentTable').DataTable({
+                    data: currentData,
+                    columns: currentColumns,
+                    pageLength: 10,
+                    scrollX: true,
+                    destroy: true,
+                    ordering: true,
+                    searching: true,
+                    language: {
+                        lengthMenu: "_MENU_ 개씩 보기",
+                        info: "_START_ - _END_ / _TOTAL_ 건",
+                        paginate: { next: "다음", previous: "이전" }
                     }
-                    
-                    // Clear all table content and structure
-                    $(tableId).empty();
-                    
-                    // Wait a moment for cleanup
-                    setTimeout(() => {
-                        // Recreate basic table structure
-                        $(tableId).html('<thead></thead><tbody></tbody>');
-                        
-                        // Initialize new DataTable
-                        const table = $(tableId).DataTable({
-                            data: data,
-                            columns: columns,
-                            pageLength: 10,
-                            scrollX: true,
-                            destroy: true,
-                            ordering: true,
-                            searching: true,
-                            language: {
-                                lengthMenu: "_MENU_ 개씩 보기",
-                                info: "_START_ - _END_ / _TOTAL_ 건",
-                                paginate: { next: "다음", previous: "이전" }
-                            }
-                        });
-                        
-                        console.log(`${tableType} table recreated with ${data.length} rows`);
-                        
-                        // Store reference
-                        if (tableType === 'Current') tables.current = table;
-                        else if (tableType === 'Voltage') tables.voltage = table;
-                        else if (tableType === 'Power') tables.power = table;
-                        
-                    }, 100);
-                }
+                });
 
-                // Initialize current table immediately
-                forceReinitializeTable('#currentTable', currentData, currentColumns, 'Current');
-                
-                // Initialize voltage and power tables with delays to prevent conflicts
-                setTimeout(() => {
-                    forceReinitializeTable('#voltageTable', voltageData, voltageColumns, 'Voltage');
-                }, 200);
-                
-                setTimeout(() => {
-                    forceReinitializeTable('#powerTable', powerData, powerColumns, 'Power');
-                }, 400);
+                // Initialize tables only when tabs are clicked
+                let voltageTableInitialized = false;
+                let powerTableInitialized = false;
+
+                // Tab click handlers for lazy initialization
+                $('#voltage-tab').on('click', function() {
+                    if (!voltageTableInitialized) {
+                        console.log('Initializing voltage table...');
+                        
+                        // Destroy if exists
+                        if ($.fn.DataTable.isDataTable('#voltageTable')) {
+                            $('#voltageTable').DataTable().destroy();
+                        }
+                        
+                        // Clear and recreate
+                        $('#voltageTable').empty().html('<thead></thead><tbody></tbody>');
+                        
+                        setTimeout(() => {
+                            tables.voltage = $('#voltageTable').DataTable({
+                                data: voltageData,
+                                columns: voltageColumns,
+                                pageLength: 10,
+                                scrollX: true,
+                                destroy: true,
+                                ordering: true,
+                                searching: true,
+                                language: {
+                                    lengthMenu: "_MENU_ 개씩 보기",
+                                    info: "_START_ - _END_ / _TOTAL_ 건",
+                                    paginate: { next: "다음", previous: "이전" }
+                                }
+                            });
+                            voltageTableInitialized = true;
+                            console.log('Voltage table initialized successfully');
+                        }, 50);
+                    }
+                });
+
+                $('#power-tab').on('click', function() {
+                    if (!powerTableInitialized) {
+                        console.log('Initializing power table...');
+                        
+                        // Destroy if exists
+                        if ($.fn.DataTable.isDataTable('#powerTable')) {
+                            $('#powerTable').DataTable().destroy();
+                        }
+                        
+                        // Clear and recreate
+                        $('#powerTable').empty().html('<thead></thead><tbody></tbody>');
+                        
+                        setTimeout(() => {
+                            tables.power = $('#powerTable').DataTable({
+                                data: powerData,
+                                columns: powerColumns,
+                                pageLength: 10,
+                                scrollX: true,
+                                destroy: true,
+                                ordering: true,
+                                searching: true,
+                                language: {
+                                    lengthMenu: "_MENU_ 개씩 보기",
+                                    info: "_START_ - _END_ / _TOTAL_ 건",
+                                    paginate: { next: "다음", previous: "이전" }
+                                }
+                            });
+                            powerTableInitialized = true;
+                            console.log('Power table initialized successfully');
+                        }, 50);
+                    }
+                });
 
             } catch (error) {
                 console.error('Error initializing tables:', error);
