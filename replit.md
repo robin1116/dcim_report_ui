@@ -141,3 +141,8 @@ The architecture prioritizes modularity and separation of concerns, making it ea
 - **Enhanced CSS Architecture**: Expanded theme system with DCIM-specific design tokens and animations
 - **Font Standardization**: Applied Pretendard font across all project pages replacing Google Fonts (Inter/Poppins) for consistent Korean typography
 - **Table Hover Effects**: Fixed data shifting issue on mouse hover by removing transform effects and optimizing hover animations
+- **Menu Consistency**: Standardized "장애임계치 설정" menu naming across all pages for consistent navigation
+
+### Recent Bug Fixes (2025-07-27)
+- **Table Initialization**: Implemented lazy loading for voltage and power tables to resolve dual-header display issues
+- **Navigation Consistency**: Updated all sidebar menus to use "장애임계치 설정" instead of "장애 설정" for uniform naming
