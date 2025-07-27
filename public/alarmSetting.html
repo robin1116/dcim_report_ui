@@ -816,10 +816,8 @@
                     { title: 'I_T LL', data: 'i_t_ll', className: 'text-center', width: '70px' }
                 ];
 
-                // Destroy existing table if it exists
-                if ($.fn.DataTable.isDataTable('#currentTable')) {
-                    $('#currentTable').DataTable().destroy();
-                }
+                // Clear existing table HTML and recreate with single header
+                $('#currentTable').empty().html('<thead></thead><tbody></tbody>');
                 
                 tables.current = $('#currentTable').DataTable({
                     data: currentData,
@@ -888,10 +886,8 @@
                     { title: 'V_T LL', data: 'v_t_ll', className: 'text-center', width: '70px' }
                 ];
 
-                // Destroy existing table if it exists
-                if ($.fn.DataTable.isDataTable('#voltageTable')) {
-                    $('#voltageTable').DataTable().destroy();
-                }
+                // Clear existing table HTML and recreate with single header
+                $('#voltageTable').empty().html('<thead></thead><tbody></tbody>');
                 
                 tables.voltage = $('#voltageTable').DataTable({
                     data: voltageData,
@@ -960,10 +956,8 @@
                     { title: 'KW_T LL', data: 'kw_t_ll', className: 'text-center', width: '70px' }
                 ];
 
-                // Destroy existing table if it exists
-                if ($.fn.DataTable.isDataTable('#powerTable')) {
-                    $('#powerTable').DataTable().destroy();
-                }
+                // Clear existing table HTML and recreate with single header
+                $('#powerTable').empty().html('<thead></thead><tbody></tbody>');
                 
                 tables.power = $('#powerTable').DataTable({
                     data: powerData,
