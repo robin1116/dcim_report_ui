@@ -467,6 +467,133 @@
         </main>
     </div>
 
+    <!-- Threshold Edit Modal -->
+    <div class="modal fade" id="thresholdEditModal" tabindex="-1" aria-labelledby="thresholdEditModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 16px;">
+                <div class="modal-header border-0" style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%); border-radius: 16px 16px 0 0;">
+                    <h5 class="modal-title" id="thresholdEditModalLabel" style="color: #333; font-weight: 600;">
+                        <span id="modalTabType">전류</span> 임계치 설정
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="padding: 30px;">
+                    <!-- Device Info -->
+                    <div class="mb-4" style="background: rgba(139, 92, 246, 0.05); padding: 15px; border-radius: 12px; border: 1px solid rgba(139, 92, 246, 0.2);">
+                        <div class="row text-center">
+                            <div class="col-3">
+                                <strong>층: </strong><span id="modalFloor">1층</span>
+                            </div>
+                            <div class="col-3">
+                                <strong>DCU: </strong><span id="modalDcu">1</span>
+                            </div>
+                            <div class="col-3">
+                                <strong>BUSWAY: </strong><span id="modalBusway">2</span>
+                            </div>
+                            <div class="col-3">
+                                <strong>라인: </strong><span id="modalLine">a</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Threshold Settings -->
+                    <div class="row g-4">
+                        <!-- R Phase -->
+                        <div class="col-md-4">
+                            <div class="threshold-section" style="border: 2px solid #e2e8f0; border-radius: 12px; padding: 20px; background: rgba(255, 255, 255, 0.8);">
+                                <h6 class="text-center mb-3" style="font-weight: 600; color: #333;" id="modalRTitle">I_R</h6>
+                                <div class="mb-3 text-center">
+                                    <label class="form-label" style="font-weight: 500;">Enable</label>
+                                    <div class="form-check form-switch d-flex justify-content-center">
+                                        <input class="form-check-input" type="checkbox" id="modalREnabled" style="transform: scale(1.5);">
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" style="font-weight: 500;">HH</label>
+                                    <input type="number" class="form-control" id="modalRHH" style="border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 8px;">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" style="font-weight: 500;">H</label>
+                                    <input type="number" class="form-control" id="modalRH" style="border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 8px;">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" style="font-weight: 500;">L</label>
+                                    <input type="number" class="form-control" id="modalRL" style="border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 8px;">
+                                </div>
+                                <div class="mb-0">
+                                    <label class="form-label" style="font-weight: 500;">LL</label>
+                                    <input type="number" class="form-control" id="modalRLL" style="border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 8px;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- S Phase -->
+                        <div class="col-md-4">
+                            <div class="threshold-section" style="border: 2px solid #e2e8f0; border-radius: 12px; padding: 20px; background: rgba(255, 255, 255, 0.8);">
+                                <h6 class="text-center mb-3" style="font-weight: 600; color: #333;" id="modalSTitle">I_S</h6>
+                                <div class="mb-3 text-center">
+                                    <label class="form-label" style="font-weight: 500;">Enable</label>
+                                    <div class="form-check form-switch d-flex justify-content-center">
+                                        <input class="form-check-input" type="checkbox" id="modalSEnabled" style="transform: scale(1.5);">
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" style="font-weight: 500;">HH</label>
+                                    <input type="number" class="form-control" id="modalSHH" style="border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 8px;">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" style="font-weight: 500;">H</label>
+                                    <input type="number" class="form-control" id="modalSH" style="border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 8px;">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" style="font-weight: 500;">L</label>
+                                    <input type="number" class="form-control" id="modalSL" style="border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 8px;">
+                                </div>
+                                <div class="mb-0">
+                                    <label class="form-label" style="font-weight: 500;">LL</label>
+                                    <input type="number" class="form-control" id="modalSLL" style="border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 8px;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- T Phase -->
+                        <div class="col-md-4">
+                            <div class="threshold-section" style="border: 2px solid #e2e8f0; border-radius: 12px; padding: 20px; background: rgba(255, 255, 255, 0.8);">
+                                <h6 class="text-center mb-3" style="font-weight: 600; color: #333;" id="modalTTitle">I_T</h6>
+                                <div class="mb-3 text-center">
+                                    <label class="form-label" style="font-weight: 500;">Enable</label>
+                                    <div class="form-check form-switch d-flex justify-content-center">
+                                        <input class="form-check-input" type="checkbox" id="modalTEnabled" style="transform: scale(1.5);">
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" style="font-weight: 500;">HH</label>
+                                    <input type="number" class="form-control" id="modalTHH" style="border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 8px;">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" style="font-weight: 500;">H</label>
+                                    <input type="number" class="form-control" id="modalTH" style="border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 8px;">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" style="font-weight: 500;">L</label>
+                                    <input type="number" class="form-control" id="modalTL" style="border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 8px;">
+                                </div>
+                                <div class="mb-0">
+                                    <label class="form-label" style="font-weight: 500;">LL</label>
+                                    <input type="number" class="form-control" id="modalTLL" style="border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 8px;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0" style="padding: 20px 30px;">
+                    <button type="button" class="btn" data-bs-dismiss="modal" style="background: rgba(108, 117, 125, 0.8); border: 1px solid rgba(108, 117, 125, 0.3); color: #fff; border-radius: 8px; padding: 8px 24px; font-weight: 500;">취소</button>
+                    <button type="button" class="btn" id="saveThresholdBtn" style="background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%); border: none; color: white; border-radius: 8px; padding: 8px 24px; font-weight: 500;">수정</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Toast Container -->
     <div id="toast-container" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
 
@@ -590,8 +717,8 @@
                         data: '수정',
                         title: '수정',
                         className: 'text-center',
-                        render: function(data) {
-                            return '<button class="btn btn-sm btn-outline-primary" title="편집"><i class="fas fa-edit"></i></button>';
+                        render: function(data, type, row, meta) {
+                            return '<button class="btn btn-sm btn-outline-primary edit-threshold-btn" title="편집" data-row-index="' + meta.row + '"><i class="fas fa-edit"></i></button>';
                         }
                     },
                     { 
@@ -716,6 +843,124 @@
             $('#exportPDF').on('click', function() {
                 console.log('Export PDF clicked');
                 showToast('PDF 파일을 다운로드합니다', 'success');
+            });
+
+            // Modal functionality
+            let currentEditData = null;
+            let currentTable = null;
+            let currentPrefix = '';
+
+            // Handle edit button clicks for all tables
+            $(document).on('click', '.edit-threshold-btn', function() {
+                const rowIndex = parseInt($(this).data('row-index'));
+                const activeTabId = $('.nav-tabs .nav-link.active').attr('id');
+                
+                // Determine which table and prefix based on active tab
+                if (activeTabId === 'current-tab') {
+                    currentTable = $('#currentTable').DataTable();
+                    currentPrefix = 'i';
+                    $('#modalTabType').text('전류');
+                    $('#modalRTitle').text('I_R');
+                    $('#modalSTitle').text('I_S');
+                    $('#modalTTitle').text('I_T');
+                } else if (activeTabId === 'voltage-tab') {
+                    currentTable = $('#voltageTable').DataTable();
+                    currentPrefix = 'v';
+                    $('#modalTabType').text('전압');
+                    $('#modalRTitle').text('V_R');
+                    $('#modalSTitle').text('V_S');
+                    $('#modalTTitle').text('V_T');
+                } else if (activeTabId === 'power-tab') {
+                    currentTable = $('#powerTable').DataTable();
+                    currentPrefix = 'p';
+                    $('#modalTabType').text('전력량');
+                    $('#modalRTitle').text('KW_R');
+                    $('#modalSTitle').text('KW_S');
+                    $('#modalTTitle').text('KW_T');
+                }
+
+                // Get row data
+                currentEditData = currentTable.row(rowIndex).data();
+                
+                // Populate modal with data
+                populateModal(currentEditData, currentPrefix);
+                
+                // Show modal
+                $('#thresholdEditModal').modal('show');
+            });
+
+            function populateModal(data, prefix) {
+                // Set device info (mock data for now)
+                $('#modalFloor').text('1층');
+                $('#modalDcu').text('1');
+                $('#modalBusway').text(data.busway ? data.busway.replace('BW', '') : '1');
+                $('#modalLine').text(data.line ? data.line.replace('L', '') : 'a');
+
+                // Populate R phase data
+                $('#modalREnabled').prop('checked', data[`${prefix}_r_en`] === 'checked');
+                $('#modalRHH').val(data[`${prefix}_r_hh`] || '');
+                $('#modalRH').val(data[`${prefix}_r_h`] || '');
+                $('#modalRL').val(data[`${prefix}_r_l`] || '');
+                $('#modalRLL').val(data[`${prefix}_r_ll`] || '');
+
+                // Populate S phase data
+                $('#modalSEnabled').prop('checked', data[`${prefix}_s_en`] === 'checked');
+                $('#modalSHH').val(data[`${prefix}_s_hh`] || '');
+                $('#modalSH').val(data[`${prefix}_s_h`] || '');
+                $('#modalSL').val(data[`${prefix}_s_l`] || '');
+                $('#modalSLL').val(data[`${prefix}_s_ll`] || '');
+
+                // Populate T phase data
+                $('#modalTEnabled').prop('checked', data[`${prefix}_t_en`] === 'checked');
+                $('#modalTHH').val(data[`${prefix}_t_hh`] || '');
+                $('#modalTH').val(data[`${prefix}_t_h`] || '');
+                $('#modalTL').val(data[`${prefix}_t_l`] || '');
+                $('#modalTLL').val(data[`${prefix}_t_ll`] || '');
+            }
+
+            // Handle save button
+            $('#saveThresholdBtn').on('click', function() {
+                if (!currentEditData || !currentTable) return;
+
+                // Update data object
+                currentEditData[`${currentPrefix}_r_en`] = $('#modalREnabled').prop('checked') ? 'checked' : 'unchecked';
+                currentEditData[`${currentPrefix}_r_hh`] = $('#modalRHH').val();
+                currentEditData[`${currentPrefix}_r_h`] = $('#modalRH').val();
+                currentEditData[`${currentPrefix}_r_l`] = $('#modalRL').val();
+                currentEditData[`${currentPrefix}_r_ll`] = $('#modalRLL').val();
+
+                currentEditData[`${currentPrefix}_s_en`] = $('#modalSEnabled').prop('checked') ? 'checked' : 'unchecked';
+                currentEditData[`${currentPrefix}_s_hh`] = $('#modalSHH').val();
+                currentEditData[`${currentPrefix}_s_h`] = $('#modalSH').val();
+                currentEditData[`${currentPrefix}_s_l`] = $('#modalSL').val();
+                currentEditData[`${currentPrefix}_s_ll`] = $('#modalSLL').val();
+
+                currentEditData[`${currentPrefix}_t_en`] = $('#modalTEnabled').prop('checked') ? 'checked' : 'unchecked';
+                currentEditData[`${currentPrefix}_t_hh`] = $('#modalTHH').val();
+                currentEditData[`${currentPrefix}_t_h`] = $('#modalTH').val();
+                currentEditData[`${currentPrefix}_t_l`] = $('#modalTL').val();
+                currentEditData[`${currentPrefix}_t_ll`] = $('#modalTLL').val();
+
+                // Redraw table to reflect changes
+                currentTable.draw();
+                
+                // Close modal
+                $('#thresholdEditModal').modal('hide');
+                
+                // Show success message
+                showToast('임계치 설정이 저장되었습니다', 'success');
+                
+                // Reset variables
+                currentEditData = null;
+                currentTable = null;
+                currentPrefix = '';
+            });
+
+            // Reset modal variables when modal is hidden
+            $('#thresholdEditModal').on('hidden.bs.modal', function() {
+                currentEditData = null;
+                currentTable = null;
+                currentPrefix = '';
             });
 
         });
