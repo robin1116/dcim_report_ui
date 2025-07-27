@@ -757,7 +757,13 @@
                 
                 // Simple columns for testing
                 const simpleColumns = [
-                    { title: '수정', data: null, defaultContent: '<button class="btn btn-sm btn-outline-primary edit-threshold-btn"><i class="fas fa-edit"></i></button>', orderable: false },
+                    { 
+                        title: '수정', 
+                        data: null, 
+                        defaultContent: '<button class="btn btn-sm btn-outline-primary edit-threshold-btn" type="button"><i class="fas fa-edit"></i></button>', 
+                        orderable: false,
+                        className: 'text-center'
+                    },
                     { title: 'BUSWAY', data: 'busway' },
                     { title: 'LINE', data: 'line' },
                     { title: 'I_R EN', data: 'i_r_en' },
@@ -781,7 +787,13 @@
 
                 // Simple voltage columns
                 const voltageColumns = [
-                    { title: '수정', data: null, defaultContent: '<button class="btn btn-sm btn-outline-primary edit-threshold-btn"><i class="fas fa-edit"></i></button>', orderable: false },
+                    { 
+                        title: '수정', 
+                        data: null, 
+                        defaultContent: '<button class="btn btn-sm btn-outline-primary edit-threshold-btn" type="button"><i class="fas fa-edit"></i></button>', 
+                        orderable: false,
+                        className: 'text-center'
+                    },
                     { title: 'BUSWAY', data: 'busway' },
                     { title: 'LINE', data: 'line' },
                     { title: 'V_R EN', data: 'v_r_en' },
@@ -805,7 +817,13 @@
 
                 // Simple power columns  
                 const powerColumns = [
-                    { title: '수정', data: null, defaultContent: '<button class="btn btn-sm btn-outline-primary edit-threshold-btn"><i class="fas fa-edit"></i></button>', orderable: false },
+                    { 
+                        title: '수정', 
+                        data: null, 
+                        defaultContent: '<button class="btn btn-sm btn-outline-primary edit-threshold-btn" type="button"><i class="fas fa-edit"></i></button>', 
+                        orderable: false,
+                        className: 'text-center'
+                    },
                     { title: 'BUSWAY', data: 'busway' },
                     { title: 'LINE', data: 'line' },
                     { title: 'KW_R EN', data: 'kw_r_en' },
@@ -893,8 +911,10 @@
 
             // Handle edit button clicks for all tables
             $(document).on('click', '.edit-threshold-btn', function() {
-                const rowIndex = parseInt($(this).data('row-index'));
+                console.log('Edit button clicked');
+                const $row = $(this).closest('tr');
                 const activeTabId = $('.nav-tabs .nav-link.active').attr('id');
+                console.log('Active tab:', activeTabId);
                 
                 // Determine which table and prefix based on active tab
                 if (activeTabId === 'current-tab') {
@@ -920,22 +940,41 @@
                     $('#modalTTitle').text('KW_T');
                 }
 
-                // Get row data
-                currentEditData = activeTable.row(rowIndex).data();
+                // Get row data from the table
+                currentEditData = activeTable.row($row).data();
+                console.log('Row data:', currentEditData);
+                
+                // Check if we have valid data and table
+                if (!currentEditData) {
+                    console.error('No row data found');
+                    return;
+                }
+                
+                if (!activeTable) {
+                    console.error('No active table found');
+                    return;
+                }
+                
+                console.log('Populating modal with prefix:', currentPrefix);
                 
                 // Populate modal with data
                 populateModal(currentEditData, currentPrefix);
                 
                 // Show modal
+                console.log('Showing modal...');
                 $('#thresholdEditModal').modal('show');
             });
 
             function populateModal(data, prefix) {
+                console.log('populateModal called with:', { data, prefix });
+                
                 // Set device info (mock data for now)
                 $('#modalFloor').text('1층');
                 $('#modalDcu').text('1');
                 $('#modalBusway').text(data.busway ? data.busway.replace('BW', '') : '1');
                 $('#modalLine').text(data.line ? data.line.replace('L', '') : 'a');
+                
+                console.log('Device info set');
 
                 // Populate R phase data
                 $('#modalREnabled').prop('checked', data[`${prefix}_r_en`] === 'checked');
