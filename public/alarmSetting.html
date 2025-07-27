@@ -318,26 +318,28 @@
                     <!-- 첫 번째 행: 드롭다운 선택 -->
                     <div class="row g-2 mb-3">
                         <div class="col-3">
+                            <select class="form-select form-select-light" id="floorFilter" style="border-radius: 25px; background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(139, 92, 246, 0.3); color: #666;">
+                                <option value="all">전체층</option>
+                                <option value="1f">1층</option>
+                                <option value="2f">2층</option>
+                                <option value="3f">3층</option>
+                                <option value="4f">4층</option>
+                                <option value="5f">5층</option>
+                            </select>
+                        </div>
+                        <div class="col-3">
+                            <select class="form-select form-select-light" id="dcuFilter" style="border-radius: 25px; background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(139, 92, 246, 0.3); color: #666;">
+                                <option value="all">전체 DCU</option>
+                                <option value="dcu1">DCU-001</option>
+                                <option value="dcu2">DCU-002</option>
+                                <option value="dcu3">DCU-003</option>
+                            </select>
+                        </div>
+                        <div class="col-3">
                             <select class="form-select form-select-light" id="measureTypeFilter" style="border-radius: 25px; background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(139, 92, 246, 0.3); color: #666;">
                                 <option value="voltage">전압</option>
                                 <option value="current">전류</option>
                                 <option value="power">전력량</option>
-                            </select>
-                        </div>
-                        <div class="col-3">
-                            <select class="form-select form-select-light" id="buswayFilter" style="border-radius: 25px; background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(139, 92, 246, 0.3); color: #666;">
-                                <option value="all">전체 BUSWAY</option>
-                                <option value="busway1">BUSWAY-A</option>
-                                <option value="busway2">BUSWAY-B</option>
-                                <option value="busway3">BUSWAY-C</option>
-                            </select>
-                        </div>
-                        <div class="col-3">
-                            <select class="form-select form-select-light" id="lineFilter" style="border-radius: 25px; background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(139, 92, 246, 0.3); color: #666;">
-                                <option value="all">전체 라인</option>
-                                <option value="line1">Line-1</option>
-                                <option value="line2">Line-2</option>
-                                <option value="line3">Line-3</option>
                             </select>
                         </div>
                         <div class="col-3">
@@ -511,7 +513,7 @@
                 columns: [
                     { 
                         data: '수정',
-                        title: '수정',
+                        title: '',
                         className: 'text-center',
                         render: function(data) {
                             return '<button class="btn btn-sm btn-outline-primary" title="편집"><i class="fas fa-edit"></i></button>';
@@ -605,7 +607,7 @@
                 showToast('알람 설정 조회 완료', 'success');
             });
 
-            $('#measureTypeFilter, #buswayFilter, #lineFilter').on('change', function() {
+            $('#floorFilter, #dcuFilter, #measureTypeFilter').on('change', function() {
                 console.log('Filter changed:', $(this).val());
                 // Apply filters here if needed
             });
@@ -613,9 +615,9 @@
             // Action button handlers
             $('#resetFilter').on('click', function() {
                 console.log('Reset filter clicked');
+                $('#floorFilter').val('all');
+                $('#dcuFilter').val('all');
                 $('#measureTypeFilter').val('voltage');
-                $('#buswayFilter').val('all');
-                $('#lineFilter').val('all');
                 showToast('필터가 초기화되었습니다', 'info');
             });
 
