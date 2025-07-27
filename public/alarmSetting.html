@@ -314,38 +314,35 @@
 
             <div class="content-area">
                 <!-- Filter Controls -->
-                <div class="d-flex align-items-center gap-3 mb-4" style="background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(10px); border-radius: 12px; padding: 16px 24px; border: 1px solid rgba(255, 255, 255, 0.12);">
-                    <div class="d-flex align-items-center gap-2">
-                        <select class="form-select" id="totalFilter" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #ffffff; min-width: 120px; border-radius: 8px;">
-                            <option value="all" style="background: #1a1a2e; color: #ffffff;">전체층</option>
-                            <option value="1f" style="background: #1a1a2e; color: #ffffff;">1층</option>
-                            <option value="2f" style="background: #1a1a2e; color: #ffffff;">2층</option>
-                            <option value="3f" style="background: #1a1a2e; color: #ffffff;">3층</option>
-                            <option value="4f" style="background: #1a1a2e; color: #ffffff;">4층</option>
-                            <option value="5f" style="background: #1a1a2e; color: #ffffff;">5층</option>
-                        </select>
-                    </div>
-                    <div class="d-flex align-items-center gap-2">
-                        <select class="form-select" id="dcuFilter" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #ffffff; min-width: 120px; border-radius: 8px;">
-                            <option value="all" style="background: #1a1a2e; color: #ffffff;">전체 DCU</option>
-                            <option value="dcu1" style="background: #1a1a2e; color: #ffffff;">DCU-001</option>
-                            <option value="dcu2" style="background: #1a1a2e; color: #ffffff;">DCU-002</option>
-                            <option value="dcu3" style="background: #1a1a2e; color: #ffffff;">DCU-003</option>
-                        </select>
-                    </div>
-                    <button class="btn" id="searchAlarmData" style="background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%); border: none; font-weight: 600; border-radius: 8px; color: white; padding: 8px 20px; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);">
-                        <i class="fas fa-search me-1"></i> 조회
-                    </button>
-                    <div class="ms-auto d-flex gap-2">
-                        <button class="btn btn-outline-light" style="border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.3);">
-                            <i class="fas fa-download me-1"></i>
-                        </button>
-                        <button class="btn btn-outline-light" style="border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.3);">
-                            <i class="fas fa-upload me-1"></i>
-                        </button>
-                        <button class="btn btn-outline-light" style="border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.3);">
-                            <i class="fas fa-print me-1"></i>
-                        </button>
+                <div class="modern-card mb-4">
+                    <div class="card-body-modern">
+                        <div class="row g-3 align-items-end">
+                            <div class="col-auto">
+                                <label for="totalFilter" class="form-label text-muted">전체층</label>
+                                <select class="form-select form-select-light" id="totalFilter" style="border-radius: 25px; background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(139, 92, 246, 0.3); color: #666;">
+                                    <option value="all">전체층</option>
+                                    <option value="1f">1층</option>
+                                    <option value="2f">2층</option>
+                                    <option value="3f">3층</option>
+                                    <option value="4f">4층</option>
+                                    <option value="5f">5층</option>
+                                </select>
+                            </div>
+                            <div class="col-auto">
+                                <label for="dcuFilter" class="form-label text-muted">전체 DCU</label>
+                                <select class="form-select form-select-light" id="dcuFilter" style="border-radius: 25px; background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(139, 92, 246, 0.3); color: #666;">
+                                    <option value="all">전체 DCU</option>
+                                    <option value="dcu1">DCU-001</option>
+                                    <option value="dcu2">DCU-002</option>
+                                    <option value="dcu3">DCU-003</option>
+                                </select>
+                            </div>
+                            <div class="col-auto">
+                                <button class="btn btn-primary" id="searchAlarmData" style="background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%); border: none; border-radius: 25px; padding: 10px 25px; font-weight: 600; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);">
+                                    <i class="fas fa-search me-1"></i> 조회
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -355,6 +352,15 @@
                         <h3 class="card-title-modern">장애 설정</h3>
                         <div class="d-flex gap-2">
                             <span class="badge bg-success" id="dataCount">설정 가능한 항목들</span>
+                            <button class="btn btn-outline-light btn-sm" id="resetTable" title="초기화">
+                                <i class="fas fa-undo"></i>
+                            </button>
+                            <button class="btn btn-outline-success btn-sm" id="exportExcel" title="엑셀 다운로드">
+                                <i class="fas fa-file-excel"></i>
+                            </button>
+                            <button class="btn btn-outline-danger btn-sm" id="exportPDF" title="PDF 다운로드">
+                                <i class="fas fa-file-pdf"></i>
+                            </button>
                         </div>
                     </div>
                     
@@ -616,6 +622,22 @@
             $('#totalFilter, #dcuFilter').on('change', function() {
                 console.log('Filter changed:', $(this).val());
                 // Apply filters here if needed
+            });
+
+            // Action button handlers
+            $('#resetTable').on('click', function() {
+                console.log('Reset table clicked');
+                showToast('테이블이 초기화되었습니다', 'info');
+            });
+
+            $('#exportExcel').on('click', function() {
+                console.log('Export Excel clicked');
+                showToast('엑셀 파일을 다운로드합니다', 'success');
+            });
+
+            $('#exportPDF').on('click', function() {
+                console.log('Export PDF clicked');
+                showToast('PDF 파일을 다운로드합니다', 'success');
             });
 
         });
