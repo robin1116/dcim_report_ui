@@ -1064,15 +1064,15 @@ body {
 .fault-icon-modern i {
     font-size: 24px;
     color: white;
-    width: 32px !important;
+    width: 24px !important;
     height: 24px !important;
     display: flex !important;
     align-items: center;
     justify-content: center;
     text-align: center;
     line-height: 24px;
-    min-width: 32px !important;
-    max-width: 32px !important;
+    min-width: 24px !important;
+    max-width: 24px !important;
 }
 
 .fault-details {
@@ -1116,12 +1116,12 @@ body {
     
     .fault-icon-modern i {
         font-size: 20px;
-        width: 26px !important;
+        width: 20px !important;
         height: 20px !important;
         text-align: center;
         line-height: 20px;
-        min-width: 26px !important;
-        max-width: 26px !important;
+        min-width: 20px !important;
+        max-width: 20px !important;
     }
     
     .fault-number {
