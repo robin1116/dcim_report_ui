@@ -577,7 +577,12 @@
 
     <script>
         $(document).ready(function() {
-            let currentTable, voltageTable, powerTable;
+            // Initialize global variables
+            var tables = {
+                current: null,
+                voltage: null,
+                power: null
+            };
             
             // Current threshold data (전류)
             const currentData = [
@@ -762,7 +767,7 @@
                     { title: 'I_R LL', data: 'i_r_ll' }
                 ];
 
-                currentTable = $('#currentTable').DataTable({
+                tables.current = $('#currentTable').DataTable({
                     data: currentData,
                     columns: simpleColumns,
                     pageLength: 10,
@@ -786,7 +791,7 @@
                     { title: 'V_R LL', data: 'v_r_ll' }
                 ];
 
-                voltageTable = $('#voltageTable').DataTable({
+                tables.voltage = $('#voltageTable').DataTable({
                     data: voltageData,
                     columns: voltageColumns,
                     pageLength: 10,
@@ -810,7 +815,7 @@
                     { title: 'KW_R LL', data: 'kw_r_ll' }
                 ];
 
-                powerTable = $('#powerTable').DataTable({
+                tables.power = $('#powerTable').DataTable({
                     data: powerData,
                     columns: powerColumns,
                     pageLength: 10,
@@ -838,16 +843,16 @@
             
             // Force refresh tables after initialization
             setTimeout(function() {
-                if (currentTable) {
-                    currentTable.clear().rows.add(currentData).draw();
+                if (tables.current) {
+                    tables.current.clear().rows.add(currentData).draw();
                     console.log('Current table refreshed');
                 }
-                if (voltageTable) {
-                    voltageTable.clear().rows.add(voltageData).draw();
+                if (tables.voltage) {
+                    tables.voltage.clear().rows.add(voltageData).draw();
                     console.log('Voltage table refreshed');
                 }
-                if (powerTable) {
-                    powerTable.clear().rows.add(powerData).draw();
+                if (tables.power) {
+                    tables.power.clear().rows.add(powerData).draw();
                     console.log('Power table refreshed');
                 }
             }, 500);
@@ -883,7 +888,7 @@
 
             // Modal functionality
             let currentEditData = null;
-            let currentTable = null;
+            let activeTable = null;
             let currentPrefix = '';
 
             // Handle edit button clicks for all tables
@@ -893,21 +898,21 @@
                 
                 // Determine which table and prefix based on active tab
                 if (activeTabId === 'current-tab') {
-                    currentTable = $('#currentTable').DataTable();
+                    activeTable = tables.current;
                     currentPrefix = 'i';
                     $('#modalTabType').text('전류');
                     $('#modalRTitle').text('I_R');
                     $('#modalSTitle').text('I_S');
                     $('#modalTTitle').text('I_T');
                 } else if (activeTabId === 'voltage-tab') {
-                    currentTable = $('#voltageTable').DataTable();
+                    activeTable = tables.voltage;
                     currentPrefix = 'v';
                     $('#modalTabType').text('전압');
                     $('#modalRTitle').text('V_R');
                     $('#modalSTitle').text('V_S');
                     $('#modalTTitle').text('V_T');
                 } else if (activeTabId === 'power-tab') {
-                    currentTable = $('#powerTable').DataTable();
+                    activeTable = tables.power;
                     currentPrefix = 'kw';
                     $('#modalTabType').text('전력량');
                     $('#modalRTitle').text('KW_R');
@@ -916,7 +921,7 @@
                 }
 
                 // Get row data
-                currentEditData = currentTable.row(rowIndex).data();
+                currentEditData = activeTable.row(rowIndex).data();
                 
                 // Populate modal with data
                 populateModal(currentEditData, currentPrefix);
@@ -956,7 +961,7 @@
 
             // Handle save button
             $('#saveThresholdBtn').on('click', function() {
-                if (!currentEditData || !currentTable) return;
+                if (!currentEditData || !activeTable) return;
 
                 // Update data object
                 currentEditData[`${currentPrefix}_r_en`] = $('#modalREnabled').prop('checked') ? 'checked' : 'unchecked';
@@ -978,7 +983,7 @@
                 currentEditData[`${currentPrefix}_t_ll`] = $('#modalTLL').val();
 
                 // Redraw table to reflect changes
-                currentTable.draw();
+                activeTable.draw();
                 
                 // Close modal
                 $('#thresholdEditModal').modal('hide');
@@ -988,14 +993,14 @@
                 
                 // Reset variables
                 currentEditData = null;
-                currentTable = null;
+                activeTable = null;
                 currentPrefix = '';
             });
 
             // Reset modal variables when modal is hidden
             $('#thresholdEditModal').on('hidden.bs.modal', function() {
                 currentEditData = null;
-                currentTable = null;
+                activeTable = null;
                 currentPrefix = '';
             });
 
