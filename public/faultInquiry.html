@@ -186,6 +186,22 @@
             background: rgba(255, 255, 255, 0.15);
             outline: none;
         }
+
+        /* Fault Level Badge Uniform Width */
+        .fault-level-badge {
+            min-width: 60px !important;
+            max-width: 60px !important;
+            width: 60px !important;
+            display: inline-block !important;
+            text-align: center !important;
+            padding: 6px 8px !important;
+            font-size: 12px !important;
+            font-weight: 600 !important;
+            border-radius: 20px !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+        }
     </style>
 </head>
 <body>
@@ -707,7 +723,7 @@
                             else if (data === 'H') badgeClass = 'bg-warning';
                             else if (data === '정상') badgeClass = 'bg-success';
                             else if (data === '비정상') badgeClass = 'bg-danger';
-                            return `<span class="badge ${badgeClass}">${data}</span>`;
+                            return `<span class="badge ${badgeClass} fault-level-badge">${data}</span>`;
                         }
                     },
                     { 
