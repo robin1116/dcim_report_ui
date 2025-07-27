@@ -759,219 +759,101 @@
                 ];
             }
 
-            // Initialize tables with complete column sets
+            // Initialize tables with unified single-header structure
             try {
-                console.log('Initializing tables with full column sets...');
+                console.log('Creating unified single-header tables...');
                 
-                // Current table columns with icon rendering
-                const currentColumns = [
-                    { 
-                        title: '수정', 
-                        data: null, 
-                        defaultContent: '<button class="btn btn-sm btn-outline-primary edit-threshold-btn" type="button"><i class="fas fa-edit"></i></button>', 
-                        orderable: false,
-                        className: 'text-center',
-                        width: '60px'
-                    },
-                    { title: 'BUSWAY', data: 'busway', className: 'text-center', width: '80px' },
-                    { title: 'LINE', data: 'line', className: 'text-center', width: '60px' },
-                    { 
-                        title: 'I_R EN', 
-                        data: 'i_r_en', 
-                        className: 'text-center', 
-                        width: '70px',
-                        render: function(data) {
-                            return data === 'checked' ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-times-circle text-danger"></i>';
-                        }
-                    },
-                    { title: 'I_R HH', data: 'i_r_hh', className: 'text-center', width: '70px' },
-                    { title: 'I_R H', data: 'i_r_h', className: 'text-center', width: '70px' },
-                    { title: 'I_R L', data: 'i_r_l', className: 'text-center', width: '70px' },
-                    { title: 'I_R LL', data: 'i_r_ll', className: 'text-center', width: '70px' },
-                    { 
-                        title: 'I_S EN', 
-                        data: 'i_s_en', 
-                        className: 'text-center', 
-                        width: '70px',
-                        render: function(data) {
-                            return data === 'checked' ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-times-circle text-danger"></i>';
-                        }
-                    },
-                    { title: 'I_S HH', data: 'i_s_hh', className: 'text-center', width: '70px' },
-                    { title: 'I_S H', data: 'i_s_h', className: 'text-center', width: '70px' },
-                    { title: 'I_S L', data: 'i_s_l', className: 'text-center', width: '70px' },
-                    { title: 'I_S LL', data: 'i_s_ll', className: 'text-center', width: '70px' },
-                    { 
-                        title: 'I_T EN', 
-                        data: 'i_t_en', 
-                        className: 'text-center', 
-                        width: '70px',
-                        render: function(data) {
-                            return data === 'checked' ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-times-circle text-danger"></i>';
-                        }
-                    },
-                    { title: 'I_T HH', data: 'i_t_hh', className: 'text-center', width: '70px' },
-                    { title: 'I_T H', data: 'i_t_h', className: 'text-center', width: '70px' },
-                    { title: 'I_T L', data: 'i_t_l', className: 'text-center', width: '70px' },
-                    { title: 'I_T LL', data: 'i_t_ll', className: 'text-center', width: '70px' }
-                ];
+                // Unified column definition function to ensure consistency
+                function createTableColumns(prefix) {
+                    return [
+                        { 
+                            title: '수정', 
+                            data: null, 
+                            defaultContent: '<button class="btn btn-sm btn-outline-primary edit-threshold-btn" type="button"><i class="fas fa-edit"></i></button>', 
+                            orderable: false,
+                            className: 'text-center',
+                            width: '60px'
+                        },
+                        { title: 'BUSWAY', data: 'busway', className: 'text-center', width: '80px' },
+                        { title: 'LINE', data: 'line', className: 'text-center', width: '60px' },
+                        { 
+                            title: prefix.toUpperCase() + '_R EN', 
+                            data: prefix + '_r_en', 
+                            className: 'text-center', 
+                            width: '80px',
+                            render: function(data) {
+                                return data === 'checked' ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-times-circle text-danger"></i>';
+                            }
+                        },
+                        { title: prefix.toUpperCase() + '_R HH', data: prefix + '_r_hh', className: 'text-center', width: '80px' },
+                        { title: prefix.toUpperCase() + '_R H', data: prefix + '_r_h', className: 'text-center', width: '80px' },
+                        { title: prefix.toUpperCase() + '_R L', data: prefix + '_r_l', className: 'text-center', width: '80px' },
+                        { title: prefix.toUpperCase() + '_R LL', data: prefix + '_r_ll', className: 'text-center', width: '80px' },
+                        { 
+                            title: prefix.toUpperCase() + '_S EN', 
+                            data: prefix + '_s_en', 
+                            className: 'text-center', 
+                            width: '80px',
+                            render: function(data) {
+                                return data === 'checked' ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-times-circle text-danger"></i>';
+                            }
+                        },
+                        { title: prefix.toUpperCase() + '_S HH', data: prefix + '_s_hh', className: 'text-center', width: '80px' },
+                        { title: prefix.toUpperCase() + '_S H', data: prefix + '_s_h', className: 'text-center', width: '80px' },
+                        { title: prefix.toUpperCase() + '_S L', data: prefix + '_s_l', className: 'text-center', width: '80px' },
+                        { title: prefix.toUpperCase() + '_S LL', data: prefix + '_s_ll', className: 'text-center', width: '80px' },
+                        { 
+                            title: prefix.toUpperCase() + '_T EN', 
+                            data: prefix + '_t_en', 
+                            className: 'text-center', 
+                            width: '80px',
+                            render: function(data) {
+                                return data === 'checked' ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-times-circle text-danger"></i>';
+                            }
+                        },
+                        { title: prefix.toUpperCase() + '_T HH', data: prefix + '_t_hh', className: 'text-center', width: '80px' },
+                        { title: prefix.toUpperCase() + '_T H', data: prefix + '_t_h', className: 'text-center', width: '80px' },
+                        { title: prefix.toUpperCase() + '_T L', data: prefix + '_t_l', className: 'text-center', width: '80px' },
+                        { title: prefix.toUpperCase() + '_T LL', data: prefix + '_t_ll', className: 'text-center', width: '80px' }
+                    ];
+                }
 
-                // Clear existing table HTML and recreate with single header
-                $('#currentTable').empty().html('<thead></thead><tbody></tbody>');
-                
-                tables.current = $('#currentTable').DataTable({
-                    data: currentData,
-                    columns: currentColumns,
-                    pageLength: 10,
-                    scrollX: true,
-                    destroy: true,
-                    language: {
-                        lengthMenu: "_MENU_ 개씩 보기",
-                        info: "_START_ - _END_ / _TOTAL_ 건",
-                        paginate: { next: "다음", previous: "이전" }
-                    }
-                });
-                console.log('Current table created with', currentData.length, 'rows');
+                // Create columns for each table
+                const currentColumns = createTableColumns('i');
+                const voltageColumns = createTableColumns('v');
+                const powerColumns = createTableColumns('kw');
 
-                // Voltage table columns with icon rendering
-                const voltageColumns = [
-                    { 
-                        title: '수정', 
-                        data: null, 
-                        defaultContent: '<button class="btn btn-sm btn-outline-primary edit-threshold-btn" type="button"><i class="fas fa-edit"></i></button>', 
-                        orderable: false,
-                        className: 'text-center',
-                        width: '60px'
-                    },
-                    { title: 'BUSWAY', data: 'busway', className: 'text-center', width: '80px' },
-                    { title: 'LINE', data: 'line', className: 'text-center', width: '60px' },
-                    { 
-                        title: 'V_R EN', 
-                        data: 'v_r_en', 
-                        className: 'text-center', 
-                        width: '70px',
-                        render: function(data) {
-                            return data === 'checked' ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-times-circle text-danger"></i>';
+                // Function to initialize a table with clean structure
+                function initializeTable(tableId, data, columns, tableType) {
+                    console.log(`Initializing ${tableType} table...`);
+                    
+                    // Completely destroy and recreate table element
+                    const $container = $(tableId).parent();
+                    $(tableId).remove();
+                    $container.append(`<table id="${tableId.substring(1)}" class="table table-modern table-compact" style="width:100%;"><thead></thead><tbody></tbody></table>`);
+                    
+                    // Initialize DataTable
+                    const table = $(tableId).DataTable({
+                        data: data,
+                        columns: columns,
+                        pageLength: 10,
+                        scrollX: true,
+                        destroy: true,
+                        language: {
+                            lengthMenu: "_MENU_ 개씩 보기",
+                            info: "_START_ - _END_ / _TOTAL_ 건",
+                            paginate: { next: "다음", previous: "이전" }
                         }
-                    },
-                    { title: 'V_R HH', data: 'v_r_hh', className: 'text-center', width: '70px' },
-                    { title: 'V_R H', data: 'v_r_h', className: 'text-center', width: '70px' },
-                    { title: 'V_R L', data: 'v_r_l', className: 'text-center', width: '70px' },
-                    { title: 'V_R LL', data: 'v_r_ll', className: 'text-center', width: '70px' },
-                    { 
-                        title: 'V_S EN', 
-                        data: 'v_s_en', 
-                        className: 'text-center', 
-                        width: '70px',
-                        render: function(data) {
-                            return data === 'checked' ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-times-circle text-danger"></i>';
-                        }
-                    },
-                    { title: 'V_S HH', data: 'v_s_hh', className: 'text-center', width: '70px' },
-                    { title: 'V_S H', data: 'v_s_h', className: 'text-center', width: '70px' },
-                    { title: 'V_S L', data: 'v_s_l', className: 'text-center', width: '70px' },
-                    { title: 'V_S LL', data: 'v_s_ll', className: 'text-center', width: '70px' },
-                    { 
-                        title: 'V_T EN', 
-                        data: 'v_t_en', 
-                        className: 'text-center', 
-                        width: '70px',
-                        render: function(data) {
-                            return data === 'checked' ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-times-circle text-danger"></i>';
-                        }
-                    },
-                    { title: 'V_T HH', data: 'v_t_hh', className: 'text-center', width: '70px' },
-                    { title: 'V_T H', data: 'v_t_h', className: 'text-center', width: '70px' },
-                    { title: 'V_T L', data: 'v_t_l', className: 'text-center', width: '70px' },
-                    { title: 'V_T LL', data: 'v_t_ll', className: 'text-center', width: '70px' }
-                ];
+                    });
+                    
+                    console.log(`${tableType} table created with ${data.length} rows`);
+                    return table;
+                }
 
-                // Clear existing table HTML and recreate with single header
-                $('#voltageTable').empty().html('<thead></thead><tbody></tbody>');
-                
-                tables.voltage = $('#voltageTable').DataTable({
-                    data: voltageData,
-                    columns: voltageColumns,
-                    pageLength: 10,
-                    scrollX: true,
-                    destroy: true,
-                    language: {
-                        lengthMenu: "_MENU_ 개씩 보기",
-                        info: "_START_ - _END_ / _TOTAL_ 건",
-                        paginate: { next: "다음", previous: "이전" }
-                    }
-                });
-                console.log('Voltage table created with', voltageData.length, 'rows');
-
-                // Power table columns with icon rendering
-                const powerColumns = [
-                    { 
-                        title: '수정', 
-                        data: null, 
-                        defaultContent: '<button class="btn btn-sm btn-outline-primary edit-threshold-btn" type="button"><i class="fas fa-edit"></i></button>', 
-                        orderable: false,
-                        className: 'text-center',
-                        width: '60px'
-                    },
-                    { title: 'BUSWAY', data: 'busway', className: 'text-center', width: '80px' },
-                    { title: 'LINE', data: 'line', className: 'text-center', width: '60px' },
-                    { 
-                        title: 'KW_R EN', 
-                        data: 'kw_r_en', 
-                        className: 'text-center', 
-                        width: '70px',
-                        render: function(data) {
-                            return data === 'checked' ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-times-circle text-danger"></i>';
-                        }
-                    },
-                    { title: 'KW_R HH', data: 'kw_r_hh', className: 'text-center', width: '70px' },
-                    { title: 'KW_R H', data: 'kw_r_h', className: 'text-center', width: '70px' },
-                    { title: 'KW_R L', data: 'kw_r_l', className: 'text-center', width: '70px' },
-                    { title: 'KW_R LL', data: 'kw_r_ll', className: 'text-center', width: '70px' },
-                    { 
-                        title: 'KW_S EN', 
-                        data: 'kw_s_en', 
-                        className: 'text-center', 
-                        width: '70px',
-                        render: function(data) {
-                            return data === 'checked' ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-times-circle text-danger"></i>';
-                        }
-                    },
-                    { title: 'KW_S HH', data: 'kw_s_hh', className: 'text-center', width: '70px' },
-                    { title: 'KW_S H', data: 'kw_s_h', className: 'text-center', width: '70px' },
-                    { title: 'KW_S L', data: 'kw_s_l', className: 'text-center', width: '70px' },
-                    { title: 'KW_S LL', data: 'kw_s_ll', className: 'text-center', width: '70px' },
-                    { 
-                        title: 'KW_T EN', 
-                        data: 'kw_t_en', 
-                        className: 'text-center', 
-                        width: '70px',
-                        render: function(data) {
-                            return data === 'checked' ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-times-circle text-danger"></i>';
-                        }
-                    },
-                    { title: 'KW_T HH', data: 'kw_t_hh', className: 'text-center', width: '70px' },
-                    { title: 'KW_T H', data: 'kw_t_h', className: 'text-center', width: '70px' },
-                    { title: 'KW_T L', data: 'kw_t_l', className: 'text-center', width: '70px' },
-                    { title: 'KW_T LL', data: 'kw_t_ll', className: 'text-center', width: '70px' }
-                ];
-
-                // Clear existing table HTML and recreate with single header
-                $('#powerTable').empty().html('<thead></thead><tbody></tbody>');
-                
-                tables.power = $('#powerTable').DataTable({
-                    data: powerData,
-                    columns: powerColumns,
-                    pageLength: 10,
-                    scrollX: true,
-                    destroy: true,
-                    language: {
-                        lengthMenu: "_MENU_ 개씩 보기",
-                        info: "_START_ - _END_ / _TOTAL_ 건",
-                        paginate: { next: "다음", previous: "이전" }
-                    }
-                });
-                console.log('Power table created with', powerData.length, 'rows');
+                // Initialize all tables
+                tables.current = initializeTable('#currentTable', currentData, currentColumns, 'Current');
+                tables.voltage = initializeTable('#voltageTable', voltageData, voltageColumns, 'Voltage');
+                tables.power = initializeTable('#powerTable', powerData, powerColumns, 'Power');
 
             } catch (error) {
                 console.error('Error initializing tables:', error);
