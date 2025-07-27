@@ -401,18 +401,6 @@
                                 <div class="table-container" style="overflow-x: auto;">
                                     <table id="currentTable" class="table table-modern table-compact" style="width:100%;">
                                         <thead>
-                                            <!-- Column Search Filters -->
-                                            <tr class="column-filters">
-                                                <th></th>
-                                                <th>
-                                                    <input type="text" class="form-control form-control-sm column-search-current" data-column="1" placeholder="busway" style="font-size: 12px;">
-                                                </th>
-                                                <th>
-                                                    <input type="text" class="form-control form-control-sm column-search-current" data-column="2" placeholder="line" style="font-size: 12px;">
-                                                </th>
-                                                <th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th>
-                                            </tr>
-                                            <!-- Main Headers -->
                                             <tr>
                                                 <th rowspan="2" class="text-center" style="vertical-align: middle;"></th>
                                                 <th rowspan="2" class="text-center" style="vertical-align: middle;">busway</th>
@@ -437,18 +425,6 @@
                                 <div class="table-container" style="overflow-x: auto;">
                                     <table id="voltageTable" class="table table-modern table-compact" style="width:100%;">
                                         <thead>
-                                            <!-- Column Search Filters -->
-                                            <tr class="column-filters">
-                                                <th></th>
-                                                <th>
-                                                    <input type="text" class="form-control form-control-sm column-search-voltage" data-column="1" placeholder="busway" style="font-size: 12px;">
-                                                </th>
-                                                <th>
-                                                    <input type="text" class="form-control form-control-sm column-search-voltage" data-column="2" placeholder="line" style="font-size: 12px;">
-                                                </th>
-                                                <th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th>
-                                            </tr>
-                                            <!-- Main Headers -->
                                             <tr>
                                                 <th rowspan="2" class="text-center" style="vertical-align: middle;"></th>
                                                 <th rowspan="2" class="text-center" style="vertical-align: middle;">busway</th>
@@ -473,18 +449,6 @@
                                 <div class="table-container" style="overflow-x: auto;">
                                     <table id="powerTable" class="table table-modern table-compact" style="width:100%;">
                                         <thead>
-                                            <!-- Column Search Filters -->
-                                            <tr class="column-filters">
-                                                <th></th>
-                                                <th>
-                                                    <input type="text" class="form-control form-control-sm column-search-power" data-column="1" placeholder="busway" style="font-size: 12px;">
-                                                </th>
-                                                <th>
-                                                    <input type="text" class="form-control form-control-sm column-search-power" data-column="2" placeholder="line" style="font-size: 12px;">
-                                                </th>
-                                                <th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th>
-                                            </tr>
-                                            <!-- Main Headers -->
                                             <tr>
                                                 <th rowspan="2" class="text-center" style="vertical-align: middle;"></th>
                                                 <th rowspan="2" class="text-center" style="vertical-align: middle;">busway</th>
@@ -727,24 +691,7 @@
                 columns: createColumns('p')
             });
 
-            // Add column search functionality for each table
-            $('.column-search-current').on('keyup change clear', function() {
-                const columnIndex = $(this).data('column');
-                const searchTerm = this.value;
-                currentTable.column(columnIndex).search(searchTerm).draw();
-            });
 
-            $('.column-search-voltage').on('keyup change clear', function() {
-                const columnIndex = $(this).data('column');
-                const searchTerm = this.value;
-                voltageTable.column(columnIndex).search(searchTerm).draw();
-            });
-
-            $('.column-search-power').on('keyup change clear', function() {
-                const columnIndex = $(this).data('column');
-                const searchTerm = this.value;
-                powerTable.column(columnIndex).search(searchTerm).draw();
-            });
 
             console.log('All Alarm Settings Tables loaded successfully');
             $('#dataCount').text(`총 ${currentData.length}건`);
