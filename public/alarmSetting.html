@@ -670,36 +670,34 @@
 
             // Common column configuration function
             function createColumns(prefix) {
+                let phaseLabel = '';
+                if (prefix === 'i') phaseLabel = 'I';
+                else if (prefix === 'v') phaseLabel = 'V';
+                else if (prefix === 'kw') phaseLabel = 'KW';
+
                 return [
                     { 
-                        data: '수정',
+                        data: null,
                         title: '수정',
                         className: 'text-center',
+                        orderable: false,
                         render: function(data, type, row, meta) {
                             return '<button class="btn btn-sm btn-outline-primary edit-threshold-btn" title="편집" data-row-index="' + meta.row + '"><i class="fas fa-edit"></i></button>';
                         }
                     },
                     { 
                         data: 'busway',
-                        title: 'busway',
-                        className: 'text-center',
-                        render: function(data) {
-                            if (data === null || data === undefined) return '';
-                            return `<span class="data-value">${data}</span>`;
-                        }
+                        title: 'BUSWAY',
+                        className: 'text-center'
                     },
                     { 
                         data: 'line',
-                        title: 'line',
-                        className: 'text-center',
-                        render: function(data) {
-                            if (data === null || data === undefined) return '';
-                            return `<span class="data-value">${data}</span>`;
-                        }
+                        title: 'LINE',
+                        className: 'text-center'
                     },
                     { 
                         data: `${prefix}_r_en`, 
-                        title: 'en', 
+                        title: `${phaseLabel}_R EN`, 
                         className: 'text-center',
                         render: function(data) {
                             if (data === 'checked') {
@@ -709,13 +707,13 @@
                             }
                         }
                     },
-                    { data: `${prefix}_r_hh`, title: 'HH', className: 'text-center' },
-                    { data: `${prefix}_r_h`, title: 'H', className: 'text-center' },
-                    { data: `${prefix}_r_l`, title: 'L', className: 'text-center' },
-                    { data: `${prefix}_r_ll`, title: 'LL', className: 'text-center' },
+                    { data: `${prefix}_r_hh`, title: `${phaseLabel}_R HH`, className: 'text-center' },
+                    { data: `${prefix}_r_h`, title: `${phaseLabel}_R H`, className: 'text-center' },
+                    { data: `${prefix}_r_l`, title: `${phaseLabel}_R L`, className: 'text-center' },
+                    { data: `${prefix}_r_ll`, title: `${phaseLabel}_R LL`, className: 'text-center' },
                     { 
                         data: `${prefix}_s_en`, 
-                        title: 'en', 
+                        title: `${phaseLabel}_S EN`, 
                         className: 'text-center',
                         render: function(data) {
                             if (data === 'checked') {
@@ -725,13 +723,13 @@
                             }
                         }
                     },
-                    { data: `${prefix}_s_hh`, title: 'HH', className: 'text-center' },
-                    { data: `${prefix}_s_h`, title: 'H', className: 'text-center' },
-                    { data: `${prefix}_s_l`, title: 'L', className: 'text-center' },
-                    { data: `${prefix}_s_ll`, title: 'LL', className: 'text-center' },
+                    { data: `${prefix}_s_hh`, title: `${phaseLabel}_S HH`, className: 'text-center' },
+                    { data: `${prefix}_s_h`, title: `${phaseLabel}_S H`, className: 'text-center' },
+                    { data: `${prefix}_s_l`, title: `${phaseLabel}_S L`, className: 'text-center' },
+                    { data: `${prefix}_s_ll`, title: `${phaseLabel}_S LL`, className: 'text-center' },
                     { 
                         data: `${prefix}_t_en`, 
-                        title: 'en', 
+                        title: `${phaseLabel}_T EN`, 
                         className: 'text-center',
                         render: function(data) {
                             if (data === 'checked') {
@@ -741,10 +739,10 @@
                             }
                         }
                     },
-                    { data: `${prefix}_t_hh`, title: 'HH', className: 'text-center' },
-                    { data: `${prefix}_t_h`, title: 'H', className: 'text-center' },
-                    { data: `${prefix}_t_l`, title: 'L', className: 'text-center' },
-                    { data: `${prefix}_t_ll`, title: 'LL', className: 'text-center' }
+                    { data: `${prefix}_t_hh`, title: `${phaseLabel}_T HH`, className: 'text-center' },
+                    { data: `${prefix}_t_h`, title: `${phaseLabel}_T H`, className: 'text-center' },
+                    { data: `${prefix}_t_l`, title: `${phaseLabel}_T L`, className: 'text-center' },
+                    { data: `${prefix}_t_ll`, title: `${phaseLabel}_T LL`, className: 'text-center' }
                 ];
             }
 
