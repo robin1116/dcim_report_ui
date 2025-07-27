@@ -1228,3 +1228,81 @@ body {
         transform: translateY(0);
     }
 }
+
+/* Enhanced responsive table styling for browser zoom */
+.table-container {
+    position: relative;
+    width: 100%;
+    min-width: 0;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Responsive table adjustments for different zoom levels and viewport sizes */
+@media (max-width: 1400px) {
+    .table-container {
+        font-size: 0.9rem;
+    }
+    
+    .dataTables_wrapper .dataTables_length select,
+    .dataTables_wrapper .dataTables_filter input {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 1200px) {
+    .table-container {
+        font-size: 0.85rem;
+    }
+    
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.8rem;
+    }
+    
+    .table th,
+    .table td {
+        padding: 0.5rem 0.25rem;
+    }
+}
+
+/* High zoom level adjustments (150%+ zoom equivalent) */
+@media (max-width: 900px) {
+    .table-container {
+        font-size: 0.8rem;
+    }
+    
+    .table th,
+    .table td {
+        padding: 0.4rem 0.2rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 80px;
+    }
+    
+    .btn-sm {
+        padding: 0.2rem 0.4rem;
+        font-size: 0.75rem;
+    }
+    
+    .fas {
+        font-size: 0.8rem;
+    }
+}
+
+/* DataTable specific responsive adjustments */
+.dataTables_wrapper {
+    overflow-x: auto;
+}
+
+.dataTables_scrollHead,
+.dataTables_scrollBody {
+    overflow-x: auto !important;
+}
+
+/* Ensure proper table scaling on zoom */
+.table-responsive .table {
+    margin-bottom: 0;
+    min-width: max-content;
+}

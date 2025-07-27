@@ -366,8 +366,8 @@
                         <div class="tab-content" id="alarmTabContent">
                             <!-- Current Tab Pane -->
                             <div class="tab-pane fade show active" id="current-pane" role="tabpanel" aria-labelledby="current-tab">
-                                <div class="table-container" style="overflow-x: auto;">
-                                    <table id="currentTable" class="table table-modern table-compact" style="width:100%;">
+                                <div class="table-container" style="overflow-x: auto; min-width: 0; width: 100%;">
+                                    <table id="currentTable" class="table table-modern table-compact" style="width: 100%; min-width: 1200px;">
                                         <thead></thead>
                                         <tbody></tbody>
                                     </table>
@@ -376,8 +376,8 @@
 
                             <!-- Voltage Tab Pane -->
                             <div class="tab-pane fade" id="voltage-pane" role="tabpanel" aria-labelledby="voltage-tab">
-                                <div class="table-container" style="overflow-x: auto;">
-                                    <table id="voltageTable" class="table table-modern table-compact" style="width:100%;">
+                                <div class="table-container" style="overflow-x: auto; min-width: 0; width: 100%;">
+                                    <table id="voltageTable" class="table table-modern table-compact" style="width: 100%; min-width: 1200px;">
                                         <thead></thead>
                                         <tbody></tbody>
                                     </table>
@@ -386,8 +386,8 @@
 
                             <!-- Power Tab Pane -->
                             <div class="tab-pane fade" id="power-pane" role="tabpanel" aria-labelledby="power-tab">
-                                <div class="table-container" style="overflow-x: auto;">
-                                    <table id="powerTable" class="table table-modern table-compact" style="width:100%;">
+                                <div class="table-container" style="overflow-x: auto; min-width: 0; width: 100%;">
+                                    <table id="powerTable" class="table table-modern table-compact" style="width: 100%; min-width: 1200px;">
                                         <thead></thead>
                                         <tbody></tbody>
                                     </table>
@@ -747,49 +747,49 @@
                             defaultContent: '<button class="btn btn-sm btn-outline-primary edit-threshold-btn" type="button"><i class="fas fa-edit"></i></button>', 
                             orderable: false,
                             className: 'text-center',
-                            width: '50px'
+                            width: '5%'
                         },
-                        { title: 'BUSWAY', data: 'busway', className: 'text-center', width: '70px' },
-                        { title: 'LINE', data: 'line', className: 'text-center', width: '50px' },
+                        { title: 'BUSWAY', data: 'busway', className: 'text-center', width: '8%' },
+                        { title: 'LINE', data: 'line', className: 'text-center', width: '6%' },
                         { 
                             title: upperPrefix + '_R EN', 
                             data: prefix + '_r_en', 
                             className: 'text-center', 
-                            width: '60px',
+                            width: '6%',
                             render: function(data) {
                                 return data === 'checked' ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-times-circle text-danger"></i>';
                             }
                         },
-                        { title: upperPrefix + '_R HH', data: prefix + '_r_hh', className: 'text-center', width: '60px' },
-                        { title: upperPrefix + '_R H', data: prefix + '_r_h', className: 'text-center', width: '60px' },
-                        { title: upperPrefix + '_R L', data: prefix + '_r_l', className: 'text-center', width: '60px' },
-                        { title: upperPrefix + '_R LL', data: prefix + '_r_ll', className: 'text-center', width: '60px' },
+                        { title: upperPrefix + '_R HH', data: prefix + '_r_hh', className: 'text-center', width: '6%' },
+                        { title: upperPrefix + '_R H', data: prefix + '_r_h', className: 'text-center', width: '6%' },
+                        { title: upperPrefix + '_R L', data: prefix + '_r_l', className: 'text-center', width: '6%' },
+                        { title: upperPrefix + '_R LL', data: prefix + '_r_ll', className: 'text-center', width: '6%' },
                         { 
                             title: upperPrefix + '_S EN', 
                             data: prefix + '_s_en', 
                             className: 'text-center', 
-                            width: '60px',
+                            width: '6%',
                             render: function(data) {
                                 return data === 'checked' ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-times-circle text-danger"></i>';
                             }
                         },
-                        { title: upperPrefix + '_S HH', data: prefix + '_s_hh', className: 'text-center', width: '60px' },
-                        { title: upperPrefix + '_S H', data: prefix + '_s_h', className: 'text-center', width: '60px' },
-                        { title: upperPrefix + '_S L', data: prefix + '_s_l', className: 'text-center', width: '60px' },
-                        { title: upperPrefix + '_S LL', data: prefix + '_s_ll', className: 'text-center', width: '60px' },
+                        { title: upperPrefix + '_S HH', data: prefix + '_s_hh', className: 'text-center', width: '6%' },
+                        { title: upperPrefix + '_S H', data: prefix + '_s_h', className: 'text-center', width: '6%' },
+                        { title: upperPrefix + '_S L', data: prefix + '_s_l', className: 'text-center', width: '6%' },
+                        { title: upperPrefix + '_S LL', data: prefix + '_s_ll', className: 'text-center', width: '6%' },
                         { 
                             title: upperPrefix + '_T EN', 
                             data: prefix + '_t_en', 
                             className: 'text-center', 
-                            width: '60px',
+                            width: '6%',
                             render: function(data) {
                                 return data === 'checked' ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-times-circle text-danger"></i>';
                             }
                         },
-                        { title: upperPrefix + '_T HH', data: prefix + '_t_hh', className: 'text-center', width: '60px' },
-                        { title: upperPrefix + '_T H', data: prefix + '_t_h', className: 'text-center', width: '60px' },
-                        { title: upperPrefix + '_T L', data: prefix + '_t_l', className: 'text-center', width: '60px' },
-                        { title: upperPrefix + '_T LL', data: prefix + '_t_ll', className: 'text-center', width: '60px' }
+                        { title: upperPrefix + '_T HH', data: prefix + '_t_hh', className: 'text-center', width: '6%' },
+                        { title: upperPrefix + '_T H', data: prefix + '_t_h', className: 'text-center', width: '6%' },
+                        { title: upperPrefix + '_T L', data: prefix + '_t_l', className: 'text-center', width: '6%' },
+                        { title: upperPrefix + '_T LL', data: prefix + '_t_ll', className: 'text-center', width: '6%' }
                     ];
                 }
 
@@ -804,9 +804,12 @@
                     columns: currentColumns,
                     pageLength: 10,
                     scrollX: true,
+                    scrollCollapse: true,
+                    responsive: true,
                     destroy: true,
                     ordering: true,
                     searching: true,
+                    autoWidth: false,
                     language: {
                         lengthMenu: "_MENU_ 개씩 보기",
                         info: "_START_ - _END_ / _TOTAL_ 건",
@@ -837,9 +840,12 @@
                                 columns: voltageColumns,
                                 pageLength: 10,
                                 scrollX: true,
+                                scrollCollapse: true,
+                                responsive: true,
                                 destroy: true,
                                 ordering: true,
                                 searching: true,
+                                autoWidth: false,
                                 language: {
                                     lengthMenu: "_MENU_ 개씩 보기",
                                     info: "_START_ - _END_ / _TOTAL_ 건",
@@ -870,9 +876,12 @@
                                 columns: powerColumns,
                                 pageLength: 10,
                                 scrollX: true,
+                                scrollCollapse: true,
+                                responsive: true,
                                 destroy: true,
                                 ordering: true,
                                 searching: true,
+                                autoWidth: false,
                                 language: {
                                     lengthMenu: "_MENU_ 개씩 보기",
                                     info: "_START_ - _END_ / _TOTAL_ 건",

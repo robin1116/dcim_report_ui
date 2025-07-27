@@ -153,3 +153,4 @@ The architecture prioritizes modularity and separation of concerns, making it ea
   - Simplified sidebar headers by removing logo SVG elements
 - **Search Button Sizing**: Adjusted alarm threshold setting page search button to match other pages (col-2 width)
 - **Menu Cleanup**: Removed fault level settings menu and page (alarmLevelConfig.html) from all pages as requested
+- **Responsive Design Fix**: Fixed browser zoom issues (150%+) by converting fixed pixel widths to percentage-based responsive columns and adding media queries for optimal scaling
