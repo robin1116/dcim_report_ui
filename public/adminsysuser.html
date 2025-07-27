@@ -129,12 +129,12 @@
                             <table id="usersTable" class="table table-modern" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th>아이디</th>
-                                        <th>이름</th>
-                                        <th>권한</th>
-                                        <th>비고</th>
-                                        <th>가입일</th>
-                                        <th>작업</th>
+                                        <th style="text-align: center;">아이디</th>
+                                        <th style="text-align: center;">이름</th>
+                                        <th style="text-align: center;">권한</th>
+                                        <th style="text-align: center;">비고</th>
+                                        <th style="text-align: center;">가입일</th>
+                                        <th style="text-align: center;">작업</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -384,13 +384,30 @@
                     paginate: { next: "다음", previous: "이전" }
                 },
                 columns: [
-                    { data: 'username', title: '아이디' },
-                    { data: 'name', title: '이름' },
-                    { data: 'role', title: '권한' },
-                    { data: 'notes', title: '비고' },
+                    { 
+                        data: 'username', 
+                        title: '아이디',
+                        className: 'text-center'
+                    },
+                    { 
+                        data: 'name', 
+                        title: '이름',
+                        className: 'text-center'
+                    },
+                    { 
+                        data: 'role', 
+                        title: '권한',
+                        className: 'text-center'
+                    },
+                    { 
+                        data: 'notes', 
+                        title: '비고',
+                        className: 'text-center'
+                    },
                     { 
                         data: 'joinDate', 
                         title: '가입일',
+                        className: 'text-center',
                         render: function(data) {
                             return new Date(data).toLocaleDateString('ko-KR');
                         }
@@ -398,6 +415,7 @@
                     {
                         data: null,
                         title: '작업',
+                        className: 'text-center',
                         orderable: false,
                         render: function(data, type, row) {
                             return `
