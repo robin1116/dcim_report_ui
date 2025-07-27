@@ -746,102 +746,111 @@
                 ];
             }
 
-            // Initialize tables with error handling
+            // Simplified table initialization
             try {
-                console.log('Initializing Current Table with data:', currentData.length, 'items');
+                console.log('Initializing tables...');
+                
+                // Simple columns for testing
+                const simpleColumns = [
+                    { title: '수정', data: null, defaultContent: '<button class="btn btn-sm btn-outline-primary edit-threshold-btn"><i class="fas fa-edit"></i></button>', orderable: false },
+                    { title: 'BUSWAY', data: 'busway' },
+                    { title: 'LINE', data: 'line' },
+                    { title: 'I_R EN', data: 'i_r_en' },
+                    { title: 'I_R HH', data: 'i_r_hh' },
+                    { title: 'I_R H', data: 'i_r_h' },
+                    { title: 'I_R L', data: 'i_r_l' },
+                    { title: 'I_R LL', data: 'i_r_ll' }
+                ];
+
                 currentTable = $('#currentTable').DataTable({
-                    processing: true,
-                    serverSide: false,
-                    responsive: true,
-                    dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6">><"row"<"col-sm-12"tr>><"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
-                    language: {
-                        processing: "처리중...",
-                        search: "검색:",
-                        lengthMenu: "_MENU_ 개씩 보기",
-                        info: "_START_ - _END_ / _TOTAL_ 건",
-                        infoEmpty: "0건",
-                        infoFiltered: "(전체 _MAX_ 건 중 검색결과)",
-                        paginate: {
-                            first: "처음",
-                            last: "마지막", 
-                            next: "다음",
-                            previous: "이전"
-                        }
-                    },
-                    order: [[1, 'asc']],
-                    pageLength: 10,
-                    lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
                     data: currentData,
-                    columns: createColumns('i')
+                    columns: simpleColumns,
+                    pageLength: 10,
+                    language: {
+                        lengthMenu: "_MENU_ 개씩 보기",
+                        info: "_START_ - _END_ / _TOTAL_ 건",
+                        paginate: { next: "다음", previous: "이전" }
+                    }
                 });
-                console.log('Current table initialized successfully');
+                console.log('Current table created with', currentData.length, 'rows');
 
-                console.log('Initializing Voltage Table with data:', voltageData.length, 'items');
+                // Simple voltage columns
+                const voltageColumns = [
+                    { title: '수정', data: null, defaultContent: '<button class="btn btn-sm btn-outline-primary edit-threshold-btn"><i class="fas fa-edit"></i></button>', orderable: false },
+                    { title: 'BUSWAY', data: 'busway' },
+                    { title: 'LINE', data: 'line' },
+                    { title: 'V_R EN', data: 'v_r_en' },
+                    { title: 'V_R HH', data: 'v_r_hh' },
+                    { title: 'V_R H', data: 'v_r_h' },
+                    { title: 'V_R L', data: 'v_r_l' },
+                    { title: 'V_R LL', data: 'v_r_ll' }
+                ];
+
                 voltageTable = $('#voltageTable').DataTable({
-                    processing: true,
-                    serverSide: false,
-                    responsive: true,
-                    dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6">><"row"<"col-sm-12"tr>><"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
-                    language: {
-                        processing: "처리중...",
-                        search: "검색:",
-                        lengthMenu: "_MENU_ 개씩 보기",
-                        info: "_START_ - _END_ / _TOTAL_ 건",
-                        infoEmpty: "0건",
-                        infoFiltered: "(전체 _MAX_ 건 중 검색결과)",
-                        paginate: {
-                            first: "처음",
-                            last: "마지막", 
-                            next: "다음",
-                            previous: "이전"
-                        }
-                    },
-                    order: [[1, 'asc']],
-                    pageLength: 10,
-                    lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
                     data: voltageData,
-                    columns: createColumns('v')
-                });
-                console.log('Voltage table initialized successfully');
-
-                console.log('Initializing Power Table with data:', powerData.length, 'items');
-                powerTable = $('#powerTable').DataTable({
-                    processing: true,
-                    serverSide: false,
-                    responsive: true,
-                    dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6">><"row"<"col-sm-12"tr>><"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+                    columns: voltageColumns,
+                    pageLength: 10,
                     language: {
-                        processing: "처리중...",
-                        search: "검색:",
                         lengthMenu: "_MENU_ 개씩 보기",
                         info: "_START_ - _END_ / _TOTAL_ 건",
-                        infoEmpty: "0건",
-                        infoFiltered: "(전체 _MAX_ 건 중 검색결과)",
-                        paginate: {
-                            first: "처음",
-                            last: "마지막", 
-                            next: "다음",
-                            previous: "이전"
-                        }
-                    },
-                    order: [[1, 'asc']],
-                    pageLength: 10,
-                    lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
-                    data: powerData,
-                    columns: createColumns('kw')
+                        paginate: { next: "다음", previous: "이전" }
+                    }
                 });
-                console.log('Power table initialized successfully');
+                console.log('Voltage table created with', voltageData.length, 'rows');
+
+                // Simple power columns  
+                const powerColumns = [
+                    { title: '수정', data: null, defaultContent: '<button class="btn btn-sm btn-outline-primary edit-threshold-btn"><i class="fas fa-edit"></i></button>', orderable: false },
+                    { title: 'BUSWAY', data: 'busway' },
+                    { title: 'LINE', data: 'line' },
+                    { title: 'KW_R EN', data: 'kw_r_en' },
+                    { title: 'KW_R HH', data: 'kw_r_hh' },
+                    { title: 'KW_R H', data: 'kw_r_h' },
+                    { title: 'KW_R L', data: 'kw_r_l' },
+                    { title: 'KW_R LL', data: 'kw_r_ll' }
+                ];
+
+                powerTable = $('#powerTable').DataTable({
+                    data: powerData,
+                    columns: powerColumns,
+                    pageLength: 10,
+                    language: {
+                        lengthMenu: "_MENU_ 개씩 보기",
+                        info: "_START_ - _END_ / _TOTAL_ 건",
+                        paginate: { next: "다음", previous: "이전" }
+                    }
+                });
+                console.log('Power table created with', powerData.length, 'rows');
+
             } catch (error) {
                 console.error('Error initializing tables:', error);
+                console.error('Error details:', error.message);
             }
 
 
 
             console.log('All Alarm Settings Tables loaded successfully');
+            console.log('Current data sample:', currentData[0]);
             console.log('Current data:', currentData.length, 'items');
             console.log('Voltage data:', voltageData.length, 'items');
             console.log('Power data:', powerData.length, 'items');
             $('#dataCount').text(`총 ${currentData.length}건`);
+            
+            // Force refresh tables after initialization
+            setTimeout(function() {
+                if (currentTable) {
+                    currentTable.clear().rows.add(currentData).draw();
+                    console.log('Current table refreshed');
+                }
+                if (voltageTable) {
+                    voltageTable.clear().rows.add(voltageData).draw();
+                    console.log('Voltage table refreshed');
+                }
+                if (powerTable) {
+                    powerTable.clear().rows.add(powerData).draw();
+                    console.log('Power table refreshed');
+                }
+            }, 500);
 
             // Event handlers for filter controls
             $('#searchAlarmData').on('click', function() {
