@@ -393,21 +393,7 @@
                             <div class="tab-pane fade show active" id="current-pane" role="tabpanel" aria-labelledby="current-tab">
                                 <div class="table-container" style="overflow-x: auto;">
                                     <table id="currentTable" class="table table-modern table-compact" style="width:100%;">
-                                        <thead>
-                                            <tr>
-                                                <th rowspan="2" class="text-center" style="vertical-align: middle;">수정</th>
-                                                <th rowspan="2" class="text-center" style="vertical-align: middle;">busway</th>
-                                                <th rowspan="2" class="text-center" style="vertical-align: middle;">line</th>
-                                                <th colspan="5" class="text-center" style="background: rgba(139, 92, 246, 0.1);">I_R</th>
-                                                <th colspan="5" class="text-center" style="background: rgba(59, 130, 246, 0.1);">I_S</th>
-                                                <th colspan="5" class="text-center" style="background: rgba(16, 185, 129, 0.1);">I_T</th>
-                                            </tr>
-                                            <tr>
-                                                <th class="text-center">en</th><th class="text-center">HH</th><th class="text-center">H</th><th class="text-center">L</th><th class="text-center">LL</th>
-                                                <th class="text-center">en</th><th class="text-center">HH</th><th class="text-center">H</th><th class="text-center">L</th><th class="text-center">LL</th>
-                                                <th class="text-center">en</th><th class="text-center">HH</th><th class="text-center">H</th><th class="text-center">L</th><th class="text-center">LL</th>
-                                            </tr>
-                                        </thead>
+                                        <thead></thead>
                                         <tbody></tbody>
                                     </table>
                                 </div>
@@ -417,21 +403,7 @@
                             <div class="tab-pane fade" id="voltage-pane" role="tabpanel" aria-labelledby="voltage-tab">
                                 <div class="table-container" style="overflow-x: auto;">
                                     <table id="voltageTable" class="table table-modern table-compact" style="width:100%;">
-                                        <thead>
-                                            <tr>
-                                                <th rowspan="2" class="text-center" style="vertical-align: middle;">수정</th>
-                                                <th rowspan="2" class="text-center" style="vertical-align: middle;">busway</th>
-                                                <th rowspan="2" class="text-center" style="vertical-align: middle;">line</th>
-                                                <th colspan="5" class="text-center" style="background: rgba(139, 92, 246, 0.1);">V_R</th>
-                                                <th colspan="5" class="text-center" style="background: rgba(59, 130, 246, 0.1);">V_S</th>
-                                                <th colspan="5" class="text-center" style="background: rgba(16, 185, 129, 0.1);">V_T</th>
-                                            </tr>
-                                            <tr>
-                                                <th class="text-center">en</th><th class="text-center">HH</th><th class="text-center">H</th><th class="text-center">L</th><th class="text-center">LL</th>
-                                                <th class="text-center">en</th><th class="text-center">HH</th><th class="text-center">H</th><th class="text-center">L</th><th class="text-center">LL</th>
-                                                <th class="text-center">en</th><th class="text-center">HH</th><th class="text-center">H</th><th class="text-center">L</th><th class="text-center">LL</th>
-                                            </tr>
-                                        </thead>
+                                        <thead></thead>
                                         <tbody></tbody>
                                     </table>
                                 </div>
@@ -441,21 +413,7 @@
                             <div class="tab-pane fade" id="power-pane" role="tabpanel" aria-labelledby="power-tab">
                                 <div class="table-container" style="overflow-x: auto;">
                                     <table id="powerTable" class="table table-modern table-compact" style="width:100%;">
-                                        <thead>
-                                            <tr>
-                                                <th rowspan="2" class="text-center" style="vertical-align: middle;">수정</th>
-                                                <th rowspan="2" class="text-center" style="vertical-align: middle;">busway</th>
-                                                <th rowspan="2" class="text-center" style="vertical-align: middle;">line</th>
-                                                <th colspan="5" class="text-center" style="background: rgba(139, 92, 246, 0.1);">KW_R</th>
-                                                <th colspan="5" class="text-center" style="background: rgba(59, 130, 246, 0.1);">KW_S</th>
-                                                <th colspan="5" class="text-center" style="background: rgba(16, 185, 129, 0.1);">KW_T</th>
-                                            </tr>
-                                            <tr>
-                                                <th class="text-center">en</th><th class="text-center">HH</th><th class="text-center">H</th><th class="text-center">L</th><th class="text-center">LL</th>
-                                                <th class="text-center">en</th><th class="text-center">HH</th><th class="text-center">H</th><th class="text-center">L</th><th class="text-center">LL</th>
-                                                <th class="text-center">en</th><th class="text-center">HH</th><th class="text-center">H</th><th class="text-center">L</th><th class="text-center">LL</th>
-                                            </tr>
-                                        </thead>
+                                        <thead></thead>
                                         <tbody></tbody>
                                     </table>
                                 </div>
@@ -790,26 +748,94 @@
                 ];
             }
 
-            // Initialize Current Table
-            currentTable = $('#currentTable').DataTable({
-                ...tableConfig,
-                data: currentData,
-                columns: createColumns('i')
-            });
+            // Initialize tables with error handling
+            try {
+                console.log('Initializing Current Table with data:', currentData.length, 'items');
+                currentTable = $('#currentTable').DataTable({
+                    processing: true,
+                    serverSide: false,
+                    responsive: true,
+                    dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6">><"row"<"col-sm-12"tr>><"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+                    language: {
+                        processing: "처리중...",
+                        search: "검색:",
+                        lengthMenu: "_MENU_ 개씩 보기",
+                        info: "_START_ - _END_ / _TOTAL_ 건",
+                        infoEmpty: "0건",
+                        infoFiltered: "(전체 _MAX_ 건 중 검색결과)",
+                        paginate: {
+                            first: "처음",
+                            last: "마지막", 
+                            next: "다음",
+                            previous: "이전"
+                        }
+                    },
+                    order: [[1, 'asc']],
+                    pageLength: 10,
+                    lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+                    data: currentData,
+                    columns: createColumns('i')
+                });
+                console.log('Current table initialized successfully');
 
-            // Initialize Voltage Table
-            voltageTable = $('#voltageTable').DataTable({
-                ...tableConfig,
-                data: voltageData,
-                columns: createColumns('v')
-            });
+                console.log('Initializing Voltage Table with data:', voltageData.length, 'items');
+                voltageTable = $('#voltageTable').DataTable({
+                    processing: true,
+                    serverSide: false,
+                    responsive: true,
+                    dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6">><"row"<"col-sm-12"tr>><"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+                    language: {
+                        processing: "처리중...",
+                        search: "검색:",
+                        lengthMenu: "_MENU_ 개씩 보기",
+                        info: "_START_ - _END_ / _TOTAL_ 건",
+                        infoEmpty: "0건",
+                        infoFiltered: "(전체 _MAX_ 건 중 검색결과)",
+                        paginate: {
+                            first: "처음",
+                            last: "마지막", 
+                            next: "다음",
+                            previous: "이전"
+                        }
+                    },
+                    order: [[1, 'asc']],
+                    pageLength: 10,
+                    lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+                    data: voltageData,
+                    columns: createColumns('v')
+                });
+                console.log('Voltage table initialized successfully');
 
-            // Initialize Power Table
-            powerTable = $('#powerTable').DataTable({
-                ...tableConfig,
-                data: powerData,
-                columns: createColumns('kw')
-            });
+                console.log('Initializing Power Table with data:', powerData.length, 'items');
+                powerTable = $('#powerTable').DataTable({
+                    processing: true,
+                    serverSide: false,
+                    responsive: true,
+                    dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6">><"row"<"col-sm-12"tr>><"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+                    language: {
+                        processing: "처리중...",
+                        search: "검색:",
+                        lengthMenu: "_MENU_ 개씩 보기",
+                        info: "_START_ - _END_ / _TOTAL_ 건",
+                        infoEmpty: "0건",
+                        infoFiltered: "(전체 _MAX_ 건 중 검색결과)",
+                        paginate: {
+                            first: "처음",
+                            last: "마지막", 
+                            next: "다음",
+                            previous: "이전"
+                        }
+                    },
+                    order: [[1, 'asc']],
+                    pageLength: 10,
+                    lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+                    data: powerData,
+                    columns: createColumns('kw')
+                });
+                console.log('Power table initialized successfully');
+            } catch (error) {
+                console.error('Error initializing tables:', error);
+            }
 
 
 
