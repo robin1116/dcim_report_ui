@@ -4,77 +4,77 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>장애조회 | simpleEye DCIM</title>
-    
+
     <!-- Bootstrap 5.3 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css">
-    
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
+
     <!-- ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
-    
+
     <!-- Custom CSS -->
     <link href="css/themes.css" rel="stylesheet">
     <link href="css/modern-admin.css" rel="stylesheet">
-    
+
     <style>
         /* Custom column widths for compact layout */
         .col-md-1-5 {
             flex: 0 0 auto;
             width: 12%;
         }
-        
+
         @media (max-width: 768px) {
             .col-md-1-5 {
                 width: 50%;
             }
         }
-        
+
         /* Compact form controls */
         .form-control-sm {
             padding: 0.25rem 0.5rem;
             font-size: 0.875rem;
         }
-        
+
         .form-check-sm .form-check-input {
             margin-top: 0.125em;
         }
-        
+
         .form-check-sm .form-check-label {
             font-size: 0.875rem;
         }
-        
+
         /* Compact card body */
         .card-body-modern.py-3 {
             padding: 1rem 1.5rem;
         }
-        
+
         /* Hide DataTables default buttons and search */
         .dt-buttons {
             display: none;
         }
-        
+
         .hidden-csv-btn, .hidden-excel-btn {
             display: none !important;
         }
-        
+
         .dataTables_filter {
             display: none;
         }
-        
+
         /* Larger font for data count */
         .dataTables_info {
             font-size: 1.1rem !important;
             font-weight: 600 !important;
             color: var(--primary-color) !important;
         }
-        
+
         /* Fault Count Cards Styling */
         .fault-count-card {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
@@ -90,7 +90,7 @@
             overflow: hidden;
             height: 100px;
         }
-        
+
         .fault-count-card::before {
             content: '';
             position: absolute;
@@ -100,13 +100,13 @@
             height: 2px;
             background: linear-gradient(90deg, #8b5cf6, #3b82f6);
         }
-        
+
         .fault-count-card:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(139, 92, 246, 0.2);
             border-color: rgba(139, 92, 246, 0.4);
         }
-        
+
         .fault-icon {
             width: 50px;
             height: 50px;
@@ -119,45 +119,45 @@
             font-size: 20px;
             flex-shrink: 0;
         }
-        
+
         .fault-icon.trip-error {
             background: linear-gradient(135deg, #f59e0b, #d97706);
         }
-        
+
         .fault-icon.comm-error {
             background: linear-gradient(135deg, #ef4444, #dc2626);
         }
-        
+
         .fault-icon.voltage-error {
             background: linear-gradient(135deg, #10b981, #059669);
         }
-        
+
         .fault-icon.current-error {
             background: linear-gradient(135deg, #06b6d4, #0891b2);
         }
-        
+
         .fault-icon.power-error {
             background: linear-gradient(135deg, #8b5cf6, #7c3aed);
         }
-        
+
         .fault-info {
             flex: 1;
         }
-        
+
         .fault-title {
             color: rgba(255, 255, 255, 0.8);
             font-size: 14px;
             font-weight: 500;
             margin: 0 0 8px 0;
         }
-        
+
         .fault-count {
             color: white;
             font-size: 24px;
             font-weight: 700;
             margin: 0;
         }
-        
+
         /* Table Search Filter Styling */
         .table-search-filter {
             background: rgba(255, 255, 255, 0.05);
@@ -166,7 +166,7 @@
             backdrop-filter: blur(10px);
             border: 1px solid rgba(139, 92, 246, 0.2);
         }
-        
+
         .table-search-input {
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(139, 92, 246, 0.3);
@@ -175,11 +175,11 @@
             padding: 10px 15px;
             font-size: 14px;
         }
-        
+
         .table-search-input::placeholder {
             color: rgba(255, 255, 255, 0.6);
         }
-        
+
         .table-search-input:focus {
             border-color: #8b5cf6;
             box-shadow: 0 0 0 0.2rem rgba(139, 92, 246, 0.25);
@@ -354,7 +354,7 @@
                             </select>
                         </div>
                     </div>
-                    
+
                     <!-- 두 번째 행: 기간설정/날짜/조회 버튼 -->
                     <div class="light-filter-row" style="background: rgba(255, 255, 255, 0.9); padding: 15px; border-radius: 12px; backdrop-filter: blur(10px);">
                         <div class="row g-2 align-items-center">
@@ -368,24 +368,24 @@
                                     <option value="custom">사용자정의</option>
                                 </select>
                             </div>
-                            
+
                             <!-- 시작 날짜 -->
                             <div class="col-2">
                                 <input type="date" class="form-control" id="startDate" value="2025-07-18" style="background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(139, 92, 246, 0.3); color: #333; border-radius: 8px;">
                             </div>
-                            
+
                             <!-- 종료 날짜 -->
                             <div class="col-2">
                                 <input type="date" class="form-control" id="endDate" value="2025-07-18" style="background: rgba(255, 255, 255, 0.9); border: 1px solid rgba(139, 92, 246, 0.3); color: #333; border-radius: 8px;">
                             </div>
-                            
+
                             <!-- 조회 버튼 -->
                             <div class="col-2">
                                 <button class="btn btn-primary w-100" id="searchFaultData" style="background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%); border: none; font-weight: 600; border-radius: 8px; color: white; padding: 8px 16px;">
                                     <i class="fas fa-search me-1"></i> 조회
                                 </button>
                             </div>
-                            
+
                             <!-- Export buttons -->
                             <div class="col-4">
                                 <div class="d-flex justify-content-end gap-2">
@@ -501,11 +501,11 @@
                             <span class="badge bg-info" id="dataCount">총 0건</span>
                         </div>
                     </div>
-                    
 
-                    
+
+
                     <div class="card-body-modern">
-                        
+
                         <div class="table-container">
                             <table id="faultDataTable" class="table table-modern table-compact" style="width:100%">
                                 <thead>
@@ -563,7 +563,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        
+
                         <!-- Pagination will be handled by DataTables -->
                     </div>
                 </div>
@@ -589,7 +589,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
 
-    
+
     <script src="js/theme-manager.js"></script>
     <script src="js/admin-common.js"></script>
     <script src="js/toast-notifications.js"></script>
@@ -605,7 +605,7 @@
             const lastWeek = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
             $('#startDate').val(lastWeek.toISOString().split('T')[0]);
             $('#endDate').val(today.toISOString().split('T')[0]);
-            
+
             // Check if ECharts is loaded
             if (typeof echarts === 'undefined') {
                 console.error('ECharts not loaded');
@@ -665,8 +665,7 @@
                     search: "검색:",
                     lengthMenu: "_MENU_ 개씩 보기",
                     info: "_START_ - _END_ / _TOTAL_ 건",
-                    infoEmpty: "0건",
-                    infoFiltered: "(전체 _MAX_ 건 중 검색결과)",
+                    infoEmpty: "0건",                    infoFiltered: "(전체 _MAX_ 건 중 검색결과)",
                     paginate: {
                         first: "처음",
                         last: "마지막", 
@@ -750,30 +749,30 @@
                 pageLength: 10,
                 lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]]
             });
-            
+
             console.log('DataTable initialized');
 
             // Load initial data immediately
             loadInitialData();
-            
+
             // Initialize chart after short delay
             setTimeout(() => {
                 initializeFaultChart();
             }, 300);
-            
+
             function loadInitialData() {
                 try {
                     console.log('Loading initial data...');
                     const initialData = generateMockFaultData();
                     console.log('Generated data:', initialData.length, 'items');
-                    
+
                     if (initialData.length > 0) {
                         faultDataTable.clear();
                         faultDataTable.rows.add(initialData);
                         faultDataTable.draw();
                         updateDataCount(initialData.length);
                         console.log('Data loaded to table');
-                        
+
                         // Update chart if it exists
                         setTimeout(() => {
                             if (faultTrendChart) {
@@ -799,7 +798,7 @@
                         '차단기 비정상',
                         '차단기 정상'
                     ];
-                    
+
                     // Generate sample data based on the image
                     const sampleData = [
                         { timestamp: '1751517297', dcu: 1, busway: 1, line: 'a', type: 'i_r', level: 'HH', message: '임계값 HH : i_r, 현재값 95, 설정값 90' },
@@ -808,13 +807,13 @@
                         { timestamp: '1751517297', dcu: 3, busway: 3, line: 'a', type: 'di1', level: '비정상', message: '차단기 비정상' },
                         { timestamp: '1751517297', dcu: 3, busway: 3, line: 'a', type: 'di1', level: '정상', message: '차단기 정상' }
                     ];
-                    
+
                     // Convert timestamps to readable format and add more records
                     for (let i = 0; i < 20; i++) {
                         const baseRecord = sampleData[i % sampleData.length];
                         const date = new Date();
                         date.setHours(date.getHours() - i);
-                        
+
                         data.push({
                             timestamp: date.toLocaleDateString('ko-KR', {
                                 month: '2-digit', 
@@ -830,7 +829,7 @@
                             message: baseRecord.message
                         });
                     }
-                    
+
                     console.log('Generated', data.length, 'fault data points');
                     return data;
                 } catch (error) {
@@ -846,23 +845,23 @@
                         console.error('ECharts not available');
                         return;
                     }
-                    
+
                     const chartContainer = document.getElementById('faultTrendChart');
                     if (!chartContainer) {
                         console.log('Chart container element not found - chart was replaced with fault count cards');
                         return;
                     }
-                    
+
                     console.log('Initializing ECharts...');
-                    
+
                     // Dispose existing chart if any
                     if (faultTrendChart) {
                         faultTrendChart.dispose();
                     }
-                    
+
                     // Initialize ECharts instance
                     faultTrendChart = echarts.init(chartContainer, 'dark');
-                    
+
                     // Basic chart configuration
                     const option = {
                         title: {
@@ -1004,22 +1003,22 @@
                             data: []
                         }]
                     };
-                    
+
                     // Set the configuration option to chart
                     faultTrendChart.setOption(option);
-                    
+
                     // Make chart responsive
                     window.addEventListener('resize', () => {
                         if (faultTrendChart) {
                             faultTrendChart.resize();
                         }
                     });
-                    
+
                     console.log('ECharts initialized successfully');
-                    
+
                     // Update chart with current data
                     updateChart();
-                    
+
                 } catch (error) {
                     console.error('Error initializing ECharts:', error);
                 }
@@ -1032,10 +1031,10 @@
                         console.log('Chart not ready yet');
                         return;
                     }
-                    
+
                     const data = faultDataTable.data().toArray();
                     console.log('Updating chart with', data.length, 'data points');
-                    
+
                     if (data.length === 0) {
                         console.log('No data to display in chart');
                         faultTrendChart.setOption({
@@ -1049,16 +1048,16 @@
                         });
                         return;
                     }
-                    
+
                     // Sort data by timestamp
                     data.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
-                    
+
                     // Prepare chart data
                     const xAxisData = data.map(item => {
                         const date = new Date(item.timestamp);
                         return date.toLocaleDateString('ko-KR') + ' ' + date.toLocaleTimeString('ko-KR', {hour: '2-digit', minute: '2-digit'});
                     });
-                    
+
                     const powerTypeConfig = {
                         'voltage': {
                             name: '전압 (V)',
@@ -1079,7 +1078,7 @@
                             yAxisIndex: 2
                         }
                     };
-                    
+
                     // Create series based on selected types
                     const series = selectedPowerTypes.map(type => ({
                         name: powerTypeConfig[type].name,
@@ -1109,9 +1108,9 @@
                         },
                         data: powerTypeConfig[type].data
                     }));
-                    
+
                     console.log('Chart series:', series.length);
-                    
+
                     // Show/hide Y axes based on selected types
                     const yAxisOptions = [
                         { // 전압
@@ -1200,9 +1199,9 @@
                         yAxis: yAxisOptions,
                         series: series
                     });
-                    
+
                     console.log('ECharts updated successfully');
-                    
+
                 } catch (error) {
                     console.error('Error updating ECharts:', error);
                 }
@@ -1218,7 +1217,7 @@
                 } else {
                     selectedPowerTypes = selectedPowerTypes.filter(type => type !== value);
                 }
-                
+
                 // Ensure at least one type is selected
                 if (selectedPowerTypes.length === 0) {
                     $(this).prop('checked', true);
@@ -1226,7 +1225,7 @@
                     window.ToastNotifications.warning('최소 하나의 항목은 선택되어야 합니다.');
                     return;
                 }
-                
+
                 updateChart();
             });
 
@@ -1238,12 +1237,12 @@
                 const dcu = $('#dcuSelect').val();
                 const busway = $('#buswaySelect').val();
                 const line = $('#lineSelect').val();
-                
+
                 if (!startDate || !endDate) {
                     window.ToastNotifications.warning('시작 날짜와 종료 날짜를 선택해주세요.');
                     return;
                 }
-                
+
                 if (new Date(startDate) > new Date(endDate)) {
                     window.ToastNotifications.error('시작 날짜는 종료 날짜보다 이전이어야 합니다.');
                     return;
@@ -1261,19 +1260,19 @@
                         console.log('Generating new data for search...');
                         const newData = generateMockFaultData();
                         console.log('Search generated:', newData.length, 'items');
-                        
+
                         if (newData.length > 0) {
                             // Update table
                             faultDataTable.clear();
                             faultDataTable.rows.add(newData);
                             faultDataTable.draw();
                             console.log('Table updated with new data');
-                            
+
                             // Update chart with same data
                             setTimeout(() => {
                                 updateChart();
                             }, 100);
-                            
+
                             updateDataCount(newData.length);
                             updateFaultCountCards();
                             window.ToastNotifications.success(`${newData.length}건의 데이터를 조회했습니다.`);
@@ -1284,7 +1283,7 @@
                         console.error('Error during search:', error);
                         window.ToastNotifications.error('데이터 조회 중 오류가 발생했습니다.');
                     }
-                    
+
                     btn.html(originalText);
                     btn.prop('disabled', false);
                 }, 1500);
@@ -1299,14 +1298,14 @@
                 $('#periodSelect').val('1hour');
                 $('#startDate').val('2025-07-18');
                 $('#endDate').val('2025-07-18');
-                
+
                 // Enable date inputs for custom selection
                 $('#startDate, #endDate').prop('disabled', false);
-                
+
                 // Clear table filter
                 faultDataTable.search('').draw();
                 updateFaultCountCards();
-                
+
                 updateChart();
                 window.ToastNotifications.info('필터가 초기화되었습니다.');
             });
@@ -1316,18 +1315,18 @@
                 const selectedPeriod = $(this).val();
                 const now = new Date();
                 let startDate, endDate;
-                
+
                 if (selectedPeriod === 'custom') {
                     // Enable date inputs for custom selection
                     $('#startDate, #endDate').prop('disabled', false);
                 } else {
                     // Disable date inputs and set predefined dates
                     $('#startDate, #endDate').prop('disabled', true);
-                    
+
                     // Calculate date range based on selection
                     endDate = new Date(now);
                     startDate = new Date(now);
-                    
+
                     switch(selectedPeriod) {
                         case '1hour':
                             startDate.setHours(startDate.getHours() - 1);
@@ -1342,12 +1341,12 @@
                             startDate.setMonth(startDate.getMonth() - 1);
                             break;
                     }
-                    
+
                     // Format dates for input fields
                     const formatDate = (date) => {
                         return date.toISOString().split('T')[0];
                     };
-                    
+
                     $('#startDate').val(formatDate(startDate));
                     $('#endDate').val(formatDate(endDate));
                 }
@@ -1370,7 +1369,7 @@
             });
 
 
-            
+
             $('#exportPdfData').click(function() {
                 window.ToastNotifications.info('PDF 보고서를 생성하는 중입니다...');
                 try {
@@ -1381,15 +1380,15 @@
                     window.ToastNotifications.error('PDF 보고서 생성 중 오류가 발생했습니다.');
                 }
             });
-            
+
             // Create Excel file with data only
             function createExcelWithData() {
                 const wb = XLSX.utils.book_new();
-                
+
                 // Get table data
                 const tableData = faultDataTable.data().toArray();
                 const headers = ['시간', 'DCU', 'Busway', 'Line', 'Type', '등급', '알람메시지(예시)'];
-                
+
                 // Format data for Excel
                 const excelData = [headers];
                 tableData.forEach(row => {
@@ -1403,10 +1402,10 @@
                         row.message
                     ]);
                 });
-                
+
                 // Create worksheet
                 const ws = XLSX.utils.aoa_to_sheet(excelData);
-                
+
                 // Set column widths
                 ws['!cols'] = [
                     { width: 15 }, // 시간
@@ -1417,61 +1416,61 @@
                     { width: 12 }, // 등급
                     { width: 40 }  // 알람메시지
                 ];
-                
+
                 // Add worksheet to workbook
                 XLSX.utils.book_append_sheet(wb, ws, '장애조회데이터');
-                
+
                 // Generate filename with timestamp
                 const now = new Date();
                 const dateStr = now.toISOString().slice(0, 19).replace(/:/g, '-');
                 const filename = `장애조회_${dateStr}.xlsx`;
-                
+
                 // Write and download
                 XLSX.writeFile(wb, filename);
             }
-            
+
             // Create PDF report with chart and data (Korean/English hybrid)
             function createPdfReport() {
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF('p', 'mm', 'a4');
-                
+
                 let yPosition = 20;
-                
+
                 // Header - mix of Korean and English for better readability
                 doc.setFontSize(18);
                 doc.text('Fault Inquiry Report', 105, yPosition, { align: 'center' });
                 yPosition += 8;
-                
+
                 doc.setFontSize(14);
                 doc.text('(장애조회 보고서)', 105, yPosition, { align: 'center' });
                 yPosition += 8;
-                
+
                 doc.setFontSize(12);
                 doc.text('simpleEye DCIM System', 105, yPosition, { align: 'center' });
                 yPosition += 15;
-                
+
                 // Report generation time
                 doc.setFontSize(11);
                 const now = new Date();
                 const reportTime = now.toLocaleDateString('ko-KR') + ' ' + now.toLocaleTimeString('ko-KR');
                 doc.text(`Report Generated: ${reportTime}`, 20, yPosition);
                 yPosition += 12;
-                
+
                 // Filter information
                 doc.setFontSize(12);
                 doc.text('Search Conditions (조회 조건)', 20, yPosition);
                 yPosition += 8;
-                
+
                 doc.setFontSize(10);
                 const searchDate = $('#searchDate').val() || '2025-07-18';
                 const startTime = $('#startTime').val() || '12:00';
                 const endTime = $('#endTime').val() || '12:00';
-                
+
                 doc.text(`Date (조회일자): ${searchDate}`, 25, yPosition);
                 yPosition += 6;
                 doc.text(`Time Range (시간범위): ${startTime} ~ ${endTime}`, 25, yPosition);
                 yPosition += 12;
-                
+
                 // Add chart image if available
                 if (faultTrendChart) {
                     try {
@@ -1480,11 +1479,11 @@
                             backgroundColor: '#ffffff',
                             pixelRatio: 2
                         });
-                        
+
                         doc.setFontSize(12);
                         doc.text('Fault Trend Chart (장애 트렌드 차트)', 20, yPosition);
                         yPosition += 10;
-                        
+
                         // Add chart image (scaled to fit page)
                         const imgWidth = 170;
                         const imgHeight = 80;
@@ -1496,16 +1495,16 @@
                         yPosition += 10;
                     }
                 }
-                
+
                 // Data table
                 doc.setFontSize(12);
                 doc.text('Fault Data (장애 데이터)', 20, yPosition);
                 yPosition += 10;
-                
+
                 // Get table data
                 const tableData = faultDataTable.data().toArray();
                 const tableRows = [];
-                
+
                 tableData.forEach(row => {
                     tableRows.push([
                         row.timestamp,
@@ -1517,7 +1516,7 @@
                         row.message.substring(0, 30) + '...' // Truncate long messages
                     ]);
                 });
-                
+
                 // Add table using autoTable plugin
                 doc.autoTable({
                     head: [['Time', 'DCU', 'Busway', 'Line', 'Type', 'Level', 'Message']],
@@ -1544,7 +1543,7 @@
                         3: { cellWidth: 35, halign: 'center' }
                     }
                 });
-                
+
                 // Add footer
                 const pageCount = doc.internal.getNumberOfPages();
                 for (let i = 1; i <= pageCount; i++) {
@@ -1553,7 +1552,7 @@
                     doc.text(`Page ${i} of ${pageCount}`, 105, 290, { align: 'center' });
                     doc.text('simpleEye DCIM System', 20, 290);
                 }
-                
+
                 // Generate filename and save
                 const filename = `FaultReport_${now.toISOString().slice(0, 19).replace(/:/g, '-')}.pdf`;
                 doc.save(filename);
@@ -1598,10 +1597,10 @@
             // Fault count cards functions
             function updateFaultCountCards() {
                 if (!faultDataTable) return;
-                
+
                 // Get filtered/searched data instead of all data
                 const filteredData = faultDataTable.rows({search: 'applied'}).data().toArray();
-                
+
                 let counts = {
                     breakerError: 0,
                     tripError: 0,
@@ -1614,7 +1613,7 @@
                 filteredData.forEach(row => {
                     const type = row[4] || ''; // Type column
                     const alarmMessage = (row[6] || '').toLowerCase(); // Alarm message column
-                    
+
                     // Check for different fault types based on Type and alarm message
                     if (type === 'trip' || alarmMessage.includes('trip')) {
                         counts.tripError++;
@@ -1644,7 +1643,7 @@
                 document.getElementById('voltageErrorCount').textContent = counts.voltageError;
                 document.getElementById('currentErrorCount').textContent = counts.currentError;
                 document.getElementById('powerErrorCount').textContent = counts.powerError;
-                
+
                 console.log('Fault counts updated:', counts);
             }
 
@@ -1654,16 +1653,16 @@
                 $('.column-search').on('keyup', function() {
                     const column = $(this).data('column');
                     const value = this.value;
-                    
+
                     faultDataTable
                         .column(column)
                         .search(value)
                         .draw();
-                    
+
                     updateFaultCountCards();
                     updateDataCount();
                 });
-                
+
                 console.log('Column search initialized');
             }
 
@@ -1686,14 +1685,14 @@
                 // Get filter values
                 const faultType = $('#faultTypeFilter').val();
                 const faultLevel = $('#faultLevelFilter').val();
-                
+
                 // Create custom search function
                 $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
                     // Check fault type filter
                     if (faultType !== 'all') {
                         const type = data[4] || '';
                         const message = data[6] || '';
-                        
+
                         let typeMatch = false;
                         switch(faultType) {
                             case 'trip': 
@@ -1717,15 +1716,15 @@
                             default:
                                 typeMatch = true;
                         }
-                        
+
                         if (!typeMatch) return false;
                     }
-                    
+
                     // Check fault level filter
                     if (faultLevel !== 'all') {
                         const levelBadge = data[5] || '';
                         let levelMatch = false;
-                        
+
                         switch(faultLevel) {
                             case 'H': 
                                 levelMatch = levelBadge.includes('bg-danger');
@@ -1742,19 +1741,19 @@
                             default:
                                 levelMatch = true;
                         }
-                        
+
                         if (!levelMatch) return false;
                     }
-                    
+
                     return true;
                 });
-                
+
                 // Redraw table with filters applied
                 faultDataTable.draw();
-                
+
                 // Update fault count cards with filtered data
                 updateFaultCountCards();
-                
+
                 // Remove the custom search function to avoid accumulation
                 $.fn.dataTable.ext.search.pop();
             }
