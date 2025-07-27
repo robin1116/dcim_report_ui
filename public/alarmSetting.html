@@ -930,12 +930,12 @@
 
             $('#exportExcel').on('click', function() {
                 console.log('Export Excel clicked');
-                showToast('엑셀 파일을 다운로드합니다', 'success');
+                exportToExcel();
             });
 
             $('#exportPDF').on('click', function() {
                 console.log('Export PDF clicked');
-                showToast('PDF 파일을 다운로드합니다', 'success');
+                exportToPDF();
             });
 
             // Modal functionality
@@ -1076,6 +1076,238 @@
                 activeTable = null;
                 currentPrefix = '';
             });
+
+            // Excel export function for all 3 tabs
+            function exportToExcel() {
+                try {
+                    const workbook = XLSX.utils.book_new();
+                    
+                    // Export Current data
+                    if (tables.current) {
+                        const currentData = tables.current.rows().data().toArray();
+                        const currentSheet = convertTableDataForExport(currentData, 'current');
+                        XLSX.utils.book_append_sheet(workbook, currentSheet, '전류 임계치');
+                    }
+                    
+                    // Export Voltage data
+                    if (tables.voltage) {
+                        const voltageData = tables.voltage.rows().data().toArray();
+                        const voltageSheet = convertTableDataForExport(voltageData, 'voltage');
+                        XLSX.utils.book_append_sheet(workbook, voltageSheet, '전압 임계치');
+                    } else {
+                        // Create voltage sheet if table not initialized
+                        const voltageSheet = convertTableDataForExport(voltageData, 'voltage');
+                        XLSX.utils.book_append_sheet(workbook, voltageSheet, '전압 임계치');
+                    }
+                    
+                    // Export Power data
+                    if (tables.power) {
+                        const powerData = tables.power.rows().data().toArray();
+                        const powerSheet = convertTableDataForExport(powerData, 'power');
+                        XLSX.utils.book_append_sheet(workbook, powerSheet, '전력량 임계치');
+                    } else {
+                        // Create power sheet if table not initialized
+                        const powerSheet = convertTableDataForExport(powerData, 'power');
+                        XLSX.utils.book_append_sheet(workbook, powerSheet, '전력량 임계치');
+                    }
+                    
+                    // Generate filename with timestamp
+                    const now = new Date();
+                    const dateStr = now.toISOString().slice(0, 19).replace(/:/g, '-');
+                    const filename = `알람임계치설정_${dateStr}.xlsx`;
+                    
+                    // Save file
+                    XLSX.writeFile(workbook, filename);
+                    showToast('Excel 파일이 다운로드되었습니다', 'success');
+                    
+                } catch (error) {
+                    console.error('Excel export error:', error);
+                    showToast('Excel 내보내기 중 오류가 발생했습니다', 'error');
+                }
+            }
+
+            // PDF export function for all 3 tabs
+            function exportToPDF() {
+                try {
+                    const { jsPDF } = window.jspdf;
+                    const doc = new jsPDF('l', 'mm', 'a4'); // Landscape for better table fit
+                    
+                    let yPosition = 20;
+                    
+                    // Title
+                    doc.setFontSize(16);
+                    doc.text('Alarm Threshold Settings Report', 20, yPosition);
+                    yPosition += 15;
+                    
+                    // Current timestamp
+                    doc.setFontSize(10);
+                    doc.text(`Export Date: ${new Date().toLocaleDateString()}`, 20, yPosition);
+                    yPosition += 15;
+                    
+                    // Export Current table
+                    if (tables.current) {
+                        const currentData = tables.current.rows().data().toArray();
+                        yPosition = addTableToPDF(doc, currentData, 'Current Threshold Settings', 'current', yPosition);
+                    }
+                    
+                    // Export Voltage table (add new page if needed)
+                    if (yPosition > 180) {
+                        doc.addPage();
+                        yPosition = 20;
+                    }
+                    
+                    if (tables.voltage) {
+                        const voltageData = tables.voltage.rows().data().toArray();
+                        yPosition = addTableToPDF(doc, voltageData, 'Voltage Threshold Settings', 'voltage', yPosition);
+                    } else {
+                        yPosition = addTableToPDF(doc, voltageData, 'Voltage Threshold Settings', 'voltage', yPosition);
+                    }
+                    
+                    // Export Power table (add new page if needed)
+                    if (yPosition > 180) {
+                        doc.addPage();
+                        yPosition = 20;
+                    }
+                    
+                    if (tables.power) {
+                        const powerData = tables.power.rows().data().toArray();
+                        yPosition = addTableToPDF(doc, powerData, 'Power Threshold Settings', 'power', yPosition);
+                    } else {
+                        yPosition = addTableToPDF(doc, powerData, 'Power Threshold Settings', 'power', yPosition);
+                    }
+                    
+                    // Generate filename with timestamp
+                    const now = new Date();
+                    const dateStr = now.toISOString().slice(0, 19).replace(/:/g, '-');
+                    const filename = `alarm_threshold_settings_${dateStr}.pdf`;
+                    
+                    // Save file
+                    doc.save(filename);
+                    showToast('PDF 파일이 다운로드되었습니다', 'success');
+                    
+                } catch (error) {
+                    console.error('PDF export error:', error);
+                    showToast('PDF 내보내기 중 오류가 발생했습니다', 'error');
+                }
+            }
+
+            // Helper function to convert table data for Excel export
+            function convertTableDataForExport(data, type) {
+                const headers = getExcelHeaders(type);
+                const rows = [];
+                
+                // Add headers
+                rows.push(headers);
+                
+                // Add data rows
+                data.forEach(row => {
+                    const exportRow = [];
+                    exportRow.push(row.busway || '');
+                    exportRow.push(row.line || '');
+                    
+                    const prefix = type === 'current' ? 'i' : (type === 'voltage' ? 'v' : 'kw');
+                    
+                    // R phase
+                    exportRow.push(row[`${prefix}_r_en`] === 'checked' ? 'Y' : 'N');
+                    exportRow.push(row[`${prefix}_r_hh`] || '');
+                    exportRow.push(row[`${prefix}_r_h`] || '');
+                    exportRow.push(row[`${prefix}_r_l`] || '');
+                    exportRow.push(row[`${prefix}_r_ll`] || '');
+                    
+                    // S phase
+                    exportRow.push(row[`${prefix}_s_en`] === 'checked' ? 'Y' : 'N');
+                    exportRow.push(row[`${prefix}_s_hh`] || '');
+                    exportRow.push(row[`${prefix}_s_h`] || '');
+                    exportRow.push(row[`${prefix}_s_l`] || '');
+                    exportRow.push(row[`${prefix}_s_ll`] || '');
+                    
+                    // T phase
+                    exportRow.push(row[`${prefix}_t_en`] === 'checked' ? 'Y' : 'N');
+                    exportRow.push(row[`${prefix}_t_hh`] || '');
+                    exportRow.push(row[`${prefix}_t_h`] || '');
+                    exportRow.push(row[`${prefix}_t_l`] || '');
+                    exportRow.push(row[`${prefix}_t_ll`] || '');
+                    
+                    rows.push(exportRow);
+                });
+                
+                return XLSX.utils.aoa_to_sheet(rows);
+            }
+
+            // Helper function to get Excel headers
+            function getExcelHeaders(type) {
+                const prefix = type === 'current' ? 'I' : (type === 'voltage' ? 'V' : 'KW');
+                return [
+                    'BUSWAY', 'LINE',
+                    `${prefix}_R_EN`, `${prefix}_R_HH`, `${prefix}_R_H`, `${prefix}_R_L`, `${prefix}_R_LL`,
+                    `${prefix}_S_EN`, `${prefix}_S_HH`, `${prefix}_S_H`, `${prefix}_S_L`, `${prefix}_S_LL`,
+                    `${prefix}_T_EN`, `${prefix}_T_HH`, `${prefix}_T_H`, `${prefix}_T_L`, `${prefix}_T_LL`
+                ];
+            }
+
+            // Helper function to add table to PDF
+            function addTableToPDF(doc, data, title, type, yPosition) {
+                doc.setFontSize(12);
+                doc.text(title, 20, yPosition);
+                yPosition += 10;
+                
+                const headers = getPDFHeaders(type);
+                const rows = [];
+                
+                data.forEach(row => {
+                    const pdfRow = [];
+                    pdfRow.push(row.busway || '');
+                    pdfRow.push(row.line || '');
+                    
+                    const prefix = type === 'current' ? 'i' : (type === 'voltage' ? 'v' : 'kw');
+                    
+                    // R phase
+                    pdfRow.push(row[`${prefix}_r_en`] === 'checked' ? 'Y' : 'N');
+                    pdfRow.push(row[`${prefix}_r_hh`] || '');
+                    pdfRow.push(row[`${prefix}_r_h`] || '');
+                    pdfRow.push(row[`${prefix}_r_l`] || '');
+                    pdfRow.push(row[`${prefix}_r_ll`] || '');
+                    
+                    // S phase
+                    pdfRow.push(row[`${prefix}_s_en`] === 'checked' ? 'Y' : 'N');
+                    pdfRow.push(row[`${prefix}_s_hh`] || '');
+                    pdfRow.push(row[`${prefix}_s_h`] || '');
+                    pdfRow.push(row[`${prefix}_s_l`] || '');
+                    pdfRow.push(row[`${prefix}_s_ll`] || '');
+                    
+                    // T phase
+                    pdfRow.push(row[`${prefix}_t_en`] === 'checked' ? 'Y' : 'N');
+                    pdfRow.push(row[`${prefix}_t_hh`] || '');
+                    pdfRow.push(row[`${prefix}_t_h`] || '');
+                    pdfRow.push(row[`${prefix}_t_l`] || '');
+                    pdfRow.push(row[`${prefix}_t_ll`] || '');
+                    
+                    rows.push(pdfRow);
+                });
+                
+                // Use autoTable for better formatting
+                doc.autoTable({
+                    head: [headers],
+                    body: rows,
+                    startY: yPosition,
+                    styles: { fontSize: 8 },
+                    headStyles: { fillColor: [139, 92, 246] },
+                    margin: { left: 20, right: 20 }
+                });
+                
+                return doc.lastAutoTable.finalY + 15;
+            }
+
+            // Helper function to get PDF headers (English only to avoid font issues)
+            function getPDFHeaders(type) {
+                const prefix = type === 'current' ? 'I' : (type === 'voltage' ? 'V' : 'KW');
+                return [
+                    'BUSWAY', 'LINE',
+                    `${prefix}_R_EN`, `${prefix}_R_HH`, `${prefix}_R_H`, `${prefix}_R_L`, `${prefix}_R_LL`,
+                    `${prefix}_S_EN`, `${prefix}_S_HH`, `${prefix}_S_H`, `${prefix}_S_L`, `${prefix}_S_LL`,
+                    `${prefix}_T_EN`, `${prefix}_T_HH`, `${prefix}_T_H`, `${prefix}_T_L`, `${prefix}_T_LL`
+                ];
+            }
 
         });
     </script>
