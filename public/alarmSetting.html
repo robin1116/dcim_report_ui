@@ -608,19 +608,23 @@
                 {"수정": "", "busway": "BW020", "line": "L020", "i_r_en": "unchecked", "i_r_hh": "245", "i_r_h": "225", "i_r_l": "175", "i_r_ll": "145", "i_s_en": "unchecked", "i_s_hh": "250", "i_s_h": "230", "i_s_l": "180", "i_s_ll": "150", "i_t_en": "unchecked", "i_t_hh": "255", "i_t_h": "235", "i_t_l": "185", "i_t_ll": "155"}
             ];
 
-            // Voltage threshold data (전압) - similar structure with V_ prefix
+            // Voltage threshold data (전압) - complete structure with V_ prefix
             const voltageData = currentData.map(item => ({
-                ...item,
+                busway: item.busway,
+                line: item.line,
+                // V_R phase
                 v_r_en: item.i_r_en,
                 v_r_hh: (parseInt(item.i_r_hh) + 50).toString(),
                 v_r_h: (parseInt(item.i_r_h) + 50).toString(),
                 v_r_l: (parseInt(item.i_r_l) + 50).toString(),
                 v_r_ll: (parseInt(item.i_r_ll) + 50).toString(),
+                // V_S phase
                 v_s_en: item.i_s_en,
                 v_s_hh: (parseInt(item.i_s_hh) + 50).toString(),
                 v_s_h: (parseInt(item.i_s_h) + 50).toString(),
                 v_s_l: (parseInt(item.i_s_l) + 50).toString(),
                 v_s_ll: (parseInt(item.i_s_ll) + 50).toString(),
+                // V_T phase
                 v_t_en: item.i_t_en,
                 v_t_hh: (parseInt(item.i_t_hh) + 50).toString(),
                 v_t_h: (parseInt(item.i_t_h) + 50).toString(),
@@ -628,19 +632,23 @@
                 v_t_ll: (parseInt(item.i_t_ll) + 50).toString()
             }));
 
-            // Power threshold data (전력량) - similar structure with KW_ prefix for power
+            // Power threshold data (전력량) - complete structure with KW_ prefix
             const powerData = currentData.map(item => ({
-                ...item,
+                busway: item.busway,
+                line: item.line,
+                // KW_R phase
                 kw_r_en: item.i_r_en,
                 kw_r_hh: (parseInt(item.i_r_hh) * 2).toString(),
                 kw_r_h: (parseInt(item.i_r_h) * 2).toString(),
                 kw_r_l: (parseInt(item.i_r_l) * 2).toString(),
                 kw_r_ll: (parseInt(item.i_r_ll) * 2).toString(),
+                // KW_S phase
                 kw_s_en: item.i_s_en,
                 kw_s_hh: (parseInt(item.i_s_hh) * 2).toString(),
                 kw_s_h: (parseInt(item.i_s_h) * 2).toString(),
                 kw_s_l: (parseInt(item.i_s_l) * 2).toString(),
                 kw_s_ll: (parseInt(item.i_s_ll) * 2).toString(),
+                // KW_T phase
                 kw_t_en: item.i_t_en,
                 kw_t_hh: (parseInt(item.i_t_hh) * 2).toString(),
                 kw_t_h: (parseInt(item.i_t_h) * 2).toString(),
@@ -897,7 +905,9 @@
             console.log('All Alarm Settings Tables loaded successfully');
             console.log('Current data sample:', currentData[0]);
             console.log('Current data:', currentData.length, 'items');
+            console.log('Voltage data sample:', voltageData[0]);
             console.log('Voltage data:', voltageData.length, 'items');
+            console.log('Power data sample:', powerData[0]);
             console.log('Power data:', powerData.length, 'items');
             $('#dataCount').text(`총 ${currentData.length}건`);
             
