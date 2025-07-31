@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FontAwesome 아이콘 테스트</title>
+    <link rel="stylesheet" href="lib/fontawesome/all.min.css">
+    <link rel="stylesheet" href="lib/fontawesome/fontawesome-fixed.css">
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .icon-test { font-size: 24px; margin: 10px; }
+        .icon-section { margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <h1>FontAwesome 아이콘 테스트</h1>
+    
+    <div class="icon-section">
+        <h2>Solid Icons (fas)</h2>
+        <div class="icon-test"><i class="fas fa-user"></i> User</div>
+        <div class="icon-test"><i class="fas fa-edit"></i> Edit</div>
+        <div class="icon-test"><i class="fas fa-trash"></i> Trash</div>
+        <div class="icon-test"><i class="fas fa-check-circle"></i> Check Circle</div>
+        <div class="icon-test"><i class="fas fa-times-circle"></i> Times Circle</div>
+        <div class="icon-test"><i class="fas fa-search"></i> Search</div>
+        <div class="icon-test"><i class="fas fa-home"></i> Home</div>
+        <div class="icon-test"><i class="fas fa-cog"></i> Settings</div>
+    </div>
+
+    <div class="icon-section">
+        <h2>Regular Icons (far)</h2>
+        <div class="icon-test"><i class="far fa-user"></i> User</div>
+        <div class="icon-test"><i class="far fa-edit"></i> Edit</div>
+        <div class="icon-test"><i class="far fa-trash-alt"></i> Trash</div>
+        <div class="icon-test"><i class="far fa-check-circle"></i> Check Circle</div>
+        <div class="icon-test"><i class="far fa-times-circle"></i> Times Circle</div>
+    </div>
+
+    <div class="icon-section">
+        <h2>Brand Icons (fab)</h2>
+        <div class="icon-test"><i class="fab fa-github"></i> GitHub</div>
+        <div class="icon-test"><i class="fab fa-twitter"></i> Twitter</div>
+        <div class="icon-test"><i class="fab fa-facebook"></i> Facebook</div>
+    </div>
+
+    <script>
+        // Check if fonts are loaded
+        document.fonts.ready.then(function() {
+            console.log('All fonts loaded');
+            
+            // Check specific font families
+            if (document.fonts.check('12px "Font Awesome 6 Free"')) {
+                console.log('Font Awesome 6 Free is available');
+            } else {
+                console.log('Font Awesome 6 Free is NOT available');
+            }
+            
+            if (document.fonts.check('12px "Font Awesome 6 Brands"')) {
+                console.log('Font Awesome 6 Brands is available');
+            } else {
+                console.log('Font Awesome 6 Brands is NOT available');
+            }
+        });
+    </script>
+</body>
+</html>

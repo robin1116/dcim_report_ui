@@ -3,7 +3,8 @@
   font-style: normal;
   font-weight: 400;
   font-display: block;
-  src: url("fa-regular-400.woff2") format("woff2");
+  src: url("fa-regular-400.woff2") format("woff2"),
+       url("fa-regular-400.ttf") format("truetype");
 }
 
 @font-face {
@@ -11,7 +12,8 @@
   font-style: normal;
   font-weight: 900;
   font-display: block;
-  src: url("fa-solid-900.woff2") format("woff2");
+  src: url("fa-solid-900.woff2") format("woff2"),
+       url("fa-solid-900.ttf") format("truetype");
 }
 
 @font-face {
@@ -19,5 +21,28 @@
   font-style: normal;
   font-weight: 400;
   font-display: block;
-  src: url("fa-brands-400.woff2") format("woff2");
+  src: url("fa-brands-400.woff2") format("woff2"),
+       url("fa-brands-400.ttf") format("truetype");
+}
+
+/* Force font loading and rendering */
+.fas, .far, .fab {
+  font-family: "Font Awesome 6 Free" !important;
+  font-weight: 900 !important;
+  -webkit-font-feature-settings: normal;
+  font-feature-settings: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.far {
+  font-weight: 400 !important;
+}
+
+.fab {
+  font-family: "Font Awesome 6 Brands" !important;
+  font-weight: 400 !important;
 }
