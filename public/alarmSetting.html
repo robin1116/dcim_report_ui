@@ -594,7 +594,10 @@
             }
             
             // Call loadInitialData and wait for completion
-            loadInitialData();
+            loadInitialData().then(() => {
+                // Bind edit buttons after initial data is loaded
+                setTimeout(bindEditButtons, 500);
+            });
 
             // Common table configuration
             const tableConfig = {
@@ -621,83 +624,7 @@
                 lengthMenu: /*<![CDATA[*/ [[10, 25, 50, 100], [10, 25, 50, 100]] /*]]>*/
             };
 
-            // Common column configuration function
-            function createColumns(prefix) {
-                let phaseLabel = '';
-                if (prefix === 'i') phaseLabel = 'I';
-                else if (prefix === 'v') phaseLabel = 'V';
-                else if (prefix === 'kw') phaseLabel = 'KW';
-
-                return [
-                    { 
-                        data: null,
-                        title: '수정',
-                        className: 'text-center',
-                        orderable: false,
-                        render: function(data, type, row, meta) {
-                            return '<button class="btn btn-sm btn-outline-primary edit-threshold-btn" title="편집" data-row-index="' + meta.row + '"><i class="fas fa-edit"></i></button>';
-                        }
-                    },
-                    { 
-                        data: 'busway',
-                        title: 'BUSWAY',
-                        className: 'text-center'
-                    },
-                    { 
-                        data: 'line',
-                        title: 'LINE',
-                        className: 'text-center'
-                    },
-                    { 
-                        data: `${prefix}_r_en`, 
-                        title: `${phaseLabel}_R EN`, 
-                        className: 'text-center',
-                        render: function(data) {
-                            if (data === 'checked') {
-                                return '<i class="fas fa-check-circle text-success"></i>';
-                            } else {
-                                return '<i class="fas fa-times-circle text-danger"></i>';
-                            }
-                        }
-                    },
-                    { data: `${prefix}_r_hh`, title: `${phaseLabel}_R HH`, className: 'text-center' },
-                    { data: `${prefix}_r_h`, title: `${phaseLabel}_R H`, className: 'text-center' },
-                    { data: `${prefix}_r_l`, title: `${phaseLabel}_R L`, className: 'text-center' },
-                    { data: `${prefix}_r_ll`, title: `${phaseLabel}_R LL`, className: 'text-center' },
-                    { 
-                        data: `${prefix}_s_en`, 
-                        title: `${phaseLabel}_S EN`, 
-                        className: 'text-center',
-                        render: function(data) {
-                            if (data === 'checked') {
-                                return '<i class="fas fa-check-circle text-success"></i>';
-                            } else {
-                                return '<i class="fas fa-times-circle text-danger"></i>';
-                            }
-                        }
-                    },
-                    { data: `${prefix}_s_hh`, title: `${phaseLabel}_S HH`, className: 'text-center' },
-                    { data: `${prefix}_s_h`, title: `${phaseLabel}_S H`, className: 'text-center' },
-                    { data: `${prefix}_s_l`, title: `${phaseLabel}_S L`, className: 'text-center' },
-                    { data: `${prefix}_s_ll`, title: `${phaseLabel}_S LL`, className: 'text-center' },
-                    { 
-                        data: `${prefix}_t_en`, 
-                        title: `${phaseLabel}_T EN`, 
-                        className: 'text-center',
-                        render: function(data) {
-                            if (data === 'checked') {
-                                return '<i class="fas fa-check-circle text-success"></i>';
-                            } else {
-                                return '<i class="fas fa-times-circle text-danger"></i>';
-                            }
-                        }
-                    },
-                    { data: `${prefix}_t_hh`, title: `${phaseLabel}_T HH`, className: 'text-center' },
-                    { data: `${prefix}_t_h`, title: `${phaseLabel}_T H`, className: 'text-center' },
-                    { data: `${prefix}_t_l`, title: `${phaseLabel}_T L`, className: 'text-center' },
-                    { data: `${prefix}_t_ll`, title: `${phaseLabel}_T LL`, className: 'text-center' }
-                ];
-            }
+            // Remove duplicate function - use unified createTableColumns instead
 
             // Initialize tables with unified single-header structure
             try {
@@ -782,6 +709,10 @@
                                 lengthMenu: "_MENU_ 개씩 보기",
                                 info: "_START_ - _END_ / _TOTAL_ 건",
                                 paginate: { next: "다음", previous: "이전" }
+                            },
+                            drawCallback: function() {
+                                // Re-bind event handlers after table redraw
+                                bindEditButtons();
                             }
                         });
                         console.log('Current table initialized with', currentData.length, 'items');
@@ -827,6 +758,9 @@
                                     lengthMenu: "_MENU_ 개씩 보기",
                                     info: "_START_ - _END_ / _TOTAL_ 건",
                                     paginate: { next: "다음", previous: "이전" }
+                                },
+                                drawCallback: function() {
+                                    bindEditButtons();
                                 }
                             });
                             voltageTableInitialized = true;
@@ -863,6 +797,9 @@
                                     lengthMenu: "_MENU_ 개씩 보기",
                                     info: "_START_ - _END_ / _TOTAL_ 건",
                                     paginate: { next: "다음", previous: "이전" }
+                                },
+                                drawCallback: function() {
+                                    bindEditButtons();
                                 }
                             });
                             powerTableInitialized = true;
@@ -924,10 +861,18 @@
             let activeTable = null;
             let currentPrefix = '';
 
+            // Function to bind edit button events
+            function bindEditButtons() {
+                $('.edit-threshold-btn').off('click').on('click', function() {
+                    console.log('Edit button clicked - event handler working');
+                    handleEditButtonClick($(this));
+                });
+            }
+            
             // Handle edit button clicks for all tables
-            $(document).on('click', '.edit-threshold-btn', function() {
+            function handleEditButtonClick($button) {
                 console.log('Edit button clicked');
-                const $row = $(this).closest('tr');
+                const $row = $button.closest('tr');
                 const activeTabId = $('.nav-tabs .nav-link.active').attr('id');
                 console.log('Active tab:', activeTabId);
                 
@@ -978,7 +923,7 @@
                 // Show modal
                 console.log('Showing modal...');
                 $('#thresholdEditModal').modal('show');
-            });
+            }
 
             function populateModal(data, prefix) {
                 console.log('populateModal called with:', { data, prefix });
