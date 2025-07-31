@@ -595,8 +595,18 @@
             
             // Call loadInitialData and wait for completion
             loadInitialData().then(() => {
+                console.log('Initial data loaded, binding edit buttons...');
                 // Bind edit buttons after initial data is loaded
-                setTimeout(bindEditButtons, 500);
+                setTimeout(() => {
+                    bindEditButtons();
+                    // Also add a global click handler as backup
+                    $(document).on('click', '.edit-threshold-btn', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log('Global edit button handler triggered');
+                        handleEditButtonClick($(this));
+                    });
+                }, 1000);
             });
 
             // Common table configuration
@@ -863,18 +873,23 @@
 
             // Function to bind edit button events
             function bindEditButtons() {
-                $('.edit-threshold-btn').off('click').on('click', function() {
+                console.log('Binding edit buttons...');
+                $('.edit-threshold-btn').off('click').on('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
                     console.log('Edit button clicked - event handler working');
                     handleEditButtonClick($(this));
                 });
+                console.log('Edit buttons bound, found:', $('.edit-threshold-btn').length, 'buttons');
             }
             
             // Handle edit button clicks for all tables
             function handleEditButtonClick($button) {
-                console.log('Edit button clicked');
+                console.log('Edit button clicked - handleEditButtonClick called');
                 const $row = $button.closest('tr');
                 const activeTabId = $('.nav-tabs .nav-link.active').attr('id');
                 console.log('Active tab:', activeTabId);
+                console.log('Row found:', $row.length > 0);
                 
                 // Determine which table and prefix based on active tab
                 if (activeTabId === 'current-tab') {
@@ -900,18 +915,24 @@
                     $('#modalTTitle').text('KW_T');
                 }
 
-                // Get row data from the table
-                currentEditData = activeTable.row($row).data();
-                console.log('Row data:', currentEditData);
-                
-                // Check if we have valid data and table
-                if (!currentEditData) {
-                    console.error('No row data found');
+                // Check if we have an active table
+                if (!activeTable) {
+                    console.error('No active table found');
                     return;
                 }
                 
-                if (!activeTable) {
-                    console.error('No active table found');
+                // Get row data from the table
+                try {
+                    currentEditData = activeTable.row($row).data();
+                    console.log('Row data retrieved:', currentEditData);
+                } catch (error) {
+                    console.error('Error getting row data:', error);
+                    return;
+                }
+                
+                // Check if we have valid data
+                if (!currentEditData) {
+                    console.error('No row data found');
                     return;
                 }
                 
@@ -928,13 +949,25 @@
             function populateModal(data, prefix) {
                 console.log('populateModal called with:', { data, prefix });
                 
-                // Set device info (mock data for now)
+                // Set device info - handle data types properly
                 $('#modalFloor').text('1층');
                 $('#modalDcu').text('1');
-                $('#modalBusway').text(data.busway ? data.busway.replace('BW', '') : '1');
-                $('#modalLine').text(data.line ? data.line.replace('L', '') : 'a');
                 
-                console.log('Device info set');
+                // Handle busway data safely
+                let buswayText = '1';
+                if (data.busway) {
+                    buswayText = typeof data.busway === 'string' ? data.busway.replace('BW', '') : String(data.busway);
+                }
+                $('#modalBusway').text(buswayText);
+                
+                // Handle line data safely  
+                let lineText = 'a';
+                if (data.line) {
+                    lineText = typeof data.line === 'string' ? data.line.replace('L', '') : String(data.line);
+                }
+                $('#modalLine').text(lineText);
+                
+                console.log('Device info set safely');
 
                 // Populate R phase data
                 $('#modalREnabled').prop('checked', data[`${prefix}_r_en`] === 'checked');
