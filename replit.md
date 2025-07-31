@@ -183,3 +183,19 @@ The architecture prioritizes modularity and separation of concerns, making it ea
   - DataTables `order` and `lengthMenu` configurations
   - Chart.js/ECharts data arrays and color configurations
   - Export function column specifications
+
+### API Integration with Axios (2025-07-31)
+- **Flask Backend Enhancement**: Added comprehensive API endpoints for all application data:
+  - `/api/users` - User management CRUD operations with realistic Korean user data
+  - `/api/power-data` - Power monitoring data with realistic voltage, current, and power readings
+  - `/api/fault-data` - Fault inquiry data with DCU, busway, and alarm information  
+  - `/api/alarm-thresholds`, `/api/voltage-thresholds`, `/api/power-thresholds` - Alarm threshold configuration data
+- **Frontend Axios Integration**: Updated all pages to use axios for HTTP requests:
+  - User management page: Complete CRUD operations with API calls for create, update, delete operations
+  - Power inquiry page: Real-time data loading from server endpoints
+  - Fault inquiry page: Dynamic fault data retrieval with timestamp conversion
+  - Alarm settings page: Three-tier threshold management (current, voltage, power)
+- **Mock Data Generation**: Backend provides realistic sample data to simulate Spring Boot backend responses
+- **Error Handling**: Implemented comprehensive error handling with user-friendly Korean messages
+- **API Architecture**: Designed RESTful endpoints following Spring Boot conventions for seamless backend transition
+- **Production Ready**: All API endpoints return JSON responses with proper error handling and success messages

@@ -315,6 +315,7 @@
     <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
     
     <script src="js/admin-common.js"></script>
     <script src="js/toast-notifications.js"></script>
@@ -323,59 +324,11 @@
         $(document).ready(function() {
             let usersTable;
             let currentEditingUser = null;
-            
-            // Mock data for users
-            const mockUsers = [
-                {
-                    id: 1,
-                    username: 'admin01',
-                    name: '김관리',
-                    role: '관리자',
-                    notes: '시스템 총괄 관리자',
-                    joinDate: '2024-01-15',
-                    lastLogin: '2025-07-27 14:30'
-                },
-                {
-                    id: 2,
-                    username: 'manager02',
-                    name: '이운영',
-                    role: '관리자',
-                    notes: 'DC 운영 담당',
-                    joinDate: '2024-03-20',
-                    lastLogin: '2025-07-27 13:15'
-                },
-                {
-                    id: 3,
-                    username: 'operator03',
-                    name: '박모니터',
-                    role: '운영자',
-                    notes: '모니터링 전담',
-                    joinDate: '2024-05-10',
-                    lastLogin: '2025-07-27 12:45'
-                },
-                {
-                    id: 4,
-                    username: 'tech04',
-                    name: '최기술',
-                    role: '관리자',
-                    notes: '기술 지원 담당',
-                    joinDate: '2024-07-01',
-                    lastLogin: '2025-07-26 18:20'
-                },
-                {
-                    id: 5,
-                    username: 'support05',
-                    name: '정지원',
-                    role: '운영자',
-                    notes: '고객 지원팀',
-                    joinDate: '2024-09-15',
-                    lastLogin: '2025-07-25 16:10'
-                }
-            ];
+            let usersData = [];
 
-            // Initialize DataTable with mock data
+            // Initialize DataTable
             usersTable = $('#usersTable').DataTable({
-                data: mockUsers,
+                data: [],
                 pageLength: 10,
                 language: {
                     lengthMenu: "_MENU_ 개씩 보기",
@@ -435,8 +388,23 @@
                 ]
             });
 
+            // Load users data from API
+            loadUsersData();
+
+            async function loadUsersData() {
+                try {
+                    const response = await axios.get('/api/users');
+                    usersData = response.data;
+                    usersTable.clear().rows.add(usersData).draw();
+                    console.log('Users data loaded successfully');
+                } catch (error) {
+                    console.error('Error loading users data:', error);
+                    alert('사용자 데이터를 불러오는데 실패했습니다.');
+                }
+            }
+
             // Register new user
-            $('#registerUserBtn').click(function() {
+            $('#registerUserBtn').click(async function() {
                 const formData = {
                     username: $('#newUserId').val(),
                     name: $('#newUserName').val(),
@@ -472,23 +440,19 @@
                     return;
                 }
 
-                // Add new user to mock data
-                const newUser = {
-                    id: mockUsers.length + 1,
-                    username: formData.username,
-                    name: formData.name,
-                    role: formData.role,
-                    notes: formData.notes || '',
-                    joinDate: new Date().toISOString().split('T')[0],
-                    lastLogin: '미접속'
-                };
-
-                mockUsers.push(newUser);
-                usersTable.clear().rows.add(mockUsers).draw();
-                
-                $('#registerModal').modal('hide');
-                $('#registerForm')[0].reset();
-                alert('새 사용자가 성공적으로 등록되었습니다.');
+                try {
+                    const response = await axios.post('/api/users', formData);
+                    if (response.data.success) {
+                        $('#registerModal').modal('hide');
+                        $('#registerForm')[0].reset();
+                        alert(response.data.message);
+                        // Reload data from server
+                        loadUsersData();
+                    }
+                } catch (error) {
+                    console.error('Error creating user:', error);
+                    alert('사용자 등록 중 오류가 발생했습니다.');
+                }
             });
 
             // Edit user
@@ -523,16 +487,17 @@
                         return;
                     }
 
-                    // Update mock data
-                    const userIndex = mockUsers.findIndex(u => u.id === currentEditingUser.id);
-                    if (userIndex !== -1) {
-                        mockUsers[userIndex].name = formData.name;
-                        mockUsers[userIndex].role = formData.role;
-                        mockUsers[userIndex].notes = formData.notes;
-                        
-                        usersTable.clear().rows.add(mockUsers).draw();
-                        $('#editModal').modal('hide');
-                        alert('사용자 정보가 성공적으로 수정되었습니다.');
+                    // Update via API
+                    try {
+                        const response = await axios.put(`/api/users/${currentEditingUser.id}`, formData);
+                        if (response.data.success) {
+                            $('#editModal').modal('hide');
+                            alert(response.data.message);
+                            loadUsersData();
+                        }
+                    } catch (error) {
+                        console.error('Error updating user:', error);
+                        alert('사용자 정보 수정 중 오류가 발생했습니다.');
                     }
                     
                 } else if (activeTab === 'passwordTab') {
@@ -556,16 +521,19 @@
             });
 
             // Delete user
-            $(document).on('click', '.delete-user-btn', function() {
+            $(document).on('click', '.delete-user-btn', async function() {
                 const userId = parseInt($(this).data('id'));
                 
                 if (confirm('정말로 이 사용자를 삭제하시겠습니까?\n삭제된 데이터는 복구할 수 없습니다.')) {
-                    // Remove from mock data
-                    const userIndex = mockUsers.findIndex(u => u.id === userId);
-                    if (userIndex !== -1) {
-                        mockUsers.splice(userIndex, 1);
-                        usersTable.clear().rows.add(mockUsers).draw();
-                        alert('사용자가 성공적으로 삭제되었습니다.');
+                    try {
+                        const response = await axios.delete(`/api/users/${userId}`);
+                        if (response.data.success) {
+                            alert(response.data.message);
+                            loadUsersData();
+                        }
+                    } catch (error) {
+                        console.error('Error deleting user:', error);
+                        alert('사용자 삭제 중 오류가 발생했습니다.');
                     }
                 }
             });
@@ -578,8 +546,8 @@
                     return;
                 }
 
-                // Check if username already exists in mock data
-                const isExisting = mockUsers.some(user => user.username.toLowerCase() === userId.toLowerCase());
+                // Check if username already exists in loaded data
+                const isExisting = usersData.some(user => user.username.toLowerCase() === userId.toLowerCase());
                 
                 if (isExisting) {
                     alert('이미 사용 중인 아이디입니다.');

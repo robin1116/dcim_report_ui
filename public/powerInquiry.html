@@ -384,6 +384,7 @@
     
     <script src="js/admin-common.js"></script>
     <script src="js/toast-notifications.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
 
     <script>
         $(document).ready(function() {
@@ -529,11 +530,12 @@
                 initializePowerChart();
             }, 300);
             
-            function loadInitialData() {
+            async function loadInitialData() {
                 try {
-                    console.log('Loading initial data...');
-                    const initialData = generateMockPowerData();
-                    console.log('Generated data:', initialData.length, 'items');
+                    console.log('Loading power data from API...');
+                    const response = await axios.get('/api/power-data');
+                    const initialData = response.data;
+                    console.log('Loaded data:', initialData.length, 'items');
                     
                     if (initialData.length > 0) {
                         powerDataTable.clear();
@@ -550,7 +552,8 @@
                         }, 500);
                     }
                 } catch (error) {
-                    console.error('Error loading initial data:', error);
+                    console.error('Error loading power data:', error);
+                    alert('전력 데이터를 불러오는데 실패했습니다.');
                 }
             }
 
