@@ -199,3 +199,18 @@ The architecture prioritizes modularity and separation of concerns, making it ea
 - **Error Handling**: Implemented comprehensive error handling with user-friendly Korean messages
 - **API Architecture**: Designed RESTful endpoints following Spring Boot conventions for seamless backend transition
 - **Production Ready**: All API endpoints return JSON responses with proper error handling and success messages
+
+### Offline Environment Support (2025-07-31)
+- **Complete CDN to Local Migration**: Converted all external dependencies to local files for offline operation:
+  - Bootstrap 5.3.2 CSS/JS downloaded to `public/lib/bootstrap/`
+  - jQuery 3.7.1 downloaded to `public/lib/jquery/`
+  - DataTables 1.13.7 with Bootstrap integration downloaded to `public/lib/datatables/`
+  - FontAwesome 6.5.1 with webfonts downloaded to `public/lib/fontawesome/`
+  - Chart.js 4.4.0 downloaded to `public/lib/chart/`
+  - ECharts 5.4.3 downloaded to `public/lib/echarts/`
+  - Axios 1.6.0 downloaded to `public/lib/axios/`
+  - Export libraries (JSZip, XLSX, jsPDF) downloaded to `public/lib/datatables/`
+- **FontAwesome Configuration**: Updated CSS paths to use local webfont files for proper icon display
+- **Alarm Settings Bug Fix**: Added missing `loadInitialData()` function with proper API data loading
+- **HTML Updates**: All pages (index, login, adminsysuser, powerInquiry, faultInquiry, alarmSetting) updated to use local library references
+- **Offline Ready**: System now operates completely independently without internet connectivity requirements

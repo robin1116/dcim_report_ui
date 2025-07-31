@@ -564,6 +564,33 @@
             let powerData = [];
 
             // Load initial data from API
+            async function loadInitialData() {
+                try {
+                    console.log('Loading initial data from API...');
+                    
+                    // Load current threshold data
+                    const currentResponse = await axios.get('/api/alarm-thresholds');
+                    currentData = currentResponse.data;
+                    console.log('Current data loaded:', currentData.length, 'items');
+                    
+                    // Load voltage threshold data
+                    const voltageResponse = await axios.get('/api/voltage-thresholds');
+                    voltageData = voltageResponse.data;
+                    console.log('Voltage data loaded:', voltageData.length, 'items');
+                    
+                    // Load power threshold data
+                    const powerResponse = await axios.get('/api/power-thresholds');
+                    powerData = powerResponse.data;
+                    console.log('Power data loaded:', powerData.length, 'items');
+                    
+                    console.log('All initial data loaded successfully');
+                    
+                } catch (error) {
+                    console.error('Error loading initial data:', error);
+                    showToast('데이터 로드 중 오류가 발생했습니다', 'error');
+                }
+            }
+            
             loadInitialData();
 
             // Common table configuration
