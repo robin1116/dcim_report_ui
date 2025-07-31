@@ -210,7 +210,9 @@ The architecture prioritizes modularity and separation of concerns, making it ea
   - ECharts 5.4.3 downloaded to `public/lib/echarts/`
   - Axios 1.6.0 downloaded to `public/lib/axios/`
   - Export libraries (JSZip, XLSX, jsPDF) downloaded to `public/lib/datatables/`
-- **FontAwesome Configuration**: Updated CSS paths to use local webfont files for proper icon display
+- **FontAwesome Icon Fix**: Enhanced fontawesome-fixed.css with proper @font-face definitions and fallback font formats (woff2, ttf)
+- **Pretendard Font Integration**: Downloaded and applied Pretendard font locally across all pages for offline Korean typography
 - **Alarm Settings Bug Fix**: Added missing `loadInitialData()` function with proper API data loading
+- **Power Inquiry UI Fix**: Removed duplicate pagination controls that conflicted with DataTables built-in pagination
 - **HTML Updates**: All pages (index, login, adminsysuser, powerInquiry, faultInquiry, alarmSetting) updated to use local library references
 - **Offline Ready**: System now operates completely independently without internet connectivity requirements
