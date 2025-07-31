@@ -421,7 +421,7 @@
                             return `전력조회_${dateStr}`;
                         },
                         exportOptions: {
-                            columns: [0, 1, 2, 3],
+                            columns: /*<![CDATA[*/ [0, 1, 2, 3], /*]]>*/
                             format: {
                                 body: function(data, row, column, node) {
                                     const tempDiv = document.createElement('div');
@@ -440,7 +440,7 @@
                             return `전력조회_${dateStr}`;
                         },
                         exportOptions: {
-                            columns: [0, 1, 2, 3],
+                            columns: /*<![CDATA[*/ [0, 1, 2, 3], /*]]>*/
                             format: {
                                 body: function(data, row, column, node) {
                                     const tempDiv = document.createElement('div');
@@ -514,9 +514,9 @@
                         }
                     }
                 ],
-                order: [[0, 'desc']],
+                order: /*<![CDATA[*/ [[0, 'desc']], /*]]>*/
                 pageLength: 10,
-                lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]]
+                lengthMenu: /*<![CDATA[*/ [[10, 25, 50, 100], [10, 25, 50, 100]] /*]]>*/
             });
             
             console.log('DataTable initialized');
@@ -727,7 +727,7 @@
                                 }
                             }
                         ],
-                        series: [{
+                        series: /*<![CDATA[*/ [{
                             name: '전압 (V)',
                             type: 'line',
                             smooth: true,
@@ -745,15 +745,15 @@
                                     y: 0,
                                     x2: 0,
                                     y2: 1,
-                                    colorStops: [{
+                                    colorStops: /*<![CDATA[*/ [{
                                         offset: 0, color: 'rgba(139, 92, 246, 0.3)'
                                     }, {
                                         offset: 1, color: 'rgba(139, 92, 246, 0.1)'
-                                    }]
+                                    }] /*]]>*/
                                 }
                             },
                             data: []
-                        }]
+                        }] /*]]>*/
                     };
                     
                     // Set the configuration option to chart

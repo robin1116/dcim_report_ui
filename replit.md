@@ -155,6 +155,7 @@ The architecture prioritizes modularity and separation of concerns, making it ea
 - **Menu Cleanup**: Removed fault level settings menu and page (alarmLevelConfig.html) from all pages as requested
 - **Responsive Design Fix**: Fixed browser zoom issues (150%+) by converting fixed pixel widths to percentage-based responsive columns and adding media queries for optimal scaling
 - **Filter Area Responsive Design**: Implemented comprehensive responsive design for alarm threshold page filter area with proper Bootstrap grid classes
+- **Thymeleaf CDATA Escaping (2025-07-31)**: Applied CDATA escaping (`/*<![CDATA[*/` and `/*]]>*/`) to all JavaScript code containing double bracket arrays to prevent Thymeleaf parsing conflicts across all pages
 
 ### User Management Page Overhaul (2025-07-27)
 - **Statistics Cards Removal**: Removed top statistics cards section for cleaner interface
@@ -171,3 +172,14 @@ The architecture prioritizes modularity and separation of concerns, making it ea
   - Delete users with confirmation dialog
   - Username duplicate checking
 - **Action Buttons**: Added edit/delete buttons in table for each user with proper styling
+
+### Complete Branding Update (2025-07-31)
+- **System Rebranding**: Changed all references from "죽전 퍼시픽써니 DC" and "simpleEye" to "삼송 데이터센터"
+  - Updated title tags in all HTML pages
+  - Modified SVG logo text in login page
+  - Changed breadcrumb navigation labels
+  - Updated sidebar logo text across all admin pages
+- **Thymeleaf Compatibility**: Applied CDATA escaping to JavaScript arrays to prevent template parsing issues
+  - DataTables `order` and `lengthMenu` configurations
+  - Chart.js/ECharts data arrays and color configurations
+  - Export function column specifications
