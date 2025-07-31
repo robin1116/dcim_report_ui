@@ -15,6 +15,7 @@
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="lib/fontawesome/all.min.css">
+    <link rel="stylesheet" href="lib/fontawesome/fontawesome-fixed.css">
     
     <!-- ECharts -->
     <script src="lib/echarts/echarts.min.js"></script>
@@ -591,6 +592,7 @@
                 }
             }
             
+            // Call loadInitialData and wait for completion
             loadInitialData();
 
             // Common table configuration
@@ -761,24 +763,35 @@
                 const voltageColumns = createTableColumns('v');
                 const powerColumns = createTableColumns('kw');
 
-                // Initialize only current table on page load
-                tables.current = $('#currentTable').DataTable({
-                    data: currentData,
-                    columns: currentColumns,
-                    pageLength: 10,
-                    scrollX: true,
-                    scrollCollapse: true,
-                    responsive: true,
-                    destroy: true,
-                    ordering: true,
-                    searching: true,
-                    autoWidth: false,
-                    language: {
-                        lengthMenu: "_MENU_ 개씩 보기",
-                        info: "_START_ - _END_ / _TOTAL_ 건",
-                        paginate: { next: "다음", previous: "이전" }
+                // Wait for data to load before initializing tables
+                function initializeCurrentTable() {
+                    if (currentData.length > 0) {
+                        tables.current = $('#currentTable').DataTable({
+                            data: currentData,
+                            columns: currentColumns,
+                            pageLength: 10,
+                            scrollX: true,
+                            scrollCollapse: true,
+                            responsive: true,
+                            destroy: true,
+                            ordering: true,
+                            searching: true,
+                            autoWidth: false,
+                            language: {
+                                lengthMenu: "_MENU_ 개씩 보기",
+                                info: "_START_ - _END_ / _TOTAL_ 건",
+                                paginate: { next: "다음", previous: "이전" }
+                            }
+                        });
+                        console.log('Current table initialized with', currentData.length, 'items');
+                    } else {
+                        // Retry after a short delay if data not loaded yet
+                        setTimeout(initializeCurrentTable, 100);
                     }
-                });
+                }
+                
+                // Start initialization
+                initializeCurrentTable();
 
                 // Initialize tables only when tabs are clicked
                 let voltageTableInitialized = false;
