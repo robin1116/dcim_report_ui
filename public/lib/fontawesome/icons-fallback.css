@@ -1,0 +1,86 @@
+/* 아이콘 폴백 - 기본 텍스트 아이콘으로 대체 */
+.fas.fa-times::before, .fa-solid.fa-times::before,
+.fas.fa-xmark::before, .fa-solid.fa-xmark::before {
+    content: "✕" !important;
+}
+
+.fas.fa-bolt::before, .fa-solid.fa-bolt::before {
+    content: "⚡" !important;
+}
+
+.fas.fa-plug::before, .fa-solid.fa-plug::before {
+    content: "🔌" !important;
+}
+
+.fas.fa-battery-three-quarters::before, .fa-solid.fa-battery-three-quarters::before {
+    content: "🔋" !important;
+}
+
+.fas.fa-clock::before, .fa-solid.fa-clock::before {
+    content: "🕐" !important;
+}
+
+.fas.fa-user::before, .fa-solid.fa-user::before {
+    content: "👤" !important;
+}
+
+.fas.fa-cog::before, .fa-solid.fa-cog::before,
+.fas.fa-gear::before, .fa-solid.fa-gear::before {
+    content: "⚙️" !important;
+}
+
+.fas.fa-edit::before, .fa-solid.fa-edit::before,
+.fas.fa-pen-to-square::before, .fa-solid.fa-pen-to-square::before {
+    content: "✏️" !important;
+}
+
+.fas.fa-trash::before, .fa-solid.fa-trash::before,
+.fas.fa-trash-can::before, .fa-solid.fa-trash-can::before {
+    content: "🗑️" !important;
+}
+
+.fas.fa-search::before, .fa-solid.fa-search::before,
+.fas.fa-magnifying-glass::before, .fa-solid.fa-magnifying-glass::before {
+    content: "🔍" !important;
+}
+
+.fas.fa-download::before, .fa-solid.fa-download::before {
+    content: "⬇️" !important; 
+}
+
+.fas.fa-file-excel::before, .fa-solid.fa-file-excel::before {
+    content: "📊" !important;
+}
+
+.fas.fa-file-pdf::before, .fa-solid.fa-file-pdf::before {
+    content: "📄" !important;
+}
+
+.fas.fa-check-circle::before, .fa-solid.fa-check-circle::before {
+    content: "✅" !important;
+}
+
+.fas.fa-times-circle::before, .fa-solid.fa-times-circle::before {
+    content: "❌" !important;
+}
+
+.fas.fa-home::before, .fa-solid.fa-home::before {
+    content: "🏠" !important;
+}
+
+.fas.fa-bell::before, .fa-solid.fa-bell::before {
+    content: "🔔" !important;
+}
+
+.fas.fa-chart-bar::before, .fa-solid.fa-chart-bar::before {
+    content: "📊" !important;
+}
+
+/* 기본 아이콘 스타일 */
+.fas, .fa-solid, .far, .fa-regular, .fab, .fa-brands {
+    font-style: normal !important;
+    font-variant: normal !important;
+    text-rendering: auto !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+}
